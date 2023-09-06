@@ -1,0 +1,7 @@
+<svg id="music-list" xmlns="http://www.w3.org/2000/svg" width="84" height="23" viewBox="0 0 84 23">
+  <g id="Group_3927" data-name="Group 3927" transform="translate(-14.566 -273)" opacity="0.2">
+    <rect id="Rectangle_1376" data-name="Rectangle 1376" width="84" height="23" rx="11.5" transform="translate(14.566 273)" fill="#292929"/>
+    <path id="Icon_material-keyboard-arrow-right" data-name="Icon material-keyboard-arrow-right" d="M12.885,14.339l2.471-2.477L12.885,9.386l.761-.761,3.237,3.237L13.646,15.1Z" transform="translate(96.874 269.849) rotate(90)" fill="#d6d6d6"/>
+    <path id="Icon_material-queue-music" data-name="Icon material-queue-music" d="M15.693,9H4.5v1.866H15.693Zm0,3.731H4.5V14.6H15.693ZM4.5,18.328h7.462V16.462H4.5ZM17.559,9v7.63a2.794,2.794,0,1,0,1.866,2.63V10.866h2.8V9Z" transform="translate(43.205 269.204)" fill="#d6d6d6"/>
+  </g>
+</svg>

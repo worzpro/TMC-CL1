@@ -1,6 +1,8 @@
 import "@/styles/global.css";
 import Head from "next/head";
+import Script from "next/script";
 import type { AppProps } from "next/app";
+import Layout from "@/components/layout/Layout";
 
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "@/styles/chakra/theme";
@@ -10,7 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title key="title">PUZZLEMAN - 北流雲取樣機 TMC CL-1</title>
-        <link rel="icon" href="/favicon.ico" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta key="og_type" property="og:type" content="website" />
@@ -30,7 +32,8 @@ export default function App({ Component, pageProps }: AppProps) {
           property="og:description"
           content="PUZZLEMAN - 北流雲取樣機 TMC CL-1"
         />
-        <script
+
+        <Script
           dangerouslySetInnerHTML={{
             __html: `
           (function (d) {
@@ -66,7 +69,9 @@ export default function App({ Component, pageProps }: AppProps) {
         />
       </Head>
       <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ChakraProvider>
     </>
   );

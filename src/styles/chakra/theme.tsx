@@ -18,8 +18,8 @@ const theme = extendTheme({
   },
 
   fonts: {
-    heading: `'Poppins','Source Han', -apple-system, sans-serif`,
-    body: `'Poppins', 'Source Han', -apple-system, sans-serif`,
+    heading: `'Source Han', 'Poppins', -apple-system, sans-serif`,
+    body: `'Source Han', 'Poppins', -apple-system, sans-serif`,
   },
 
   shadows: {

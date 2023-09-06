@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26">
+  <g id="stop" transform="translate(-310.5 -304.5)">
+    <g id="Ellipse_94" data-name="Ellipse 94" transform="translate(310.5 304.5)" fill="#79192e" stroke="#000" stroke-width="3">
+      <circle cx="13" cy="13" r="13" stroke="none"/>
+      <circle cx="13" cy="13" r="11.5" fill="none"/>
+    </g>
+    <g id="Group_4116" data-name="Group 4116" transform="translate(0)">
+      <rect id="Rectangle_1635" data-name="Rectangle 1635" width="9" height="2" transform="translate(319 312.5)" fill="#ec2d57"/>
+      <rect id="Rectangle_1636" data-name="Rectangle 1636" width="8.473" height="2" transform="translate(327.737 322.5) rotate(180)" fill="#ec2d57"/>
+      <rect id="Rectangle_1642" data-name="Rectangle 1642" width="4.905" height="2" transform="translate(325.952 323.5) rotate(180)" fill="#ec2d57"/>
+      <rect id="Rectangle_1643" data-name="Rectangle 1643" width="4.905" height="2" transform="translate(325.952 313.5) rotate(180)" fill="#ec2d57"/>
+      <rect id="Rectangle_1639" data-name="Rectangle 1639" width="11.001" height="2" transform="translate(317.999 314.5)" fill="#ec2d57"/>
+      <rect id="Rectangle_1640" data-name="Rectangle 1640" width="11.001" height="2" transform="translate(329.001 320.5) rotate(180)" fill="#ec2d57"/>
+      <rect id="Rectangle_1641" data-name="Rectangle 1641" width="11.893" height="2" transform="translate(317.553 316.5)" fill="#ec2d57"/>
+    </g>
+  </g>
+</svg>
