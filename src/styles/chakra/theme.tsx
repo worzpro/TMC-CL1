@@ -2,6 +2,7 @@ import { extendTheme } from "@chakra-ui/react";
 
 import textStyles from "./textStyles";
 import colors from "./colors";
+import Button from "./components/button";
 
 const theme = extendTheme({
   textStyles,
@@ -42,7 +43,7 @@ const theme = extendTheme({
     xl: "1300px",
     "2xl": "1536px",
   },
-  components: {},
+  components: { Button },
 });
 
 export default theme;

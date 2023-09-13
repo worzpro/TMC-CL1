@@ -1,9 +1,9 @@
 import MainArea from "@/components/main/MainArea"
 
-const PuzzlemanPage = () => {
+const L8chingPage = () => {
   return (
     <MainArea />
   )
 }
 
-export default PuzzlemanPage
+export default L8chingPage

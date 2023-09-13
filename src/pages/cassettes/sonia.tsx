@@ -1,9 +1,9 @@
 import MainArea from "@/components/main/MainArea"
 
-const PuzzlemanPage = () => {
+const SoniaPage = () => {
   return (
     <MainArea />
   )
 }
 
-export default PuzzlemanPage
+export default SoniaPage
