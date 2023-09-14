@@ -1,16 +1,23 @@
-import { Center, Flex, Box, AspectRatio, Circle } from "@chakra-ui/react";
-import { useState } from "react";
+import { Center, Flex, Box, AspectRatio, Image, Link } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
+
 import Sidebar from "./Sidebar";
+
+import useMobileDetect from "@/hooks/useMobileDetect";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentVid, setCurrentVid] = useState("");
+  const [showQRcode, setShowQRcode] = useState(true);
+  const currentDevice = useMobileDetect();
+  const isMobile = currentDevice.isMobile();
+
 
   return (
     <Center bgColor="rgb(199, 199, 199)" h="100vh" w="100vw" pos="relative">
       {/* Main Content */}
-      <Flex h="100%" gap="77px" >
+      <Flex h="100%" gap="77px">
         {currentVid && (
           <Box
             w={{ base: "95%", md: "594px" }}
@@ -51,6 +58,35 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         setSidebarOpen={setSidebarOpen}
         setCurrentVid={setCurrentVid}
       />
+
+      {/* Link: absolute */}
+      <Link
+        pos="absolute"
+        top="20px"
+        right="20px"
+        href="https://www.tmccloud.taipei/announcements"
+        isExternal
+      >
+        <Image w="90px" src="/images/link.png" alt="北流雲" />
+      </Link>
+
+      {/* QRcode: absolute */}
+      {showQRcode   && (
+        <Box pos="absolute" bottom="20px" right="20px">
+          <Box pos="relative">
+            <Box
+              pos="absolute"
+              top="0"
+              right="0"
+              w="25px"
+              h="25px"
+              cursor="pointer"
+              onClick={() => setShowQRcode(!showQRcode)}
+            />
+            <Image w="160px" src="/images/qrcode.png" alt="qrcode" />
+          </Box>
+        </Box>
+      )}
     </Center>
   );
 };
