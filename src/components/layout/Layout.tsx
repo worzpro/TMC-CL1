@@ -1,21 +1,25 @@
-import { Center, Flex, Box, AspectRatio, Image, Link } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import {
+  Center,
+  Flex,
+  Box,
+  AspectRatio,
+  Image,
+  Link,
+  Hide,
+} from "@chakra-ui/react";
+import { useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 
 import Sidebar from "./Sidebar";
-
-import useMobileDetect from "@/hooks/useMobileDetect";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentVid, setCurrentVid] = useState("");
   const [showQRcode, setShowQRcode] = useState(true);
-  const currentDevice = useMobileDetect();
-  const isMobile = currentDevice.isMobile();
-
 
   return (
     <Center bgColor="rgb(199, 199, 199)" h="100vh" w="100vw" pos="relative">
+
       {/* Main Content */}
       <Flex h="100%" gap="77px">
         {currentVid && (
@@ -71,22 +75,25 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </Link>
 
       {/* QRcode: absolute */}
-      {showQRcode   && (
-        <Box pos="absolute" bottom="20px" right="20px">
-          <Box pos="relative">
-            <Box
-              pos="absolute"
-              top="0"
-              right="0"
-              w="25px"
-              h="25px"
-              cursor="pointer"
-              onClick={() => setShowQRcode(!showQRcode)}
-            />
-            <Image w="160px" src="/images/qrcode.png" alt="qrcode" />
+      <Hide below="lg">
+        {showQRcode && (
+          <Box pos="absolute" bottom="20px" right="20px">
+            <Box pos="relative">
+              <Box
+                pos="absolute"
+                top="0"
+                right="0"
+                w="25px"
+                h="25px"
+                cursor="pointer"
+                onClick={() => setShowQRcode(!showQRcode)}
+              />
+              <Image w="160px" src="/images/qrcode.png" alt="qrcode" />
+            </Box>
           </Box>
-        </Box>
-      )}
+        )}
+      </Hide>
+      
     </Center>
   );
 };
