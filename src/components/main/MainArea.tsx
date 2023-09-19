@@ -8,7 +8,7 @@ const MainArea = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <VStack w="400px" pos="relative">
+    <VStack  pos="relative">
       <Menu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
       <Machine isMenuOpen={isMenuOpen} />
     </VStack>

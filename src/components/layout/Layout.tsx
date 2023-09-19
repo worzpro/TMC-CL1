@@ -19,9 +19,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <Center bgColor="rgb(199, 199, 199)" h="100vh" w="100vw" pos="relative">
-
       {/* Main Content */}
-      <Flex h="100%" gap="77px">
+      <Flex h="100%" gap="77px" w="calc(100vw - 10px)" maxW={{ base: "365px", sm: "418px" }}>
         {currentVid && (
           <Box
             w={{ base: "95%", md: "594px" }}
@@ -53,7 +52,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </Box>
           </Box>
         )}
-        <Box>{children}</Box>
+        <Box w="100%">{children}</Box>
       </Flex>
 
       {/* Sidebar: absolute */}
@@ -93,7 +92,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </Box>
         )}
       </Hide>
-      
     </Center>
   );
 };

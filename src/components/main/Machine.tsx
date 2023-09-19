@@ -70,10 +70,10 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
 
   return (
     <Box
+      // 外層容器
       pos="absolute"
-      w="418px"
-      h="735px"
       overflow="hidden"
+      w="100%"
       borderRadius="8px"
       top={isMenuOpen ? "700px" : "100px"}
       zIndex="7999"
@@ -83,26 +83,49 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       boxShadow="rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0,0.5) 0px 35px 60px -15px"
     >
       <Box
+        // 機器背景
         h="100%"
         w="100%"
-        bgImage="/images/big-machine.png"
+        bgImage={{
+          base: "/images/small-machine.png",
+          sm: "/images/big-machine.png",
+        }}
         bgSize="contain"
         bgRepeat="no-repeat"
         bgPosition="center"
       >
-        <Flex direction="column" p="20px 20px 15px 15px" h="100%" gap="15px">
+        <Flex
+          // 機器內容
+          direction="column"
+          p="20px 20px 15px 15px"
+          h="100%"
+          gap="15px"
+        >
           <Box
+            // 螢幕
             border="3px solid black"
             w="100%"
-            h="382px"
+            h={{ base: "182px", sm: "91vw" }}
+            maxH='382px'
             borderRadius="8px"
             bgColor="rgb(197, 218, 227)"
           ></Box>
-          <HStack>
-            <Image w="90px" src="/images/bbbb.png" />
-            <Image w="90px" src="/images/bbbb.png" />
+
+          <HStack
+            // 按鈕
+            spacing="4px"
+          >
+            <Image w={{ base: "80px", sm: "21.5vw" }} maxW='90px' src="/images/bbbb.png" />
+            <Image w={{ base: "80px", sm: "21.5vw" }} src="/images/bbbb.png" />
           </HStack>
-          <Box p="2px" bgColor="black" w="100%" borderRadius="8px">
+
+          <Box
+            // Pad區
+            p="2px"
+            bgColor="black"
+            w="100%"
+            borderRadius="8px"
+          >
             <Flex wrap="wrap">
               {pads.map((pad) => (
                 <Box p="2px" key={pad.id} w="25%">
