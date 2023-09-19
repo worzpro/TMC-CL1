@@ -116,7 +116,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
             spacing="4px"
           >
             <Image w={{ base: "80px", sm: "21.5vw" }} maxW='90px' src="/images/bbbb.png" />
-            <Image w={{ base: "80px", sm: "21.5vw" }} src="/images/bbbb.png" />
+            <Image w={{ base: "80px", sm: "21.5vw" }} maxW='90px' src="/images/bbbb.png" />
           </HStack>
 
           <Box
