@@ -25,6 +25,12 @@ const textStyles = {
     fontWeight: 300,
   },
   
+  en_special_md_bold: {
+    fontSize: "16px",
+    lineHeight: "25px",
+    fontWeight: 600,
+    fontFamily: "lores-12",
+  },
   en_special_lg_bold: {
     fontSize: "18px",
     lineHeight: "27px",

@@ -1,4 +1,4 @@
-import { Box, Image, Flex, HStack } from "@chakra-ui/react";
+import { Box, Image, Flex, HStack, Center } from "@chakra-ui/react";
 
 interface MachineProps {
   isMenuOpen: boolean;
@@ -101,22 +101,53 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
           h="100%"
           gap="15px"
         >
-          <Box
-            // 螢幕
+          <Flex
+            // 螢幕容器
+            direction="column"
             border="3px solid black"
             w="100%"
             h={{ base: "182px", sm: "91vw" }}
-            maxH='382px'
+            maxH="382px"
             borderRadius="8px"
             bgColor="rgb(197, 218, 227)"
-          ></Box>
+            pt="12px"
+            px="8px"
+          >
+            <HStack
+              // SEQs
+              spacing="6px"
+            >
+              {[1, 2, 3, 4].map((seq) => (
+                <Center
+                  flex="1"
+                  key={seq}
+                  bgColor="#687074"
+                  color="white"
+                  textStyle="en_special_md_bold"
+                  cursor="pointer"
+                >
+                  SEQ.{seq}
+                </Center>
+              ))}
+            </HStack>
+          </Flex>
 
           <HStack
             // 按鈕
             spacing="4px"
           >
-            <Image w={{ base: "80px", sm: "21.5vw" }} maxW='90px' src="/images/bbbb.png" />
-            <Image w={{ base: "80px", sm: "21.5vw" }} maxW='90px' src="/images/bbbb.png" />
+            <Image
+              w={{ base: "80px", sm: "21.5vw" }}
+              maxW="90px"
+              src="/images/bbbb.png"
+              cursor="pointer"
+            />
+            <Image
+              w={{ base: "80px", sm: "21.5vw" }}
+              maxW="90px"
+              src="/images/bbbb.png"
+              cursor="pointer"
+            />
           </HStack>
 
           <Box
@@ -129,7 +160,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
             <Flex wrap="wrap">
               {pads.map((pad) => (
                 <Box p="2px" key={pad.id} w="25%">
-                  <Image src={pad.imageSrc} alt={pad.name} />
+                  <Image src={pad.imageSrc} alt={pad.name} cursor="pointer" />
                 </Box>
               ))}
             </Flex>
