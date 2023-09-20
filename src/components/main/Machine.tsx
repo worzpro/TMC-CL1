@@ -1,72 +1,35 @@
 import { Box, Image, Flex, HStack, Center } from "@chakra-ui/react";
+import { useState } from "react";
+import { useRouter } from "next/router";
+
+import gifs from "@/dummy/gifs";
+import pads from "@/dummy/pads";
 
 interface MachineProps {
   isMenuOpen: boolean;
 }
 
 const Machine = ({ isMenuOpen }: MachineProps) => {
-  const pads = [
-    {
-      id: 1,
-      name: "a",
-      imageSrc: "/images/button-a.png",
+  const [currentSeq, setCurrentSeq] = useState(1);
+  const [insertGift, setInsetGift] = useState<null | string>(null);
+  const router = useRouter();
+  const pathName = router.pathname.split("/")[2];
+
+  // dummy data
+  const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
+  const gifData = gifs[pathName]?.[`seq${currentSeq}`];
+
+  const handler = {
+    onGifChange: (gifSource: string) => {
+      if (insertGift !== null) {
+        setInsetGift(null);
+      }
+      setInsetGift(gifSource);
+      setTimeout(() => {
+        setInsetGift(null);
+      }, 100);
     },
-    {
-      id: 2,
-      name: "b",
-      imageSrc: "/images/button-b.png",
-    },
-    {
-      id: 3,
-      name: "c",
-      imageSrc: "/images/button-c.png",
-    },
-    {
-      id: 4,
-      name: "d",
-      imageSrc: "/images/button-d.png",
-    },
-    {
-      id: 5,
-      name: "5",
-      imageSrc: "/images/button-5.png",
-    },
-    {
-      id: 6,
-      name: "6",
-      imageSrc: "/images/button-6.png",
-    },
-    {
-      id: 7,
-      name: "7",
-      imageSrc: "/images/button-7.png",
-    },
-    {
-      id: 8,
-      name: "8",
-      imageSrc: "/images/button-8.png",
-    },
-    {
-      id: 9,
-      name: "1",
-      imageSrc: "/images/button-1.png",
-    },
-    {
-      id: 10,
-      name: "2",
-      imageSrc: "/images/button-2.png",
-    },
-    {
-      id: 11,
-      name: "3",
-      imageSrc: "/images/button-3.png",
-    },
-    {
-      id: 12,
-      name: "4",
-      imageSrc: "/images/button-4.png",
-    },
-  ];
+  };
 
   return (
     <Box
@@ -112,6 +75,8 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
             bgColor="rgb(197, 218, 227)"
             pt="12px"
             px="8px"
+            pb="1px"
+            justify="space-between"
           >
             <HStack
               // SEQs
@@ -121,15 +86,49 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
                 <Center
                   flex="1"
                   key={seq}
-                  bgColor="#687074"
+                  bgColor={currentSeq === seq ? "#292929" : "#687074"}
                   color="white"
                   textStyle="en_special_md_bold"
                   cursor="pointer"
+                  onClick={() => setCurrentSeq(seq)}
                 >
                   SEQ.{seq}
                 </Center>
               ))}
             </HStack>
+            <Box>
+              <Image
+                w="100%"
+                maxH={{ base: "100px", sm: "unset" }}
+                src={insertGift || gifData?.["wait"]}
+              />
+            </Box>
+
+            <Flex
+              // 功能按鈕區
+              pl="12px"
+              justify="space-between"
+            >
+              <HStack
+                color="#4D4D4D"
+                spacing="18px"
+                textStyle="en_special_md_bold"
+              >
+                {["FX", "SAMPLE"].map((buttonLabel) => (
+                  <Box key={buttonLabel} bgColor="#EBEBEB" p="2px 16px">
+                    {buttonLabel}
+                  </Box>
+                ))}
+              </HStack>
+              <HStack>
+                <Image
+                  src="/images/restart.svg"
+                  alt="restart"
+                  cursor="pointer"
+                />
+                <Image src="/images/play.svg" alt="play" cursor="pointer" />
+              </HStack>
+            </Flex>
           </Flex>
 
           <HStack
@@ -158,8 +157,15 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
             borderRadius="8px"
           >
             <Flex wrap="wrap">
-              {pads.map((pad) => (
-                <Box p="2px" key={pad.id} w="25%">
+              {padsArr.map((pad) => (
+                <Box
+                  p="2px"
+                  key={pad.id}
+                  w="25%"
+                  onClick={(e) => {
+                    handler.onGifChange(gifData[pad.name]);
+                  }}
+                >
                   <Image src={pad.imageSrc} alt={pad.name} cursor="pointer" />
                 </Box>
               ))}
