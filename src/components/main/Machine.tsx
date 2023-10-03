@@ -1,36 +1,80 @@
 import { Box, Image, Flex, HStack, Center } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
+import * as Tone from "tone";
 
-import gifs from "@/dummy/gifs";
+import artists from "@/dummy/artists";
 import pads from "@/dummy/pads";
+
+import PadLight from "@/components/machine/PadLight";
+import RecordingLight from "@/components/machine/RecordingLight";
 
 interface MachineProps {
   isMenuOpen: boolean;
 }
 
 const Machine = ({ isMenuOpen }: MachineProps) => {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentSeq, setCurrentSeq] = useState(1);
-  const [insertGift, setInsetGift] = useState<null | string>(null);
+  const [insertGift, setInsetGift] = useState<string>("");
+  const [activePad, setActivePad] = useState<string>("");
   const router = useRouter();
   const pathName = router.pathname.split("/")[2];
 
-  // dummy data
+  // dummy data 後處理
   const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
-  const gifData = gifs[pathName]?.[`seq${currentSeq}`];
+  const artistData = artists[pathName]?.[`seq${currentSeq}`];
+
+  const playerRef = useRef<any>(null);
 
   const handler = {
-    onGifChange: (gifSource: string) => {
-      if (insertGift !== null) {
-        setInsetGift(null);
-      }
-      setInsetGift(gifSource);
+    initiateTone: async () => {
+      await Tone.loaded();
+      console.log("Audio is loaded");
+      await Tone.start();
+      console.log("AudioContext is started");
+      setIsLoading(false);
+    },
+    onChangeGif: (padData: { [key: string]: any }) => {
+      if (!padData?.gifSrc) return;
+      if (insertGift !== "") setInsetGift("");
+      setInsetGift(padData.gifSrc);
       setTimeout(() => {
-        setInsetGift(null);
+        setInsetGift("");
+      }, padData.gifDuration);
+    },
+    onChangePadLight: (padName: string) => {
+      if (activePad !== "") setActivePad("");
+      setActivePad(padName);
+      setTimeout(() => {
+        setActivePad("");
       }, 100);
     },
   };
 
+  useEffect(() => {
+    // 判斷使用者裝置
+    const userAgent = navigator.userAgent;
+    const mobileKeywords = /Mobile|Android|iPhone|iPad|iPod|Windows Phone/i;
+    setIsMobile(mobileKeywords.test(userAgent));
+
+    // 初始化 playerRef
+    let MAPPING: any = {};
+    for (let key in artistData) {
+      MAPPING[key] = artistData[key].audioSrc;
+    }
+    const players = new Tone.Players(MAPPING).toDestination();
+    playerRef.current = players;
+  }, []);
+
+  useEffect(() => {
+    if (isLoading) {
+      handler.initiateTone();
+    }
+  }, [isLoading]);
+
+  console.log(playerRef.current)
   return (
     <Box
       // 外層容器
@@ -96,11 +140,18 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
                 </Center>
               ))}
             </HStack>
-            <Box>
+            <Box pos="relative">
+              <Image
+                pos="absolute"
+                top="0"
+                right="0"
+                w="85px"
+                src="/images/jam_off.png"
+              />
               <Image
                 w="100%"
                 maxH={{ base: "100px", sm: "unset" }}
-                src={insertGift || gifData?.["wait"]}
+                src={insertGift || artistData?.["wait"].gifSrc}
               />
             </Box>
 
@@ -159,13 +210,19 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
             <Flex wrap="wrap">
               {padsArr.map((pad) => (
                 <Box
-                  p="2px"
                   key={pad.id}
+                  pos="relative"
+                  p="2px"
                   w="25%"
-                  onClick={(e) => {
-                    handler.onGifChange(gifData[pad.name]);
+                  onClick={() => {
+                    const padData = artistData[pad.name];
+                    handler.onChangeGif(padData);
+                    handler.onChangePadLight(pad.name);
+                    playerRef.current.player(pad.name).start();
                   }}
                 >
+                  <PadLight myPadName={pad.name} activePad={activePad} />
+                  {pad.id < 5 && <RecordingLight />}
                   <Image src={pad.imageSrc} alt={pad.name} cursor="pointer" />
                 </Box>
               ))}

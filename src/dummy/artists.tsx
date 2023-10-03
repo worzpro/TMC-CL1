@@ -1,48 +1,192 @@
-const gifs: { [key: string]: any } = {
+const artists: { [key: string]: any } = {
   puzzleman: {
     seq1: {
-      "1": "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
-      "2": "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
-      "3": "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
-      "4": "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
-      "5": "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
-      "6": "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
-      "7": "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
-      "8": "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
-      wait: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      "1": {
+        pad: '1',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
+        gifDuration: 200,
+        audioSrc: '/audio/puzzleman/1/1-1.mp3'
+      },
+      "2": {
+        pad: '2',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
+        gifDuration: 200,
+        audioSrc: '/audio/puzzleman/1/1-2.mp3'
+      },
+      "3": {
+        pad: '3',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
+        gifDuration: 200,
+        audioSrc: '/audio/puzzleman/1/1-3.mp3'
+      },
+      "4": {
+        pad: '4',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
+        gifDuration: 200,
+        audioSrc: '/audio/puzzleman/1/1-4.mp3'
+      },
+      "5": {
+        pad: '5',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
+        gifDuration: 200,
+        audioSrc: '/audio/puzzleman/1/1-5.mp3'
+      },
+      "6": {
+        pad: '6',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
+        gifDuration: 200,
+        audioSrc: '/audio/puzzleman/1/1-6.mp3'
+      },
+      "7": {
+        pad: '7',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
+        gifDuration: 200,
+        audioSrc: '/audio/puzzleman/1/1-7.mp3'
+      },
+      "8": {
+        pad: '8',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
+        gifDuration: 200,
+        audioSrc: '/audio/puzzleman/1/1-8.mp3'
+      },
+      wait: {
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      },
     },
     seq2: {
-      "1": "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
-      "2": "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
-      "3": "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
-      "4": "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
-      "5": "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
-      "6": "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
-      "7": "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
-      "8": "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
-      wait: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      "1": {
+        pad: '1',
+        gifSrc:"/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
+        gifDuration: 200,
+      },
+      "2": {
+        pad: '2',
+        gifSrc:"/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
+        gifDuration: 200,
+      },
+      "3": {
+        pad: '3',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
+        gifDuration: 200,
+      },
+      "4": {
+        pad: '4',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
+        gifDuration: 200,
+      },
+      "5": {
+        pad: '5',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
+        gifDuration: 200,
+      },
+      "6": {
+        pad: '6',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
+        gifDuration: 200,
+      },
+      "7": {
+        pad: '7',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
+        gifDuration: 200,
+      },
+      "8": {
+        pad: '8',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
+        gifDuration: 200,
+      },
+      wait: {
+        gifSrc:"/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      },
     },
     seq3: {
-      "1": "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
-      "2": "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
-      "3": "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
-      "4": "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
-      "5": "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
-      "6": "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
-      "7": "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
-      "8": "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
-      wait: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      "1": {
+        pad: '1',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
+        gifDuration: 200,
+      },
+      "2": {
+        pad: '2',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
+        gifDuration: 200,
+      },
+      "3": {
+        pad: '3',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
+        gifDuration: 200,
+      },
+      "4": {
+        pad: '4',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
+        gifDuration: 200,
+      },
+      "5": {
+        pad: '5',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
+        gifDuration: 200,
+      },
+      "6": {
+        pad: '6',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
+        gifDuration: 200,
+      },
+      "7": {
+        pad: '7',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
+        gifDuration: 200,
+      },
+      "8": {
+        pad: '8',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
+        gifDuration: 200,
+      },
+      wait: {
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      },
     },
     seq4: {
-      "1": "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
-      "2": "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
-      "3": "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
-      "4": "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
-      "5": "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
-      "6": "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
-      "7": "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
-      "8": "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
-      wait: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      "1": {
+        pad: '1',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
+        gifDuration: 200,
+      },
+      "2": {
+        pad: '2',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
+        gifDuration: 200,
+      },
+      "3": {
+        pad: '3',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
+        gifDuration: 200,
+      },
+      "4": {
+        pad: '4',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
+        gifDuration: 200,
+      },
+      "5": {
+        pad: '5',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
+        gifDuration: 200,
+      },
+      "6": {
+        pad: '6',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
+        gifDuration: 200,
+      },
+      "7": {
+        pad: '7',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
+        gifDuration: 200,
+      },
+      "8": {
+        pad: '8',
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
+        gifDuration: 200,
+      },
+      wait: {
+        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      },
     },
   },
   "sunset-rollercoaster": {
@@ -139,7 +283,6 @@ const gifs: { [key: string]: any } = {
       wait: "/images/gif/enno-chunho/enno_seq4_White BG.webp",
       dust: "/images/gif/enno-chunho/enno_seq4_dust(最前面).webp",
     },
-
   },
   l8ching: {
     seq1: {
@@ -186,7 +329,6 @@ const gifs: { [key: string]: any } = {
       "8": "/images/gif/l8ching/l8ching_seq1_sample08_choir_2.webp",
       wait: "/images/gif/l8ching/l8ching_waiting.webp",
     },
-
   },
   sonia: {
     seq1: {
@@ -244,4 +386,4 @@ const gifs: { [key: string]: any } = {
   },
 };
 
-export default gifs;
+export default artists;
