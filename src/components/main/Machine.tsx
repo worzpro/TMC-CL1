@@ -12,37 +12,67 @@ import RecordingLight from "@/components/machine/RecordingLight";
 interface MachineProps {
   isMenuOpen: boolean;
 }
+interface LooseObject {
+  [key: string]: any;
+}
 
 const Machine = ({ isMenuOpen }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isToneStarted, setIsToneStarted] = useState<boolean>(false);
   const [currentSeq, setCurrentSeq] = useState(1);
-  const [insertGift, setInsetGift] = useState<string>("");
+  const [insertGif, setInsetGif] = useState<string>("");
   const [activePad, setActivePad] = useState<string>("");
+  const [isJamming, setIsJamming] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const router = useRouter();
   const pathName = router.pathname.split("/")[2];
 
   // dummy data 後處理
   const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
-  const artistData = artists[pathName]?.[`seq${currentSeq}`];
+  const curSeqData = artists[pathName]?.[`seq${currentSeq}`];
 
   const playerRef = useRef<any>(null);
 
   const handler = {
     initiateTone: async () => {
       await Tone.loaded();
-      console.log("Audio is loaded");
       await Tone.start();
-      console.log("AudioContext is started");
-      setIsLoading(false);
+      setIsToneStarted(true);
     },
-    onChangeGif: (padData: { [key: string]: any }) => {
-      if (!padData?.gifSrc) return;
-      if (insertGift !== "") setInsetGift("");
-      setInsetGift(padData.gifSrc);
+    createNewLoopedAndSyncedPlayer: (src: string) => {
+      const newPlayer = new Tone.Player(src).toDestination();
+      newPlayer.loop = true;
+      newPlayer.volume.value = -10;
+      newPlayer.sync();
+      return newPlayer;
+    },
+    createPlayers: () => {
+      const { src, srcJam } = curSeqData.audios.seqAudio;
+      const samplesAudios = curSeqData.audios.sampleAudios;
+      const fullPlayer = handler.createNewLoopedAndSyncedPlayer(src);
+      const jamPlayer = handler.createNewLoopedAndSyncedPlayer(srcJam);
+      const samplePlayers = samplesAudios.map((sampleAudio: LooseObject) =>
+        new Tone.Player(sampleAudio.src).toDestination()
+      );
+      return { fullPlayer, jamPlayer, samplePlayers };
+    },
+    setJam: (isJamming: boolean) => {
+      const { fullPlayer, jamPlayer } = playerRef.current;
+      fullPlayer.mute = isJamming;
+      jamPlayer.mute = !isJamming;
+    },
+    toggleJam: () => {
+      const { fullPlayer, jamPlayer } = playerRef.current;
+      fullPlayer.mute = !isJamming;
+      jamPlayer.mute = isJamming
+    },
+    onChangeGif: (curGifData: { [key: string]: any }) => {
+      if (!curGifData?.src) return;
+      // if (insertGif !== "") setInsetGif("");
+      setInsetGif(curGifData.src);
       setTimeout(() => {
-        setInsetGift("");
-      }, padData.gifDuration);
+        setInsetGif("");
+      }, curGifData.duration);
     },
     onChangePadLight: (padName: string) => {
       if (activePad !== "") setActivePad("");
@@ -50,6 +80,31 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       setTimeout(() => {
         setActivePad("");
       }, 100);
+    },
+    onPadTouch: (padName: string) => {
+      const padNum = parseInt(padName);
+      if (!padNum) return;
+
+      const curGifData = curSeqData.padGifs[padNum - 1];
+      handler.onChangeGif(curGifData);
+      handler.onChangePadLight(padName);
+
+      const { samplePlayers } = playerRef.current;
+      try {
+        samplePlayers[padNum - 1].start();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    onPlayOrPause: async () => {
+      if (!isPlaying) {
+        await Tone.loaded();
+        Tone.Transport.start();
+        setIsPlaying(true);
+      } else {
+        Tone.Transport.pause();
+        setIsPlaying(false);
+      }
     },
   };
 
@@ -59,22 +114,24 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
     const mobileKeywords = /Mobile|Android|iPhone|iPad|iPod|Windows Phone/i;
     setIsMobile(mobileKeywords.test(userAgent));
 
+    // 初始化 Tone
+    handler.initiateTone();
+
     // 初始化 playerRef
-    let MAPPING: any = {};
-    for (let key in artistData) {
-      MAPPING[key] = artistData[key].audioSrc;
-    }
-    const players = new Tone.Players(MAPPING).toDestination();
-    playerRef.current = players;
+    playerRef.current = handler.createPlayers();
   }, []);
 
   useEffect(() => {
-    if (isLoading) {
-      handler.initiateTone();
+    if (isToneStarted && playerRef.current) {
+      const { bpm } = curSeqData.audios.seqAudio;
+      Tone.Transport.bpm.value = bpm;
+      const { fullPlayer, jamPlayer } = playerRef.current;
+      handler.setJam(isJamming);
+      fullPlayer.start(0);
+      jamPlayer.start(0);
     }
-  }, [isLoading]);
+  }, [isToneStarted, playerRef.current]);
 
-  console.log(playerRef.current)
   return (
     <Box
       // 外層容器
@@ -140,18 +197,27 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
                 </Center>
               ))}
             </HStack>
+
             <Box pos="relative">
+              {/* Jam */}
               <Image
                 pos="absolute"
                 top="0"
                 right="0"
                 w="85px"
-                src="/images/jam_off.png"
+                src={isJamming ? "/images/jam_on.png" : "/images/jam_off.png"}
+                cursor="pointer"
+                onClick={() => {
+                  handler.toggleJam();
+                  setIsJamming((prev) => !prev);
+                }}
               />
+
+              {/* Gif */}
               <Image
                 w="100%"
                 maxH={{ base: "100px", sm: "unset" }}
-                src={insertGift || artistData?.["wait"].gifSrc}
+                src={insertGif || curSeqData["waitGif"]}
               />
             </Box>
 
@@ -177,7 +243,13 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
                   alt="restart"
                   cursor="pointer"
                 />
-                <Image src="/images/play.svg" alt="play" cursor="pointer" />
+                <Box cursor="pointer" onClick={handler.onPlayOrPause}>
+                  {isPlaying ? (
+                    <Image src="/images/pause.svg" alt="pause" />
+                  ) : (
+                    <Image src="/images/play.svg" alt="play" />
+                  )}
+                </Box>
               </HStack>
             </Flex>
           </Flex>
@@ -215,10 +287,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
                   p="2px"
                   w="25%"
                   onClick={() => {
-                    const padData = artistData[pad.name];
-                    handler.onChangeGif(padData);
-                    handler.onChangePadLight(pad.name);
-                    playerRef.current.player(pad.name).start();
+                    handler.onPadTouch(pad.name);
                   }}
                 >
                   <PadLight myPadName={pad.name} activePad={activePad} />
