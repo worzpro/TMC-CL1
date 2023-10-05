@@ -73,13 +73,13 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
         jamPlayer.sync();
       });
     },
-    setJam: (isJamming: boolean) => {
-      const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
+    setJam: (seq:string,isJamming: boolean) => {
+      const { fullPlayer, jamPlayer } = playerRef.current[seq];
       fullPlayer.mute = isJamming;
       jamPlayer.mute = !isJamming;
     },
-    toggleJam: () => {
-      const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
+    toggleJam: (seq:string) => {
+      const { fullPlayer, jamPlayer } = playerRef.current[seq];
       fullPlayer.mute = !isJamming;
       jamPlayer.mute = isJamming;
     },
@@ -96,7 +96,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
         playerRef.current[curSeq].fullPlayer.stop(switch_time);
         playerRef.current[curSeq].jamPlayer.stop(switch_time);
 
-        handler.setJam(isJamming);
+        handler.setJam(seq,isJamming);
         playerRef.current[seq].fullPlayer.start(switch_time);
         playerRef.current[seq].jamPlayer.start(switch_time);
 
@@ -194,7 +194,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       const { bpm } = curSeqData.audios.seqAudio;
       Tone.Transport.bpm.value = bpm;
       const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
-      handler.setJam(isJamming);
+      handler.setJam(curSeq,isJamming);
       fullPlayer.start(0);
       jamPlayer.start(0);
     }
@@ -284,7 +284,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
                 src={isJamming ? "/images/jam_on.png" : "/images/jam_off.png"}
                 cursor="pointer"
                 onClick={() => {
-                  handler.toggleJam();
+                  handler.toggleJam(curSeq);
                   setIsJamming((prev) => !prev);
                 }}
               />
