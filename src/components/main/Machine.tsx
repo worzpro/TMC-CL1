@@ -56,6 +56,13 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       );
       return { fullPlayer, jamPlayer, samplePlayers };
     },
+    clearAllPlayerScheduledEvents: () => {
+      const { fullPlayer, jamPlayer } = playerRef.current;
+      fullPlayer.unsync();
+      jamPlayer.unsync();
+      fullPlayer.sync();
+      jamPlayer.sync();
+    },
     setJam: (isJamming: boolean) => {
       const { fullPlayer, jamPlayer } = playerRef.current;
       fullPlayer.mute = isJamming;
@@ -64,7 +71,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
     toggleJam: () => {
       const { fullPlayer, jamPlayer } = playerRef.current;
       fullPlayer.mute = !isJamming;
-      jamPlayer.mute = isJamming
+      jamPlayer.mute = isJamming;
     },
     onChangeGif: (curGifData: { [key: string]: any }) => {
       if (!curGifData?.src) return;
@@ -104,6 +111,25 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       } else {
         Tone.Transport.pause();
         setIsPlaying(false);
+      }
+    },
+    onStop: (event: any) => {
+      if (event.detail === 1) {
+        Tone.Transport.pause();
+        if (isPlaying) {
+          setIsPlaying(false);
+        }
+      } else if (event.detail === 2) {
+        Tone.Transport.stop();
+
+        // reset Transport
+        handler.clearAllPlayerScheduledEvents();
+
+        const { fullPlayer, jamPlayer } = playerRef.current;
+        const { bpm } = curSeqData.audios.seqAudio;
+        Tone.Transport.bpm.value = bpm;
+        fullPlayer.start(0);
+        jamPlayer.start(0);
       }
     },
   };
@@ -242,6 +268,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
                   src="/images/restart.svg"
                   alt="restart"
                   cursor="pointer"
+                  onClick={handler.onStop}
                 />
                 <Box cursor="pointer" onClick={handler.onPlayOrPause}>
                   {isPlaying ? (
