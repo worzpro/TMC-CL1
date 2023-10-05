@@ -1,6 +1,6 @@
 const artists: { [key: string]: any } = {
   puzzleman: {
-    seq1: {
+    'SEQ.1': {
       padGifs: [
         {
           pad: "1",
@@ -87,139 +87,265 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    seq2: {
-      "1": {
-        pad: "1",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
-        gifDuration: 200,
-      },
-      "2": {
-        pad: "2",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
-        gifDuration: 200,
-      },
-      "3": {
-        pad: "3",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
-        gifDuration: 200,
-      },
-      "4": {
-        pad: "4",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
-        gifDuration: 200,
-      },
-      "5": {
-        pad: "5",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
-        gifDuration: 200,
-      },
-      "6": {
-        pad: "6",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
-        gifDuration: 200,
-      },
-      "7": {
-        pad: "7",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
-        gifDuration: 200,
-      },
-      "8": {
-        pad: "8",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
-        gifDuration: 200,
-      },
-      wait: {
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
-      },
-    },
-    seq3: {
-      "1": {
-        pad: "1",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
-        gifDuration: 200,
-      },
-      "2": {
-        pad: "2",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
-        gifDuration: 200,
-      },
-      "3": {
-        pad: "3",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
-        gifDuration: 200,
-      },
-      "4": {
-        pad: "4",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
-        gifDuration: 200,
-      },
-      "5": {
-        pad: "5",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
-        gifDuration: 200,
-      },
-      "6": {
-        pad: "6",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
-        gifDuration: 200,
-      },
-      "7": {
-        pad: "7",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
-        gifDuration: 200,
-      },
-      "8": {
-        pad: "8",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
-        gifDuration: 200,
-      },
-      wait: {
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+    'SEQ.2': {
+      padGifs: [
+        {
+          pad: "1",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
+          duration: 200,
+        },
+        {
+          pad: "2",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
+          duration: 200,
+        },
+        {
+          pad: "3",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
+          duration: 200,
+        },
+        {
+          pad: "4",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
+          duration: 200,
+        },
+        {
+          pad: "5",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
+          duration: 200,
+        },
+        {
+          pad: "6",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
+          duration: 200,
+        },
+        {
+          pad: "7",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
+          duration: 200,
+        },
+        {
+          pad: "8",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
+          duration: 200,
+        },
+      ],
+      waitGif: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      audios: {
+        sampleAudios: [
+          {
+            pad: "1",
+            src: "/audio/puzzleman/2/2-1.mp3",
+          },
+          {
+            pad: "2",
+            src: "/audio/puzzleman/2/2-2.mp3",
+          },
+          {
+            pad: "3",
+            src: "/audio/puzzleman/2/2-3.mp3",
+          },
+          {
+            pad: "4",
+            src: "/audio/puzzleman/2/2-4.mp3",
+          },
+          {
+            pad: "5",
+            src: "/audio/puzzleman/2/2-5.mp3",
+          },
+          {
+            pad: "6",
+            src: "/audio/puzzleman/2/2-6.mp3",
+          },
+          {
+            pad: "7",
+            src: "/audio/puzzleman/2/2-7.mp3",
+          },
+          {
+            pad: "8",
+            src: "/audio/puzzleman/2/2-8.mp3",
+          },
+        ],
+        seqAudio: {
+          seq: "2",
+          bpm: 90,
+          src: "/audio/puzzleman/2/2-seq.mp3",
+          srcJam: "/audio/puzzleman/2/2-jam.mp3",
+        },
       },
     },
-    seq4: {
-      "1": {
-        pad: "1",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
-        gifDuration: 200,
+    'SEQ.3': {
+      padGifs: [
+        {
+          pad: "1",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
+          duration: 200,
+        },
+        {
+          pad: "2",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
+          duration: 200,
+        },
+        {
+          pad: "3",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
+          duration: 200,
+        },
+        {
+          pad: "4",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
+          duration: 200,
+        },
+        {
+          pad: "5",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
+          duration: 200,
+        },
+        {
+          pad: "6",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
+          duration: 200,
+        },
+        {
+          pad: "7",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
+          duration: 200,
+        },
+        {
+          pad: "8",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
+          duration: 200,
+        },
+      ],
+      waitGif: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      audios: {
+        sampleAudios: [
+          {
+            pad: "1",
+            src: "/audio/puzzleman/3/3-1.mp3",
+          },
+          {
+            pad: "2",
+            src: "/audio/puzzleman/3/3-2.mp3",
+          },
+          {
+            pad: "3",
+            src: "/audio/puzzleman/3/3-3.mp3",
+          },
+          {
+            pad: "4",
+            src: "/audio/puzzleman/3/3-4.mp3",
+          },
+          {
+            pad: "5",
+            src: "/audio/puzzleman/3/3-5.mp3",
+          },
+          {
+            pad: "6",
+            src: "/audio/puzzleman/3/3-6.mp3",
+          },
+          {
+            pad: "7",
+            src: "/audio/puzzleman/3/3-7.mp3",
+          },
+          {
+            pad: "8",
+            src: "/audio/puzzleman/3/3-8.mp3",
+          },
+        ],
+        seqAudio: {
+          seq: "3",
+          bpm: 90,
+          src: "/audio/puzzleman/3/3-seq.mp3",
+          srcJam: "/audio/puzzleman/3/3-jam.mp3",
+        },
       },
-      "2": {
-        pad: "2",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
-        gifDuration: 200,
-      },
-      "3": {
-        pad: "3",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
-        gifDuration: 200,
-      },
-      "4": {
-        pad: "4",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
-        gifDuration: 200,
-      },
-      "5": {
-        pad: "5",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
-        gifDuration: 200,
-      },
-      "6": {
-        pad: "6",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
-        gifDuration: 200,
-      },
-      "7": {
-        pad: "7",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
-        gifDuration: 200,
-      },
-      "8": {
-        pad: "8",
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
-        gifDuration: 200,
-      },
-      wait: {
-        gifSrc: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+    },
+    'SEQ.4': {
+      padGifs: [
+        {
+          pad: "1",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample01_Kick.webp",
+          duration: 200,
+        },
+        {
+          pad: "2",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample02_Snare.webp",
+          duration: 200,
+        },
+        {
+          pad: "3",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample03_Hihat.webp",
+          duration: 200,
+        },
+        {
+          pad: "4",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample04_Open hihat.webp",
+          duration: 200,
+        },
+        {
+          pad: "5",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample05_Cowbell.webp",
+          duration: 200,
+        },
+        {
+          pad: "6",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample06_Bongo.webp",
+          duration: 200,
+        },
+        {
+          pad: "7",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample07_Bongo2.webp",
+          duration: 200,
+        },
+        {
+          pad: "8",
+          src: "/images/gif/puzzleman/puzzleman_seq1_sample08_Trumpet.webp",
+          duration: 200,
+        },
+      ],
+      waitGif: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      audios: {
+        sampleAudios: [
+          {
+            pad: "1",
+            src: "/audio/puzzleman/4/4-1.mp3",
+          },
+          {
+            pad: "2",
+            src: "/audio/puzzleman/4/4-2.mp3",
+          },
+          {
+            pad: "3",
+            src: "/audio/puzzleman/4/4-3.mp3",
+          },
+          {
+            pad: "4",
+            src: "/audio/puzzleman/4/4-4.mp3",
+          },
+          {
+            pad: "5",
+            src: "/audio/puzzleman/4/4-5.mp3",
+          },
+          {
+            pad: "6",
+            src: "/audio/puzzleman/4/4-6.mp3",
+          },
+          {
+            pad: "7",
+            src: "/audio/puzzleman/4/4-7.mp3",
+          },
+          {
+            pad: "8",
+            src: "/audio/puzzleman/4/4-8.mp3",
+          },
+        ],
+        seqAudio: {
+          seq: "4",
+          bpm: 93,
+          src: "/audio/puzzleman/4/4-seq.mp3",
+          srcJam: "/audio/puzzleman/4/4-jam.mp3",
+        },
       },
     },
   },

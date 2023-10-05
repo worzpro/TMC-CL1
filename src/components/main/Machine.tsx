@@ -19,7 +19,8 @@ interface LooseObject {
 const Machine = ({ isMenuOpen }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isToneStarted, setIsToneStarted] = useState<boolean>(false);
-  const [currentSeq, setCurrentSeq] = useState(1);
+  const [curSeq, setCurSeq] = useState<string>("SEQ.1");
+  const [pendingSeq, setPendingSeq] = useState<string | null>(null);
   const [insertGif, setInsetGif] = useState<string>("");
   const [activePad, setActivePad] = useState<string>("");
   const [isJamming, setIsJamming] = useState<boolean>(false);
@@ -29,7 +30,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
 
   // dummy data 後處理
   const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
-  const curSeqData = artists[pathName]?.[`seq${currentSeq}`];
+  const curSeqData = artists[pathName]?.[curSeq];
 
   const playerRef = useRef<any>(null);
 
@@ -47,31 +48,72 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       return newPlayer;
     },
     createPlayers: () => {
-      const { src, srcJam } = curSeqData.audios.seqAudio;
-      const samplesAudios = curSeqData.audios.sampleAudios;
-      const fullPlayer = handler.createNewLoopedAndSyncedPlayer(src);
-      const jamPlayer = handler.createNewLoopedAndSyncedPlayer(srcJam);
-      const samplePlayers = samplesAudios.map((sampleAudio: LooseObject) =>
-        new Tone.Player(sampleAudio.src).toDestination()
+      const artistData = artists[pathName];
+      const players = Object.entries(artistData).map(
+        ([seqName, seqData]: any) => {
+          const { src, srcJam } = seqData.audios.seqAudio;
+          const samplesAudios = seqData.audios.sampleAudios;
+          const fullPlayer = handler.createNewLoopedAndSyncedPlayer(src);
+          const jamPlayer = handler.createNewLoopedAndSyncedPlayer(srcJam);
+          const samplePlayers = samplesAudios.map((sampleAudio: LooseObject) =>
+            new Tone.Player(sampleAudio.src).toDestination()
+          );
+          return [seqName, { fullPlayer, jamPlayer, samplePlayers }];
+        }
       );
-      return { fullPlayer, jamPlayer, samplePlayers };
+
+      return Object.fromEntries(players);
     },
     clearAllPlayerScheduledEvents: () => {
-      const { fullPlayer, jamPlayer } = playerRef.current;
-      fullPlayer.unsync();
-      jamPlayer.unsync();
-      fullPlayer.sync();
-      jamPlayer.sync();
+      Object.values(playerRef.current).forEach((player: any) => {
+        const { fullPlayer, jamPlayer } = player;
+        fullPlayer.unsync();
+        jamPlayer.unsync();
+        fullPlayer.sync();
+        jamPlayer.sync();
+      });
     },
     setJam: (isJamming: boolean) => {
-      const { fullPlayer, jamPlayer } = playerRef.current;
+      const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
       fullPlayer.mute = isJamming;
       jamPlayer.mute = !isJamming;
     },
     toggleJam: () => {
-      const { fullPlayer, jamPlayer } = playerRef.current;
+      const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
       fullPlayer.mute = !isJamming;
       jamPlayer.mute = isJamming;
+    },
+    onSeqClick: (seq: string) => {
+      if (curSeq === seq) return;
+
+      if (isPlaying) {
+        // switch seq on the next first beat
+        setPendingSeq(seq);
+        const curTick = Tone.Transport.getTicksAtTime();
+        const curMeasure = Math.floor(curTick / (192 * 4));
+
+        const switch_time = `${curMeasure + 1}:0:0`;
+        playerRef.current[curSeq].fullPlayer.stop(switch_time);
+        playerRef.current[curSeq].jamPlayer.stop(switch_time);
+
+        handler.setJam(isJamming);
+        playerRef.current[seq].fullPlayer.start(switch_time);
+        playerRef.current[seq].jamPlayer.start(switch_time);
+
+        Tone.Transport.scheduleOnce(() => {
+          setPendingSeq(null);
+          setCurSeq(seq);
+        }, switch_time);
+      } else {
+        handler.clearAllPlayerScheduledEvents();
+        const { bpm } = curSeqData.audios.seqAudio;
+        const { fullPlayer, jamPlayer } = playerRef.current[seq];
+        Tone.Transport.bpm.value = bpm;
+
+        fullPlayer.start(0);
+        jamPlayer.start(0);
+        setCurSeq(seq);
+      }
     },
     onChangeGif: (curGifData: { [key: string]: any }) => {
       if (!curGifData?.src) return;
@@ -96,7 +138,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       handler.onChangeGif(curGifData);
       handler.onChangePadLight(padName);
 
-      const { samplePlayers } = playerRef.current;
+      const { samplePlayers } = playerRef.current[curSeq];
       try {
         samplePlayers[padNum - 1].start();
       } catch (err) {
@@ -125,7 +167,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
         // reset Transport
         handler.clearAllPlayerScheduledEvents();
 
-        const { fullPlayer, jamPlayer } = playerRef.current;
+        const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
         const { bpm } = curSeqData.audios.seqAudio;
         Tone.Transport.bpm.value = bpm;
         fullPlayer.start(0);
@@ -151,7 +193,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
     if (isToneStarted && playerRef.current) {
       const { bpm } = curSeqData.audios.seqAudio;
       Tone.Transport.bpm.value = bpm;
-      const { fullPlayer, jamPlayer } = playerRef.current;
+      const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
       handler.setJam(isJamming);
       fullPlayer.start(0);
       jamPlayer.start(0);
@@ -209,17 +251,25 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
               // SEQs
               spacing="6px"
             >
-              {[1, 2, 3, 4].map((seq) => (
+              {["SEQ.1", "SEQ.2", "SEQ.3", "SEQ.4"].map((seq) => (
                 <Center
                   flex="1"
                   key={seq}
-                  bgColor={currentSeq === seq ? "#292929" : "#687074"}
+                  bgColor={
+                    curSeq === seq
+                      ? "#292929"
+                      : pendingSeq == seq
+                      ? "#a27533"
+                      : "#687074"
+                  }
                   color="white"
                   textStyle="en_special_md_bold"
                   cursor="pointer"
-                  onClick={() => setCurrentSeq(seq)}
+                  onClick={() => {
+                    handler.onSeqClick(seq);
+                  }}
                 >
-                  SEQ.{seq}
+                  {seq}
                 </Center>
               ))}
             </HStack>
