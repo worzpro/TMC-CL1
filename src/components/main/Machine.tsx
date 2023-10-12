@@ -8,6 +8,7 @@ import pads from "@/dummy/pads";
 
 import PadLight from "@/components/machine/PadLight";
 import RecordingLight from "@/components/machine/RecordingLight";
+import Loading from "@/components/machine/Loading";
 
 interface MachineProps {
   isMenuOpen: boolean;
@@ -73,12 +74,12 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
         jamPlayer.sync();
       });
     },
-    setJam: (seq:string,isJamming: boolean) => {
+    setJam: (seq: string, isJamming: boolean) => {
       const { fullPlayer, jamPlayer } = playerRef.current[seq];
       fullPlayer.mute = isJamming;
       jamPlayer.mute = !isJamming;
     },
-    toggleJam: (seq:string) => {
+    toggleJam: (seq: string) => {
       const { fullPlayer, jamPlayer } = playerRef.current[seq];
       fullPlayer.mute = !isJamming;
       jamPlayer.mute = isJamming;
@@ -96,7 +97,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
         playerRef.current[curSeq].fullPlayer.stop(switch_time);
         playerRef.current[curSeq].jamPlayer.stop(switch_time);
 
-        handler.setJam(seq,isJamming);
+        handler.setJam(seq, isJamming);
         playerRef.current[seq].fullPlayer.start(switch_time);
         playerRef.current[seq].jamPlayer.start(switch_time);
 
@@ -194,7 +195,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       const { bpm } = curSeqData.audios.seqAudio;
       Tone.Transport.bpm.value = bpm;
       const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
-      handler.setJam(curSeq,isJamming);
+      handler.setJam(curSeq, isJamming);
       fullPlayer.start(0);
       jamPlayer.start(0);
     }
@@ -246,7 +247,10 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
             px="8px"
             pb="1px"
             justify="space-between"
+            pos='relative'
+            overflow='hidden'
           >
+            <Loading  />
             <HStack
               // SEQs
               spacing="6px"
@@ -363,7 +367,11 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
                   pos="relative"
                   p="2px"
                   w="25%"
-                  onClick={() => {
+                  onMouseDown={() => {
+                    if (isMobile) return;
+                    handler.onPadTouch(pad.name);
+                  }}
+                  onTouchStart={() => {
                     handler.onPadTouch(pad.name);
                   }}
                 >
