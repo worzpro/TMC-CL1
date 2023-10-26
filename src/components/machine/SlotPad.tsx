@@ -1,18 +1,35 @@
 import { Box, Image, Circle } from "@chakra-ui/react";
+import PadLight from "@/components/machine/PadLight";
 
 interface SlotPadProps {
   name: string;
   imageSrc: string;
+  isMobile: boolean;
+  isRegistered: boolean;
   isActive: boolean;
-  onHold: Function;
-  onMouseDown: Function;
+  onClick: Function;
 }
 
-
-const SlotPad = () => {
+const SlotPad = ({
+  name,
+  imageSrc,
+  isMobile,
+  isRegistered,
+  isActive,
+  onClick,
+}: SlotPadProps) => {
   return (
-    <div>SlotPad</div>
-  )
-}
+    <Box
+      pos="relative"
+      p="2px"
+      w="25%"
+      onClick={()=>{onClick()}}
 
-export default SlotPad
+    >
+      <PadLight myPadName={name} isRegistered={isRegistered} />
+      <Image src={imageSrc} alt={name} cursor="pointer" />
+    </Box>
+  );
+};
+
+export default SlotPad;

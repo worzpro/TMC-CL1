@@ -26,8 +26,21 @@ interface LooseObject {
 const SAMPLES = proSamples;
 const DEFAULT_SAMPLES = defaultSamples;
 const NUMBER_OF_SLOTS = 8;
-const NUMBER_OF_SAMPLES = 8;
+const NUMBER_OF_SAMPLES = 12; // TODO:加上錄音為12?
 const NUMBER_OF_PATTERNS = 4;
+const PATTER_OFFSET: any = {
+  a: 0,
+  b: 1,
+  c: 2,
+  d: 3,
+};
+
+const INIT_PADSTATE = Array.from({ length: NUMBER_OF_SAMPLES }, () =>
+  Array.from(
+    { length: (NUMBER_OF_PATTERNS + 1) * NUMBER_OF_SLOTS },
+    () => false
+  )
+);
 
 const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -44,6 +57,9 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
   const [curPattern, setCurPattern] = useState<string>("a"); // 目前選擇的段落(a,b,c,d)
   const [curPosition, setCurPosition] = useState(null);
   const samplePlayerRef = useRef<any>(null); // 全部sample的player
+
+  const [bpm, setBpm] = useState(120);
+  const [padState, setPadState] = useState<any[]>(INIT_PADSTATE); // 8個pad的狀態
 
   const [pendingSeq, setPendingSeq] = useState<string | null>(null);
   const [activePad, setActivePad] = useState<string>("");
@@ -102,12 +118,20 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
       },
       [setCurPattern]
     ),
-  };
+    onSlotPadClick: (slotIndex: number) => {
+      const curSampleIndex = curSample.index;
+      // let padRegistered = [...INIT_PADSTATE];
+      // padRegistered[curSampleIndex][slotIndex] =
+      //   !padRegistered[curSampleIndex][slotIndex];
 
-  let padRegistered = handler.generate2DArray(
-    NUMBER_OF_SAMPLES,
-    NUMBER_OF_SLOTS * (NUMBER_OF_PATTERNS + 1)
-  );
+      setPadState((prev: any) => {
+        const newState = prev.map((arr: any) => [...arr]);
+        newState[curSampleIndex][slotIndex] =
+          !newState[curSampleIndex][slotIndex];
+        return newState;
+      });
+    },
+  };
 
   useEffect(() => {
     // 判斷使用者裝置
@@ -122,6 +146,7 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
     samplePlayerRef.current = handler.createSamplePlayer();
   }, []);
 
+  console.log(padState)
   return (
     <Box
       // 外層容器
@@ -314,37 +339,28 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
                   />
                 );
               })}
-              {slotPads.map((pad) => {
+              {slotPads.map((pad, index) => {
+                const patternOffest =
+                (PATTER_OFFSET[curPattern] + 1) * NUMBER_OF_SLOTS;
+                const fixedIndex = index < 4 ? index + 4 : index - 4;
+                const slotIndex = fixedIndex + patternOffest;
                 return (
-                  <Box
+                  <SlotPad
                     key={pad.id}
-                    pos="relative"
-                    p="2px"
-                    w="25%"
-                    onMouseDown={() => {
-                      if (isMobile) return;
-                      // handler.onPadTouch(pad.name);
+                    name={pad.name}
+                    imageSrc={pad.imageSrc}
+                    isMobile={isMobile}
+                    isRegistered={padState[curSample.index][slotIndex]}
+                    isActive={activePad === pad.name}
+                    onClick={() => {
+                      handler.onSlotPadClick(slotIndex);
                     }}
-                    onTouchStart={() => {
-                      if (!isMobile) return;
-                      // handler.onPadTouch(pad.name);
-                    }}
-                  >
-                    <PadLight myPadName={pad.name} activePad={activePad} />
-                    <Image src={pad.imageSrc} alt={pad.name} cursor="pointer" />
-                  </Box>
+                  />
                 );
               })}
             </Flex>
           </Box>
         </Flex>
-      </Box>
-      <Box
-        onClick={() => {
-          console.log(samplePlayerRef.current);
-        }}
-      >
-        console(現在的samplePlayerRef)
       </Box>
     </Box>
   );
