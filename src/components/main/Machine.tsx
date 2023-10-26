@@ -38,7 +38,9 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
   const handler = {
     initiateTone: async () => {
       await Tone.loaded();
+      console.log("Audio Ready");
       await Tone.start();
+      console.log("Audio context started!");
       setIsToneStarted(true);
     },
     createNewLoopedAndSyncedPlayer: (src: string) => {
@@ -191,6 +193,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
   }, []);
 
   useEffect(() => {
+    // 初始化 bpm, jam, player
     if (isToneStarted && playerRef.current) {
       const { bpm } = curSeqData.audios.seqAudio;
       Tone.Transport.bpm.value = bpm;
@@ -213,7 +216,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       transition="all 0.3s ease-out"
       transitionDelay={isMenuOpen ? "0s" : "0.3s"}
       transitionDuration={isMenuOpen ? "0.3s" : "0.7s"}
-      boxShadow="rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0,0.5) 0px 35px 60px -15px"
+      boxShadow="rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 0, 0,0.2) 0px 30px 15px -15px"
     >
       <Box
         // 機器背景
@@ -247,10 +250,10 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
             px="8px"
             pb="1px"
             justify="space-between"
-            pos='relative'
-            overflow='hidden'
+            pos="relative"
+            overflow="hidden"
           >
-            <Loading  />
+            <Loading />
             <HStack
               // SEQs
               spacing="6px"
@@ -372,6 +375,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
                     handler.onPadTouch(pad.name);
                   }}
                   onTouchStart={() => {
+                    if (!isMobile) return;
                     handler.onPadTouch(pad.name);
                   }}
                 >

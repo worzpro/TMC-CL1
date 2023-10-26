@@ -54,7 +54,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
 
       {isMenuOpen && (
         <VStack spacing="35px" mt="190px">
-          <HStack w="100%" justify="space-between">
+          <HStack w="100%" justify="space-between" >
             <Image
               src="/images/music-list-left-right-arrow.svg"
               alt="LeftArrow"
