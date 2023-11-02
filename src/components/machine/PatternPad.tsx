@@ -65,7 +65,7 @@ const PatternPad = ({
         w="10px"
         h="10px"
         bgColor={isActive ? COLOR_MAP.active : COLOR_MAP.inactive}
-        top="0"
+        top="2px"
         left="50%"
         transform="translateX(-50%)"
       />

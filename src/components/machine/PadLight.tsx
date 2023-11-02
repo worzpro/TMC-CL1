@@ -26,7 +26,7 @@ const PadLight = ({ myPadName, activePad, isRegistered }: PadLightProps) => {
           ? colorMap.active
           : colorMap.inactive
       }
-      top="0"
+      top="2px"
       left="50%"
       transform="translateX(-50%)"
     />

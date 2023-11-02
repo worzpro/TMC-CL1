@@ -2,7 +2,7 @@ import { Flex, Box, VStack, HStack, Image, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
 import cassettes from "@/dummy/cassettes";
-import proSamples from "@/dummy/customize/proSamples";
+import allSamples from "@/dummy/allSamples";
 
 import SampleBtn from "@/components/machine/SampleBtn";
 
@@ -113,7 +113,7 @@ const SampleSelectPanel = ({
 
       {/* samples */}
       <Flex wrap="wrap" gap="4px">
-        {proSamples
+        {allSamples
           .filter((sample: any) => sample.artist == cassetteObj.path)
           .map((sample, index) => {
             return (
@@ -135,7 +135,7 @@ const SampleSelectPanel = ({
                   let newCurSamples: any[] = [...curSamples];
                   newCurSamples[curSample.index] = sample;
                   setCurSamples(newCurSamples);
-                  
+
                   // playerRef.current[curSampleIndex] = samplerPlayers[label];
                 }}
               />

@@ -1,19 +1,16 @@
 import { Box, Image, Flex, HStack, Center } from "@chakra-ui/react";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter } from "next/router";
 import * as Tone from "tone";
 
 import pads from "@/dummy/pads";
 
-import PadLight from "@/components/machine/PadLight";
-import RecordingLight from "@/components/machine/RecordingLight";
 import Loading from "@/components/machine/Loading";
 import SampleBtn from "@/components/machine/SampleBtn";
 import PatternPad from "@/components/machine/PatternPad";
 import SlotPad from "@/components/machine/SlotPad";
 import SampleSelectPanel from "@/components/machine/SampleSelectPanel";
 
-import proSamples from "@/dummy/customize/proSamples";
+import allSamples from "@/dummy/allSamples";
 import defaultSamples from "@/dummy/customize/defaultSamples";
 
 interface MachineProps {
@@ -23,7 +20,7 @@ interface LooseObject {
   [key: string]: any;
 }
 
-const SAMPLES = proSamples;
+const SAMPLES = allSamples;
 const DEFAULT_SAMPLES = defaultSamples;
 const NUMBER_OF_SLOTS = 8;
 const NUMBER_OF_SAMPLES = 12; // TODO:加上錄音為12?
@@ -146,7 +143,7 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
     samplePlayerRef.current = handler.createSamplePlayer();
   }, []);
 
-  console.log(padState)
+  // console.log(padState)
   return (
     <Box
       // 外層容器
@@ -341,7 +338,7 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
               })}
               {slotPads.map((pad, index) => {
                 const patternOffest =
-                (PATTER_OFFSET[curPattern] + 1) * NUMBER_OF_SLOTS;
+                  (PATTER_OFFSET[curPattern] + 1) * NUMBER_OF_SLOTS;
                 const fixedIndex = index < 4 ? index + 4 : index - 4;
                 const slotIndex = fixedIndex + patternOffest;
                 return (
