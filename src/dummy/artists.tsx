@@ -43,7 +43,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      waitGif: ["/images/gif/puzzleman/puzzleman_seq1_waiting.webp"],
       audios: {
         sampleAudios: [
           {
@@ -130,7 +130,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      waitGif: ["/images/gif/puzzleman/puzzleman_seq1_waiting.webp"],
       audios: {
         sampleAudios: [
           {
@@ -217,7 +217,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      waitGif: ["/images/gif/puzzleman/puzzleman_seq1_waiting.webp"],
       audios: {
         sampleAudios: [
           {
@@ -304,7 +304,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/puzzleman/puzzleman_seq1_waiting.webp",
+      waitGif: ["/images/gif/puzzleman/puzzleman_seq1_waiting.webp"],
       audios: {
         sampleAudios: [
           {
@@ -355,45 +355,45 @@ const artists: { [key: string]: any } = {
         {
           pad: "1",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample01.webp",
-          duration: 200,
+          duration: 1000,
         },
         {
           pad: "2",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample02.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "3",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample03.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "4",
-          src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample04 hihat.webp",
-          duration: 200,
+          src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample04.webp",
+          duration: 300,
         },
         {
           pad: "5",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample05.webp",
-          duration: 200,
+          duration: 500,
         },
         {
           pad: "6",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample06.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "7",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample07.webp",
-          duration: 200,
+          duration: 500,
         },
         {
           pad: "8",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample08.webp",
-          duration: 200,
+          duration: 1000,
         },
       ],
-      waitGif: "/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp",
+      waitGif: ["/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp"],
       audios: {
         sampleAudios: [
           {
@@ -442,45 +442,45 @@ const artists: { [key: string]: any } = {
         {
           pad: "1",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample01.webp",
-          duration: 200,
+          duration: 1000,
         },
         {
           pad: "2",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample02.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "3",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample03.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "4",
-          src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample04 hihat.webp",
-          duration: 200,
+          src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample04.webp",
+          duration: 400,
         },
         {
           pad: "5",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample05.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "6",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample06.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "7",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample07.webp",
-          duration: 200,
+          duration: 500,
         },
         {
           pad: "8",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample08.webp",
-          duration: 200,
+          duration: 500,
         },
       ],
-      waitGif: "/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp",
+      waitGif: ["/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp"],
       audios: {
         sampleAudios: [
           {
@@ -529,45 +529,45 @@ const artists: { [key: string]: any } = {
         {
           pad: "1",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample01.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "2",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample02.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "3",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample03.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "4",
-          src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample04 hihat.webp",
-          duration: 200,
+          src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample04.webp",
+          duration: 300,
         },
         {
           pad: "5",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample05.webp",
-          duration: 200,
+          duration: 500,
         },
         {
           pad: "6",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample06.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "7",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample07.webp",
-          duration: 200,
+          duration: 500,
         },
         {
           pad: "8",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample08.webp",
-          duration: 200,
+          duration: 1000,
         },
       ],
-      waitGif: "/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp",
+      waitGif: ["/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp"],
       audios: {
         sampleAudios: [
           {
@@ -616,45 +616,45 @@ const artists: { [key: string]: any } = {
         {
           pad: "1",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample01.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "2",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample02.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "3",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample03.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "4",
-          src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample04 hihat.webp",
-          duration: 200,
+          src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample04.webp",
+          duration: 300,
         },
         {
           pad: "5",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample05.webp",
-          duration: 200,
+          duration: 500,
         },
         {
           pad: "6",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample06.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "7",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample07.webp",
-          duration: 200,
+          duration: 500,
         },
         {
           pad: "8",
           src: "/images/gif/sunset-rollercoaster/sunset-rollercoaster_seq1_sample08.webp",
-          duration: 200,
+          duration: 1000,
         },
       ],
-      waitGif: "/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp",
+      waitGif: ["/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp"],
       audios: {
         sampleAudios: [
           {
@@ -743,7 +743,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/enno-chunho/enno_seq1_BG.webp",
+      waitGif: ["/images/gif/enno-chunho/enno_seq1_BG.webp"],
       audios: {
         sampleAudios: [
           {
@@ -830,7 +830,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/enno-chunho/enno_seq1_BG.webp",
+      waitGif: ["/images/gif/enno-chunho/enno_seq1_BG.webp"],
       audios: {
         sampleAudios: [
           {
@@ -917,7 +917,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/enno-chunho/enno_seq1_BG.webp",
+      waitGif: ["/images/gif/enno-chunho/enno_seq1_BG.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1004,7 +1004,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/enno-chunho/enno_seq1_BG.webp",
+      waitGif: ["/images/gif/enno-chunho/enno_seq1_BG.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1054,43 +1054,43 @@ const artists: { [key: string]: any } = {
       padGifs: [
         {
           pad: "1",
-          src: "/images/gif/l8ching/l8ching_seq1_sample01_kick.webp",
-          duration: 200,
+          src: ["/images/gif/l8ching/l8ching_seq1_sample01_kick.webp"],
+          duration: 600,
         },
         {
           pad: "2",
           src: "/images/gif/l8ching/l8ching_seq1_sample02_clap1.webp",
-          duration: 200,
+          duration: 300,
         },
         {
           pad: "3",
           src: "/images/gif/l8ching/l8ching_seq1_sample03_snare.webp",
-          duration: 200,
+          duration: 600,
         },
         {
           pad: "4",
           src: "/images/gif/l8ching/l8ching_seq1_sample04_bongo.webp",
-          duration: 200,
+          duration: 400,
         },
         {
           pad: "5",
           src: "/images/gif/l8ching/l8ching_seq1_sample05_conga1.webp",
-          duration: 200,
+          duration: 500,
         },
         {
           pad: "6",
           src: "/images/gif/l8ching/l8ching_seq1_sample06_animal.webp",
-          duration: 200,
+          duration: 1000,
         },
         {
           pad: "7",
           src: "/images/gif/l8ching/l8ching_seq1_sample07_choir_1.webp",
-          duration: 200,
+          duration: 500,
         },
         {
           pad: "8",
           src: "/images/gif/l8ching/l8ching_seq1_sample08_choir_2.webp",
-          duration: 200,
+          duration: 500,
         },
       ],
       waitGif: "/images/gif/l8ching/l8ching_waiting.webp",
@@ -1180,7 +1180,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/l8ching/l8ching_waiting.webp",
+      waitGif: ["/images/gif/l8ching/l8ching_waiting.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1267,7 +1267,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/l8ching/l8ching_waiting.webp",
+      waitGif: ["/images/gif/l8ching/l8ching_waiting.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1354,7 +1354,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/l8ching/l8ching_waiting.webp",
+      waitGif: ["/images/gif/l8ching/l8ching_waiting.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1404,8 +1404,8 @@ const artists: { [key: string]: any } = {
       padGifs: [
         {
           pad: "1",
-          src: "/images/gif/sonia/l8ching_seq1_sample01_kick.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample01_clap.webp",
+          duration: 1000,
         },
         {
           pad: "2",
@@ -1443,7 +1443,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/sonia/sonia-bg-fast-dark.webp",
+      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp","/images/gif/sonia/sonia calico-more dark.webp","/images/gif/sonia/sonia-walk-2-fast-bright.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1530,7 +1530,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/sonia/sonia-bg-fast-dark.webp",
+      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1617,7 +1617,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/sonia/sonia-bg-fast-dark.webp",
+      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1704,7 +1704,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: "/images/gif/sonia/sonia-bg-fast-dark.webp",
+      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp"],
       audios: {
         sampleAudios: [
           {

@@ -22,7 +22,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
   const [isToneStarted, setIsToneStarted] = useState<boolean>(false);
   const [curSeq, setCurSeq] = useState<string>("SEQ.1");
   const [pendingSeq, setPendingSeq] = useState<string | null>(null);
-  const [insertGif, setInsetGif] = useState<string>("");
+  const [gifs, setGifs] = useState<string[]>([]);
   const [activePad, setActivePad] = useState<string>("");
   const [isJamming, setIsJamming] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -118,13 +118,15 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
         setCurSeq(seq);
       }
     },
-    onChangeGif: (curGifData: { [key: string]: any }) => {
+    onChangeGif: (curGifData: LooseObject) => {
       if (!curGifData?.src) return;
-      // if (insertGif !== "") setInsetGif("");
-      setInsetGif(curGifData.src);
-      setTimeout(() => {
-        setInsetGif("");
-      }, curGifData.duration);
+      if (pathName !== "sonia" && pathName !== "enno-chunho") {
+        setGifs([...gifs, curGifData.src]);
+
+        setTimeout(() => {
+          setGifs(curSeqData.waitGif);
+        }, curGifData.duration);
+      }
     },
     onChangePadLight: (padName: string) => {
       if (activePad !== "") setActivePad("");
@@ -178,6 +180,12 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       }
     },
   };
+
+  useEffect(() => {
+    // 初始化預設gifs
+    if (!curSeqData) return;
+    setGifs(curSeqData.waitGif);
+  }, [curSeqData]);
 
   useEffect(() => {
     // 判斷使用者裝置
@@ -281,7 +289,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
               ))}
             </HStack>
 
-            <Box pos="relative">
+            <Box pos="relative" flex="1" my="8px">
               {/* Jam */}
               <Image
                 pos="absolute"
@@ -294,14 +302,24 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
                   handler.toggleJam(curSeq);
                   setIsJamming((prev) => !prev);
                 }}
+                zIndex="100"
               />
 
               {/* Gif */}
-              <Image
-                w="100%"
-                maxH={{ base: "100px", sm: "unset" }}
-                src={insertGif || curSeqData["waitGif"]}
-              />
+              <Box pos="relative" flex="1">
+                {gifs.map((gif:string,index:number) => (
+                  <Image
+                    key={gif}
+                    pos="absolute"
+                    top="0"
+                    left="0"
+                    w="100%"
+                    maxH={{ base: "100px", sm: "unset" }}
+                    src={gif}
+                    zIndex={index}
+                  />
+                ))}
+              </Box>
             </Box>
 
             <Flex
