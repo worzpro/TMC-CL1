@@ -9,7 +9,7 @@ import pads from "@/dummy/pads";
 import PadLight from "@/components/machine/PadLight";
 import RecordingLight from "@/components/machine/RecordingLight";
 import Loading from "@/components/machine/Loading";
-
+import path from "path";
 
 interface MachineProps {
   isMenuOpen: boolean;
@@ -135,6 +135,9 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       if (pathName === "sonia") {
         handler.soniaChangeGif(curGifData, padName);
       }
+      if (pathName === "enno-chunho") {
+        handler.ennoChangeGif(curGifData, padName);
+      }
     },
     soniaChangeGif: (curGifData: LooseObject, padName: string) => {
       if (padName == "1" || padName == "2") {
@@ -194,7 +197,161 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       }
     },
     ennoChangeGif: (curGifData: LooseObject, padName: string) => {
+      if (curSeq == "SEQ.1") {
+        if (padName == "1" || padName == "2") {
+          setGifs((prev: any) => {
+            let newGifs = [...prev].filter((item) => item !== curGifData.src);
+            newGifs.push(curGifData.src);
+            return newGifs;
+          });
+          setTimeout(() => {
+            setGifs((prev: any) => {
+              let newGifs = [...prev].filter((item) => item !== curGifData.src);
+              return newGifs;
+            });
+          }, curGifData.duration);
+        }
+        if (
+          padName == "3" ||
+          padName == "4" ||
+          padName == "5" ||
+          padName == "7"
+        ) {
+          setGifs((prev: any) => {
+            let newGifs = [...prev].filter(
+              (item) =>
+                item !== "/images/gif/enno-chunho/enno_seq1_spark.webp" &&
+                item !== curGifData.src
+            );
+            newGifs.push(curGifData.src);
 
+            return newGifs;
+          });
+          setTimeout(() => {
+            setGifs((prev: any) => {
+              let newGifs = [...prev].filter((item) => item !== curGifData.src);
+              if (newGifs.length < 2) {
+                return curSeqData.waitGif;
+              } else return newGifs;
+            });
+          }, curGifData.duration);
+        }
+        if (padName == "6") {
+          setGifs((prev: any) => {
+            let newGifs = [...prev];
+            newGifs = [...newGifs, ...curGifData.src];
+            return newGifs;
+          });
+          // 如果之前有計時器，先清除
+          if (timeoutID) {
+            clearTimeout(timeoutID);
+          }
+          // 設定新的計時器
+          timeoutID = setTimeout(() => {
+            setGifs(curSeqData.waitGif);
+          }, curGifData.duration);
+        }
+        if (padName == "8") {
+          setGifs((prev: any) => {
+            let newGifs = [...prev].filter((item) => item !== curGifData.src);
+            newGifs.push(curGifData.src);
+            return newGifs;
+          });
+          setTimeout(() => {
+            setGifs((prev: any) => {
+              let newGifs = [...prev].filter((item) => item !== curGifData.src);
+              return newGifs;
+            });
+          }, curGifData.duration);
+        }
+      }
+      if (curSeq == "SEQ.2") {
+        if (
+          padName == "1" ||
+          padName == "2" 
+        ) {
+          setGifs((prev: any) => {
+            let newGifs = [...prev].filter(
+              (item) =>item !== curGifData.src
+            );
+            newGifs.push(curGifData.src);
+
+            return newGifs;
+          });
+          setTimeout(() => {
+            setGifs((prev: any) => {
+              let newGifs = [...prev].filter((item) => item !== curGifData.src);
+              return newGifs;
+            });
+          }, curGifData.duration);
+        }
+
+        if (
+          padName == "3" ||
+          padName == "4" 
+        ) {
+          setGifs((prev: any) => {
+            let newGifs = [...prev].filter(
+              (item) =>
+                item !== "/images/gif/enno-chunho/enno_seq2_spark.webp" &&
+                item !== curGifData.src
+            );
+            newGifs.push(curGifData.src);
+
+            return newGifs;
+          });
+          setTimeout(() => {
+            setGifs((prev: any) => {
+              let newGifs = [...prev].filter((item) => item !== curGifData.src);
+              if (newGifs.length < 2) {
+                return curSeqData.waitGif;
+              } else return newGifs;
+            });
+          }, curGifData.duration);
+        }
+
+        if (
+          padName == "5" ||
+          padName == "6" 
+        ) {
+          setGifs([curGifData.src]);
+          setTimeout(() => {
+            setGifs((prev: any) => {
+              let newGifs = [...prev].filter((item) => item !== curGifData.src);
+              if (newGifs.length < 2) {
+                return curSeqData.waitGif;
+              } else return newGifs;
+            });
+          }, curGifData.duration);
+        }
+
+        if (padName == "7"|| padName == "8") {
+          setGifs((prev: any) => {
+            let newGifs = [...prev].filter((item) => item !== curGifData.src);
+            newGifs.push(curGifData.src);
+            return newGifs;
+          });
+          setTimeout(() => {
+            setGifs((prev: any) => {
+              let newGifs = [...prev].filter((item) => item !== curGifData.src);
+              return newGifs;
+            });
+          }, curGifData.duration);
+        }
+      }
+      if (curSeq == 'SEQ.3' || curSeq == 'SEQ.4') {
+        setGifs((prev: any) => {
+          let newGifs = [...prev].filter((item) => item !== curGifData.src);
+          newGifs.push(curGifData.src);
+          return newGifs;
+        });
+        setTimeout(() => {
+          setGifs((prev: any) => {
+            let newGifs = [...prev].filter((item) => item !== curGifData.src);
+            return newGifs;
+          });
+        }, curGifData.duration);
+      }
     },
     onChangePadLight: (padName: string) => {
       if (activePad !== "") setActivePad("");
@@ -377,13 +534,14 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
               <Box pos="relative" flex="1">
                 {gifs.map((gif: string, index: number) => (
                   <Image
-                    key={gif}
+                    key={index}
                     pos="absolute"
                     top="0"
                     left="0"
                     w="100%"
                     maxH={{ base: "100px", sm: "unset" }}
                     src={gif}
+                    opacity={gif?.includes("透明度65") ? 0.65 : 1}
                     zIndex={index}
                   />
                 ))}

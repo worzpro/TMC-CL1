@@ -1,6 +1,6 @@
 const artists: { [key: string]: any } = {
   puzzleman: {
-    'SEQ.1': {
+    "SEQ.1": {
       padGifs: [
         {
           pad: "1",
@@ -87,7 +87,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.2': {
+    "SEQ.2": {
       padGifs: [
         {
           pad: "1",
@@ -174,7 +174,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.3': {
+    "SEQ.3": {
       padGifs: [
         {
           pad: "1",
@@ -261,7 +261,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.4': {
+    "SEQ.4": {
       padGifs: [
         {
           pad: "1",
@@ -350,7 +350,7 @@ const artists: { [key: string]: any } = {
     },
   },
   "sunset-rollercoaster": {
-    'SEQ.1': {
+    "SEQ.1": {
       padGifs: [
         {
           pad: "1",
@@ -393,7 +393,9 @@ const artists: { [key: string]: any } = {
           duration: 1000,
         },
       ],
-      waitGif: ["/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp"],
+      waitGif: [
+        "/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp",
+      ],
       audios: {
         sampleAudios: [
           {
@@ -437,7 +439,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.2': {
+    "SEQ.2": {
       padGifs: [
         {
           pad: "1",
@@ -480,7 +482,9 @@ const artists: { [key: string]: any } = {
           duration: 500,
         },
       ],
-      waitGif: ["/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp"],
+      waitGif: [
+        "/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp",
+      ],
       audios: {
         sampleAudios: [
           {
@@ -524,7 +528,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.3': {
+    "SEQ.3": {
       padGifs: [
         {
           pad: "1",
@@ -567,7 +571,9 @@ const artists: { [key: string]: any } = {
           duration: 1000,
         },
       ],
-      waitGif: ["/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp"],
+      waitGif: [
+        "/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp",
+      ],
       audios: {
         sampleAudios: [
           {
@@ -611,7 +617,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.4': {
+    "SEQ.4": {
       padGifs: [
         {
           pad: "1",
@@ -654,7 +660,9 @@ const artists: { [key: string]: any } = {
           duration: 1000,
         },
       ],
-      waitGif: ["/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp"],
+      waitGif: [
+        "/images/gif/sunset-rollercoaster/sunset-rollercoasterjam.webp",
+      ],
       audios: {
         sampleAudios: [
           {
@@ -700,50 +708,57 @@ const artists: { [key: string]: any } = {
     },
   },
   "enno-chunho": {
-    'SEQ.1': {
+    "SEQ.1": {
       padGifs: [
         {
           pad: "1",
           src: "/images/gif/enno-chunho/enno_seq1_sample02_Fly_2(暫留在畫面).webp",
-          duration: 200,
+          duration: 1500,
         },
         {
           pad: "2",
           src: "/images/gif/enno-chunho/enno_seq1_sample03_Fly_3.webp",
-          duration: 200,
+          duration: 4000,
         },
         {
           pad: "3",
           src: "/images/gif/enno-chunho/enno_seq1_sample03_Fly_3.webp",
-          duration: 200,
+          duration: 4000,
         },
         {
           pad: "4",
           src: "/images/gif/enno-chunho/enno_seq1_sample01_Fly_1(暫留在畫面).webp",
-          duration: 200,
+          duration: 4000,
         },
         {
           pad: "5",
           src: "/images/gif/enno-chunho/enno_seq1_sample05_darling(暫留在畫面).webp",
-          duration: 200,
+          duration: 4000,
         },
         {
           pad: "6",
-          src: "/images/gif/enno-chunho/enno_seq1_sample07_新世界(暫留在畫面).webp",
-          duration: 200,
+          src: [
+            "/images/gif/enno-chunho/enno_seq1_sample07_新世界(暫留在畫面).webp",
+            "/images/gif/enno-chunho/enno_seq1_sample02_Fly_2(暫留在畫面).webp",
+            "/images/gif/enno-chunho/enno_seq1_sample06_愛(透明度65).webp",
+          ],
+          duration: 4000,
         },
         {
           pad: "7",
           src: "/images/gif/enno-chunho/enno_seq1_sample07_新世界(暫留在畫面).webp",
-          duration: 200,
+          duration: 4000,
         },
         {
           pad: "8",
           src: "/images/gif/enno-chunho/enno_seq1_sample08_Fx(覆蓋之前全部圖).webp",
-          duration: 200,
+          duration: 3000,
         },
       ],
-      waitGif: ["/images/gif/enno-chunho/enno_seq1_BG.webp","/images/gif/enno-chunho/enno_seq1_spark.webp"],
+      waitGif: [
+        "/images/gif/enno-chunho/enno_seq1_BG.webp",
+        "/images/gif/enno-chunho/enno_seq1_spark.webp",
+      ],
       audios: {
         sampleAudios: [
           {
@@ -787,50 +802,53 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.2': {
+    "SEQ.2": {
       padGifs: [
         {
           pad: "1",
-          src: "/images/gif/enno-chunho/enno_seq1_sample02_Fly_2(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq2_sample01_(透明度65).webp",
+          duration: 4000,
         },
         {
           pad: "2",
-          src: "/images/gif/enno-chunho/enno_seq1_sample03_Fly_3.webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq2_sample02_月娘(暫留在畫面).webp",
+          duration: 4000,
         },
         {
           pad: "3",
-          src: "/images/gif/enno-chunho/enno_seq1_sample03_Fly_3.webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq2_sample03_一世人(暫留在畫面).webp",
+          duration: 4000,
         },
         {
           pad: "4",
-          src: "/images/gif/enno-chunho/enno_seq1_sample01_Fly_1(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq2_sample04_咱的路(暫留在畫面).webp",
+          duration: 4000,
         },
         {
           pad: "5",
-          src: "/images/gif/enno-chunho/enno_seq1_sample05_darling(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq2_sample05_Umm_1.webp",
+          duration: 4000,
         },
         {
           pad: "6",
-          src: "/images/gif/enno-chunho/enno_seq1_sample07_新世界(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq2_sample06_Umm_2.webp",
+          duration: 4000,
         },
         {
           pad: "7",
-          src: "/images/gif/enno-chunho/enno_seq1_sample07_新世界(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq2_sample07_(覆蓋之前全部圖).webp",
+          duration: 4000,
         },
         {
           pad: "8",
-          src: "/images/gif/enno-chunho/enno_seq1_sample08_Fx(覆蓋之前全部圖).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq2_sample08_Fx(暫留在畫面).webp",
+          duration: 4000,
         },
       ],
-      waitGif: ["/images/gif/enno-chunho/enno_seq2_BG1.webp","/images/gif/enno-chunho/enno_seq2_spark.webp"],
+      waitGif: [
+        "/images/gif/enno-chunho/enno_seq2_BG1.webp",
+        "/images/gif/enno-chunho/enno_seq2_spark.webp",
+      ],
       audios: {
         sampleAudios: [
           {
@@ -874,47 +892,47 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.3': {
+    "SEQ.3": {
       padGifs: [
         {
           pad: "1",
-          src: "/images/gif/enno-chunho/enno_seq1_sample02_Fly_2(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq3_sample01_就算我.(暫留在畫面).webp",
+          duration: 6000,
         },
         {
           pad: "2",
-          src: "/images/gif/enno-chunho/enno_seq1_sample03_Fly_3.webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq3_sample02_請你別(暫留在畫面).webp",
+          duration: 5000,
         },
         {
           pad: "3",
-          src: "/images/gif/enno-chunho/enno_seq1_sample03_Fly_3.webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq3_sample03_就算我_2(暫留在畫面).webp",
+          duration: 4000,
         },
         {
           pad: "4",
-          src: "/images/gif/enno-chunho/enno_seq1_sample01_Fly_1(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq3_sample04_請你別_2(暫留在畫面).webp",
+          duration: 4000,
         },
         {
           pad: "5",
-          src: "/images/gif/enno-chunho/enno_seq1_sample05_darling(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq3_sample05_Umm_1(暫留在畫面).webp",
+          duration: 4000,
         },
         {
           pad: "6",
-          src: "/images/gif/enno-chunho/enno_seq1_sample07_新世界(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq3_sample06_Umm_2.webp",
+          duration: 5000,
         },
         {
           pad: "7",
-          src: "/images/gif/enno-chunho/enno_seq1_sample07_新世界(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq3_sample07_Umm_3.webp",
+          duration: 4000,
         },
         {
           pad: "8",
-          src: "/images/gif/enno-chunho/enno_seq1_sample08_Fx(覆蓋之前全部圖).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq3_sample08_Umm_4.webp",
+          duration: 6000,
         },
       ],
       waitGif: ["/images/gif/enno-chunho/enno_seq3_BG.webp"],
@@ -961,47 +979,47 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.4': {
+    "SEQ.4": {
       padGifs: [
         {
           pad: "1",
-          src: "/images/gif/enno-chunho/enno_seq1_sample02_Fly_2(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq4_sample01_我會聽(暫留在畫面).webp",
+          duration: 5000,
         },
         {
           pad: "2",
-          src: "/images/gif/enno-chunho/enno_seq1_sample03_Fly_3.webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq4_sample02_在夜晚(暫留在畫面).webp",
+          duration: 5000,
         },
         {
           pad: "3",
-          src: "/images/gif/enno-chunho/enno_seq1_sample03_Fly_3.webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq4_sample03_的盡頭(暫留在畫面).webp",
+          duration: 5000,
         },
         {
           pad: "4",
-          src: "/images/gif/enno-chunho/enno_seq1_sample01_Fly_1(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq4_sample04_我(暫留在畫面).webp",
+          duration: 5000,
         },
         {
           pad: "5",
-          src: "/images/gif/enno-chunho/enno_seq1_sample05_darling(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq4_sample05_會(暫留在畫面).webp",
+          duration: 5000,
         },
         {
           pad: "6",
-          src: "/images/gif/enno-chunho/enno_seq1_sample07_新世界(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq4_sample06_聽(暫留在畫面).webp",
+          duration: 5000,
         },
         {
           pad: "7",
-          src: "/images/gif/enno-chunho/enno_seq1_sample07_新世界(暫留在畫面).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq4_sample07_你(暫留在畫面).webp",
+          duration: 5000,
         },
         {
           pad: "8",
-          src: "/images/gif/enno-chunho/enno_seq1_sample08_Fx(覆蓋之前全部圖).webp",
-          duration: 200,
+          src: "/images/gif/enno-chunho/enno_seq4_sample08_說(暫留在畫面).webp",
+          duration: 5000,
         },
       ],
       waitGif: ["/images/gif/enno-chunho/enno_seq4_White BG.webp"],
@@ -1050,7 +1068,7 @@ const artists: { [key: string]: any } = {
     },
   },
   l8ching: {
-    'SEQ.1': {
+    "SEQ.1": {
       padGifs: [
         {
           pad: "1",
@@ -1137,7 +1155,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.2': {
+    "SEQ.2": {
       padGifs: [
         {
           pad: "1",
@@ -1224,7 +1242,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.3': {
+    "SEQ.3": {
       padGifs: [
         {
           pad: "1",
@@ -1311,7 +1329,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.4': {
+    "SEQ.4": {
       padGifs: [
         {
           pad: "1",
@@ -1400,7 +1418,7 @@ const artists: { [key: string]: any } = {
     },
   },
   sonia: {
-    'SEQ.1': {
+    "SEQ.1": {
       padGifs: [
         {
           pad: "1",
@@ -1443,7 +1461,11 @@ const artists: { [key: string]: any } = {
           duration: 3000,
         },
       ],
-      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp","/images/gif/sonia/sonia calico-more dark.webp","/images/gif/sonia/sonia-walk-2-fast-bright.webp"],
+      waitGif: [
+        "/images/gif/sonia/sonia-bg-fast-dark.webp",
+        "/images/gif/sonia/sonia calico-more dark.webp",
+        "/images/gif/sonia/sonia-walk-2-fast-bright.webp",
+      ],
       audios: {
         sampleAudios: [
           {
@@ -1487,7 +1509,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.2': {
+    "SEQ.2": {
       padGifs: [
         {
           pad: "1",
@@ -1530,7 +1552,11 @@ const artists: { [key: string]: any } = {
           duration: 3000,
         },
       ],
-      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp","/images/gif/sonia/sonia calico-more dark.webp","/images/gif/sonia/sonia-walk-2-fast-bright.webp"],
+      waitGif: [
+        "/images/gif/sonia/sonia-bg-fast-dark.webp",
+        "/images/gif/sonia/sonia calico-more dark.webp",
+        "/images/gif/sonia/sonia-walk-2-fast-bright.webp",
+      ],
       audios: {
         sampleAudios: [
           {
@@ -1574,7 +1600,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.3': {
+    "SEQ.3": {
       padGifs: [
         {
           pad: "1",
@@ -1617,7 +1643,11 @@ const artists: { [key: string]: any } = {
           duration: 3000,
         },
       ],
-      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp","/images/gif/sonia/sonia calico-more dark.webp","/images/gif/sonia/sonia-walk-2-fast-bright.webp"],
+      waitGif: [
+        "/images/gif/sonia/sonia-bg-fast-dark.webp",
+        "/images/gif/sonia/sonia calico-more dark.webp",
+        "/images/gif/sonia/sonia-walk-2-fast-bright.webp",
+      ],
       audios: {
         sampleAudios: [
           {
@@ -1661,7 +1691,7 @@ const artists: { [key: string]: any } = {
         },
       },
     },
-    'SEQ.4': {
+    "SEQ.4": {
       padGifs: [
         {
           pad: "1",
@@ -1704,7 +1734,11 @@ const artists: { [key: string]: any } = {
           duration: 3000,
         },
       ],
-      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp","/images/gif/sonia/sonia calico-more dark.webp","/images/gif/sonia/sonia-walk-2-fast-bright.webp"],
+      waitGif: [
+        "/images/gif/sonia/sonia-bg-fast-dark.webp",
+        "/images/gif/sonia/sonia calico-more dark.webp",
+        "/images/gif/sonia/sonia-walk-2-fast-bright.webp",
+      ],
       audios: {
         sampleAudios: [
           {
