@@ -10,6 +10,7 @@ import PadLight from "@/components/machine/PadLight";
 import RecordingLight from "@/components/machine/RecordingLight";
 import Loading from "@/components/machine/Loading";
 
+
 interface MachineProps {
   isMenuOpen: boolean;
 }
@@ -28,6 +29,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const router = useRouter();
   const pathName = router.pathname.split("/")[2];
+  let timeoutID: any = null;
 
   // dummy data 後處理
   const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
@@ -118,15 +120,81 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
         setCurSeq(seq);
       }
     },
-    onChangeGif: (curGifData: LooseObject) => {
+    onChangeGif: (curGifData: LooseObject, padName: string) => {
       if (!curGifData?.src) return;
+
       if (pathName !== "sonia" && pathName !== "enno-chunho") {
+        setGifs(curSeqData.waitGif);
         setGifs([...gifs, curGifData.src]);
 
         setTimeout(() => {
           setGifs(curSeqData.waitGif);
         }, curGifData.duration);
       }
+
+      if (pathName === "sonia") {
+        handler.soniaChangeGif(curGifData, padName);
+      }
+    },
+    soniaChangeGif: (curGifData: LooseObject, padName: string) => {
+      if (padName == "1" || padName == "2") {
+        setGifs((prev: any) => {
+          let newGifs = [...prev];
+          newGifs[0] = curGifData.src;
+          return newGifs;
+        });
+        // 如果之前有計時器，先清除
+        if (timeoutID) {
+          clearTimeout(timeoutID);
+        }
+        // 設定新的計時器
+        timeoutID = setTimeout(() => {
+          setGifs(curSeqData.waitGif);
+        }, curGifData.duration);
+      }
+
+      if (
+        padName == "3" ||
+        padName == "4" ||
+        padName == "5" ||
+        padName == "6" ||
+        padName == "7"
+      ) {
+        setGifs((prev: any) => {
+          let newGifs = [...prev].filter(
+            (item) =>
+              item !== "/images/gif/sonia/sonia-walk-2-fast-bright.webp" &&
+              item !== curGifData.src
+          );
+          newGifs.push(curGifData.src);
+          return newGifs;
+        });
+        setTimeout(() => {
+          setGifs((prev: any) => {
+            let newGifs = [...prev].filter((item) => item !== curGifData.src);
+            if (newGifs.length < 3) {
+              return curSeqData.waitGif;
+            } else return newGifs;
+          });
+        }, curGifData.duration);
+      }
+
+      if (padName == "8") {
+        setGifs((prev: any) => {
+          let newGifs = [...prev].filter((item) => item !== curGifData.src);
+          newGifs.push(curGifData.src);
+          return newGifs;
+        });
+        setTimeout(() => {
+          setGifs((prev: any) => {
+            let newGifs = [...prev].filter((item) => item !== curGifData.src);
+            return newGifs;
+          });
+        }, curGifData.duration);
+      }
+    },
+    ennoChangeGif: (curGifData: LooseObject, padName: string) => {
+
     },
     onChangePadLight: (padName: string) => {
       if (activePad !== "") setActivePad("");
@@ -140,7 +208,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       if (!padNum) return;
 
       const curGifData = curSeqData.padGifs[padNum - 1];
-      handler.onChangeGif(curGifData);
+      handler.onChangeGif(curGifData, padName);
       handler.onChangePadLight(padName);
 
       const { samplePlayers } = playerRef.current[curSeq];
@@ -307,7 +375,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
 
               {/* Gif */}
               <Box pos="relative" flex="1">
-                {gifs.map((gif:string,index:number) => (
+                {gifs.map((gif: string, index: number) => (
                   <Image
                     key={gif}
                     pos="absolute"

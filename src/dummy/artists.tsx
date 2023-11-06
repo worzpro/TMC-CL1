@@ -743,7 +743,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: ["/images/gif/enno-chunho/enno_seq1_BG.webp"],
+      waitGif: ["/images/gif/enno-chunho/enno_seq1_BG.webp","/images/gif/enno-chunho/enno_seq1_spark.webp"],
       audios: {
         sampleAudios: [
           {
@@ -830,7 +830,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: ["/images/gif/enno-chunho/enno_seq1_BG.webp"],
+      waitGif: ["/images/gif/enno-chunho/enno_seq2_BG1.webp","/images/gif/enno-chunho/enno_seq2_spark.webp"],
       audios: {
         sampleAudios: [
           {
@@ -917,7 +917,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: ["/images/gif/enno-chunho/enno_seq1_BG.webp"],
+      waitGif: ["/images/gif/enno-chunho/enno_seq3_BG.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1004,7 +1004,7 @@ const artists: { [key: string]: any } = {
           duration: 200,
         },
       ],
-      waitGif: ["/images/gif/enno-chunho/enno_seq1_BG.webp"],
+      waitGif: ["/images/gif/enno-chunho/enno_seq4_White BG.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1093,7 +1093,7 @@ const artists: { [key: string]: any } = {
           duration: 500,
         },
       ],
-      waitGif: "/images/gif/l8ching/l8ching_waiting.webp",
+      waitGif: ["/images/gif/l8ching/l8ching_waiting.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1405,42 +1405,42 @@ const artists: { [key: string]: any } = {
         {
           pad: "1",
           src: "/images/gif/sonia/sonia_seq1_sample01_clap.webp",
-          duration: 1000,
+          duration: 3000,
         },
         {
           pad: "2",
-          src: "/images/gif/sonia/l8ching_seq1_sample02_clap1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample02_horn-bass_1.webp",
+          duration: 3000,
         },
         {
           pad: "3",
-          src: "/images/gif/sonia/l8ching_seq1_sample03_snare.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample03_horn-bass_2.webp",
+          duration: 3000,
         },
         {
           pad: "4",
-          src: "/images/gif/sonia/l8ching_seq1_sample04_bongo.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample04_horn-bass_3.webp",
+          duration: 3000,
         },
         {
           pad: "5",
-          src: "/images/gif/sonia/l8ching_seq1_sample05_conga1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample05_bass-drop.webp",
+          duration: 3000,
         },
         {
           pad: "6",
-          src: "/images/gif/sonia/l8ching_seq1_sample06_animal.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample06_the-ha.webp",
+          duration: 3000,
         },
         {
           pad: "7",
-          src: "/images/gif/sonia/l8ching_seq1_sample07_choir_1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample07_what.webp",
+          duration: 3000,
         },
         {
           pad: "8",
-          src: "/images/gif/sonia/l8ching_seq1_sample08_choir_2.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample08_white-noise.webp",
+          duration: 3000,
         },
       ],
       waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp","/images/gif/sonia/sonia calico-more dark.webp","/images/gif/sonia/sonia-walk-2-fast-bright.webp"],
@@ -1491,46 +1491,46 @@ const artists: { [key: string]: any } = {
       padGifs: [
         {
           pad: "1",
-          src: "/images/gif/sonia/l8ching_seq1_sample01_kick.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample01_clap.webp",
+          duration: 3000,
         },
         {
           pad: "2",
-          src: "/images/gif/sonia/l8ching_seq1_sample02_clap1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample02_horn-bass_1.webp",
+          duration: 3000,
         },
         {
           pad: "3",
-          src: "/images/gif/sonia/l8ching_seq1_sample03_snare.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample03_horn-bass_2.webp",
+          duration: 3000,
         },
         {
           pad: "4",
-          src: "/images/gif/sonia/l8ching_seq1_sample04_bongo.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample04_horn-bass_3.webp",
+          duration: 3000,
         },
         {
           pad: "5",
-          src: "/images/gif/sonia/l8ching_seq1_sample05_conga1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample05_bass-drop.webp",
+          duration: 3000,
         },
         {
           pad: "6",
-          src: "/images/gif/sonia/l8ching_seq1_sample06_animal.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample06_the-ha.webp",
+          duration: 3000,
         },
         {
           pad: "7",
-          src: "/images/gif/sonia/l8ching_seq1_sample07_choir_1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample07_what.webp",
+          duration: 3000,
         },
         {
           pad: "8",
-          src: "/images/gif/sonia/l8ching_seq1_sample08_choir_2.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample08_white-noise.webp",
+          duration: 3000,
         },
       ],
-      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp"],
+      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp","/images/gif/sonia/sonia calico-more dark.webp","/images/gif/sonia/sonia-walk-2-fast-bright.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1578,46 +1578,46 @@ const artists: { [key: string]: any } = {
       padGifs: [
         {
           pad: "1",
-          src: "/images/gif/sonia/l8ching_seq1_sample01_kick.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample01_clap.webp",
+          duration: 3000,
         },
         {
           pad: "2",
-          src: "/images/gif/sonia/l8ching_seq1_sample02_clap1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample02_horn-bass_1.webp",
+          duration: 3000,
         },
         {
           pad: "3",
-          src: "/images/gif/sonia/l8ching_seq1_sample03_snare.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample03_horn-bass_2.webp",
+          duration: 3000,
         },
         {
           pad: "4",
-          src: "/images/gif/sonia/l8ching_seq1_sample04_bongo.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample04_horn-bass_3.webp",
+          duration: 3000,
         },
         {
           pad: "5",
-          src: "/images/gif/sonia/l8ching_seq1_sample05_conga1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample05_bass-drop.webp",
+          duration: 3000,
         },
         {
           pad: "6",
-          src: "/images/gif/sonia/l8ching_seq1_sample06_animal.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample06_the-ha.webp",
+          duration: 3000,
         },
         {
           pad: "7",
-          src: "/images/gif/sonia/l8ching_seq1_sample07_choir_1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample07_what.webp",
+          duration: 3000,
         },
         {
           pad: "8",
-          src: "/images/gif/sonia/l8ching_seq1_sample08_choir_2.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample08_white-noise.webp",
+          duration: 3000,
         },
       ],
-      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp"],
+      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp","/images/gif/sonia/sonia calico-more dark.webp","/images/gif/sonia/sonia-walk-2-fast-bright.webp"],
       audios: {
         sampleAudios: [
           {
@@ -1665,46 +1665,46 @@ const artists: { [key: string]: any } = {
       padGifs: [
         {
           pad: "1",
-          src: "/images/gif/sonia/l8ching_seq1_sample01_kick.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample01_clap.webp",
+          duration: 3000,
         },
         {
           pad: "2",
-          src: "/images/gif/sonia/l8ching_seq1_sample02_clap1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample02_horn-bass_1.webp",
+          duration: 3000,
         },
         {
           pad: "3",
-          src: "/images/gif/sonia/l8ching_seq1_sample03_snare.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample03_horn-bass_2.webp",
+          duration: 3000,
         },
         {
           pad: "4",
-          src: "/images/gif/sonia/l8ching_seq1_sample04_bongo.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample04_horn-bass_3.webp",
+          duration: 3000,
         },
         {
           pad: "5",
-          src: "/images/gif/sonia/l8ching_seq1_sample05_conga1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample05_bass-drop.webp",
+          duration: 3000,
         },
         {
           pad: "6",
-          src: "/images/gif/sonia/l8ching_seq1_sample06_animal.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample06_the-ha.webp",
+          duration: 3000,
         },
         {
           pad: "7",
-          src: "/images/gif/sonia/l8ching_seq1_sample07_choir_1.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample07_what.webp",
+          duration: 3000,
         },
         {
           pad: "8",
-          src: "/images/gif/sonia/l8ching_seq1_sample08_choir_2.webp",
-          duration: 200,
+          src: "/images/gif/sonia/sonia_seq1_sample08_white-noise.webp",
+          duration: 3000,
         },
       ],
-      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp"],
+      waitGif: ["/images/gif/sonia/sonia-bg-fast-dark.webp","/images/gif/sonia/sonia calico-more dark.webp","/images/gif/sonia/sonia-walk-2-fast-bright.webp"],
       audios: {
         sampleAudios: [
           {
