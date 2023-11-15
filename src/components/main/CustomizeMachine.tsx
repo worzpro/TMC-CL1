@@ -8,10 +8,13 @@ import Loading from "@/components/machine/Loading";
 import SampleBtn from "@/components/machine/SampleBtn";
 import PatternPad from "@/components/machine/PatternPad";
 import SlotPad from "@/components/machine/SlotPad";
+import Bpm from "@/components/machine/Bpm";
 import SampleSelectPanel from "@/components/machine/SampleSelectPanel";
 
 import allSamples from "@/dummy/allSamples";
 import defaultSamples from "@/dummy/customize/defaultSamples";
+
+import { debounce } from "@/utils";
 
 interface MachineProps {
   isMenuOpen: boolean;
@@ -38,6 +41,10 @@ const INIT_PADSTATE = Array.from({ length: NUMBER_OF_SAMPLES }, () =>
     () => false
   )
 );
+const debouncedSetBpm = debounce((value) => {
+  console.log("set bpm to: ", value);
+  Tone.Transport.bpm.value = value;
+}, 500);
 
 const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -127,6 +134,10 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
           !newState[curSampleIndex][slotIndex];
         return newState;
       });
+    },
+    onBpmChange: (value: number) => {
+      setBpm(value);
+      debouncedSetBpm(value);
     },
   };
 
@@ -277,6 +288,8 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
                 ))}
               </HStack>
               <HStack>
+                <Bpm onChange={handler.onBpmChange}/>
+                <Image src="/images/stop.svg" alt="stop" cursor="pointer" />
                 <Image
                   src="/images/restart.svg"
                   alt="restart"
