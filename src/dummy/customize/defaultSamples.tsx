@@ -2,25 +2,25 @@ const defaultSamples = [
   {
     id: 'rec-1',
     artist: 'self',
-    name: 'REC',
+    name: 'REC 1',
     src: '',
   },
   {
     id: 'rec-2',
     artist: 'self',
-    name: 'REC',
+    name: 'REC 2',
     src: '',
   },
   {
     id: 'rec-3',
     artist: 'self',
-    name: 'REC',
+    name: 'REC 3',
     src: '',
   },
   {
     id: 'rec-4',
     artist: 'self',
-    name: 'REC',
+    name: 'REC 4',
     src: '',
   },
   {

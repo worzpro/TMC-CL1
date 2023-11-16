@@ -70,7 +70,7 @@ const Bpm = ({ onChange }: { onChange: (value: number) => void }) => {
               transform="translate(228 345)"
               fill={isDraggable ? "#e1b46a" : "#8A989F"}
               stroke={isDraggable ? "#896c3d" : "#000"}
-              stroke-width="2"
+              strokeWidth="2"
             >
               <rect width="56" height="26" rx="13" stroke="none"></rect>
               <rect
@@ -87,9 +87,9 @@ const Bpm = ({ onChange }: { onChange: (value: number) => void }) => {
               data-name="190"
               transform="translate(256 362.5)"
               fill={isDraggable ? "#896c3d" : "rgb(197, 218, 227)"}
-              font-size="12"
-              font-family="LoRes12OT-BoldAltOakland, 'LoRes \31 2 OT Alt Oakland'"
-              font-weight="700"
+              fontSize="12"
+              fontFamily="LoRes12OT-BoldAltOakland, 'LoRes \31 2 OT Alt Oakland'"
+              fontWeight="700"
             >
               <tspan x="-9" y="-1">
                 {value}

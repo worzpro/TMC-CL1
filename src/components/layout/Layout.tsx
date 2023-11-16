@@ -17,9 +17,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const [currentVid, setCurrentVid] = useState("");
   const [showQRcode, setShowQRcode] = useState(true);
 
-  useEffect(() => {
-    setSidebarOpen(true);
-  }, []);
+
 
   return (
     <Center bgColor="rgb(199, 199, 199)" h="100vh" w="100vw" pos="relative">
