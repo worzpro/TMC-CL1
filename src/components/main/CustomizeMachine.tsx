@@ -44,12 +44,6 @@ interface LooseObject {
 /// 常數 ////////////////////////////////////////////
 const SAMPLES = allSamples;
 const DEFAULT_SAMPLES = defaultSamples;
-const PATTERN_OFFSET: any = {
-  a: 0,
-  b: 1,
-  c: 2,
-  d: 3,
-};
 
 const patternPads = Object.values(pads).filter((pad) => pad.id < 5);
 const slotPads = Object.values(pads)

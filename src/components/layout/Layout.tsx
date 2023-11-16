@@ -11,12 +11,13 @@ import { useState, useEffect } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 
 import Sidebar from "./Sidebar";
+import Hint from "./Hint";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentVid, setCurrentVid] = useState("");
   const [showQRcode, setShowQRcode] = useState(true);
-
+  const [showHint, setShowHint] = useState(true);
 
 
   return (
@@ -70,6 +71,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </Box>
       </Flex>
+
+      {/* Hint: absolute */}
+      {showHint && (
+        <Hint
+          setShowHint={setShowHint}
+        />
+      )}
 
       {/* Sidebar: absolute */}
       <Sidebar
