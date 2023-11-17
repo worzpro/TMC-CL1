@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import "@/styles/global.css";
 import Head from "next/head";
@@ -12,6 +12,18 @@ import theme from "@/styles/chakra/theme";
 export default function App({ Component, pageProps }: AppProps) {
   const [showHint, setShowHint] = useState(true);
   const [isToneStarted, setIsToneStarted] = useState(false);
+
+  useEffect(() => {
+    const handleContextMenu = (event: Event) => {
+      event.preventDefault();
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, []);
 
   return (
     <>
