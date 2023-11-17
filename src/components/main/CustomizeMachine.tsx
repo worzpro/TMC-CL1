@@ -486,7 +486,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   </Box>
                 ))}
               </HStack>
-              <HStack>
+              <HStack spacing="4px">
                 <Bpm onChange={handler.onBpmChange} />
                 <Image
                   src="/images/stop.svg"
