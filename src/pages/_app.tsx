@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import "@/styles/global.css";
 import Head from "next/head";
 import Script from "next/script";
@@ -8,6 +10,9 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "@/styles/chakra/theme";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [showHint, setShowHint] = useState(true);
+  const [isToneStarted, setIsToneStarted] = useState(false);
+
   return (
     <>
       <Head>
@@ -69,8 +74,12 @@ export default function App({ Component, pageProps }: AppProps) {
         />
       </Head>
       <ChakraProvider theme={theme}>
-        <Layout>
-          <Component {...pageProps} />
+        <Layout
+          showHint={showHint}
+          setShowHint={setShowHint}
+          setIsToneStarted={setIsToneStarted}
+        >
+          <Component isToneStarted={isToneStarted} {...pageProps} />
         </Layout>
       </ChakraProvider>
     </>

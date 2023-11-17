@@ -11,10 +11,22 @@ import { useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 
 import Sidebar from "./Sidebar";
+import Hint from "./Hint";
 
+interface LayoutProps {
+  children: React.ReactNode;
+  showHint: boolean;
+  setShowHint: Function;
+  setIsToneStarted: Function;
+}
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+const Layout = ({
+  children,
+  showHint,
+  setShowHint,
+  setIsToneStarted,
+}: LayoutProps) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentVid, setCurrentVid] = useState("");
   const [showQRcode, setShowQRcode] = useState(true);
 
@@ -65,10 +77,20 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </Box>
           </>
         )}
-        <Box w="calc(100vw - 10px)" maxW={{ base: "365px", sm: "418px" }}>
+        <Box
+          w="calc(100vw - 10px)"
+          maxW={{ base: "365px", sm: "418px" }}
+        >
           {children}
         </Box>
       </Flex>
+
+      {/* Hint: absolute */}
+      <Hint
+        showHint={showHint}
+        setShowHint={setShowHint}
+        setIsToneStarted={setIsToneStarted}
+      />
 
       {/* Sidebar: absolute */}
       <Sidebar

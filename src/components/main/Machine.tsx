@@ -421,7 +421,10 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       overflow="hidden"
       w="100%"
       borderRadius="8px"
-      top={isMenuOpen ? "700px" : "100px"}
+      top={{
+        base: isMenuOpen ? "700px" : "70px",
+        md: isMenuOpen ? "700px" : "100px",
+      }}
       zIndex="7999"
       transition="all 0.3s ease-out"
       transitionDelay={isMenuOpen ? "0s" : "0.3s"}

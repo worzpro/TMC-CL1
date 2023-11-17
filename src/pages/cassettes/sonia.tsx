@@ -1,9 +1,7 @@
-import MainArea from "@/components/main/MainArea"
+import MainArea from "@/components/main/MainArea";
 
-const SoniaPage = () => {
-  return (
-    <MainArea />
-  )
-}
+const SoniaPage = ({ isToneStarted }: { isToneStarted: boolean }) => {
+  return <MainArea isToneStarted={isToneStarted} />;
+};
 
-export default SoniaPage
+export default SoniaPage;

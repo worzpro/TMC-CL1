@@ -1,10 +1,7 @@
-import MainArea from "@/components/main/MainArea"
+import MainArea from "@/components/main/MainArea";
 
-const PuzzlemanPage = () => {
-  
-  return (
-    <MainArea  />
-  )
-}
+const PuzzlemanPage = ({ isToneStarted }: { isToneStarted: boolean }) => {
+  return <MainArea isToneStarted={isToneStarted} />;
+};
 
-export default PuzzlemanPage
+export default PuzzlemanPage;

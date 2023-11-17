@@ -1,9 +1,11 @@
-import MainArea from "@/components/main/MainArea"
+import MainArea from "@/components/main/MainArea";
 
-const SunsetRollercoasterPage = () => {
-  return (
-    <MainArea />
-  )
-}
+const SunsetRollercoasterPage = ({
+  isToneStarted,
+}: {
+  isToneStarted: boolean;
+}) => {
+  return <MainArea isToneStarted={isToneStarted} />;
+};
 
-export default SunsetRollercoasterPage
+export default SunsetRollercoasterPage;

@@ -24,13 +24,14 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
   return (
     <VStack
       spacing="0"
-      pt="40px"
+      pt={{ base: "20px", md: "40px" }}
       px="50px"
       h={isMenuOpen ? "calc(100vh - 230px)" : "auto"}
       pos="relative"
     >
       {!isMenuOpen && (
         <Image
+
           src={imageSrc}
           alt="MenuBtn"
           mb="12px"
@@ -46,7 +47,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
       <Image
         w="150px"
         pos="absolute"
-        top={isMenuOpen ? "110px" : "75px"}
+        top={{base: isMenuOpen ? "110px" : "45px", md: isMenuOpen ? "110px" : "75px"}}
         src={cassetteObj.imageSrc}
         alt={cassetteObj.name}
         transition="all 0.3s ease-out"
@@ -54,7 +55,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
 
       {isMenuOpen && (
         <VStack spacing="35px" mt="190px">
-          <HStack w="100%" justify="space-between" >
+          <HStack w="100%" justify="space-between">
             <Image
               src="/images/music-list-left-right-arrow.svg"
               alt="LeftArrow"

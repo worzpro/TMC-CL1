@@ -1,9 +1,7 @@
-import MainArea from "@/components/main/MainArea"
+import MainArea from "@/components/main/MainArea";
 
-const EnnoChunhoPage = () => {
-  return (
-    <MainArea />
-  )
-}
+const EnnoChunhoPage = ({ isToneStarted }: { isToneStarted: boolean }) => {
+  return <MainArea isToneStarted={isToneStarted} />;
+};
 
-export default EnnoChunhoPage
+export default EnnoChunhoPage;
