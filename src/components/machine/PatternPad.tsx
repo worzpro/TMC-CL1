@@ -79,6 +79,7 @@ const PatternPad = ({
       pos="relative"
       p="2px"
       w="25%"
+      onTouchStart={(e:any)=>e.preventDefault()}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
