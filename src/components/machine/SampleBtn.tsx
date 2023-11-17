@@ -15,7 +15,7 @@ const SampleBtn = memo(
       <Center
         key={index}
         w="calc((100% - 12px)/4)"
-        h={{ base: "30px", sm: "95px" }}
+        h={{ base: "30px", sm: "72px" }}
         bg={isActive ? "#791930" : "#2B2929"}
         color="#ADADAD"
         fontSize="12px"

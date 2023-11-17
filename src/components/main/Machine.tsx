@@ -455,7 +455,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             direction="column"
             border="3px solid black"
             w="100%"
-            h={{ base: "182px", sm: "91vw" }}
+            h={{ base: "182px", sm: "310px" }}
             maxH="382px"
             borderRadius="8px"
             bgColor="rgb(197, 218, 227)"
@@ -511,7 +511,13 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               />
 
               {/* Gif */}
-              <Box pos="relative" flex="1">
+              <Center
+                w="100%"
+                h="100%"
+                maxH={{ base: "95px", sm: "240px" }}
+                overflow="hidden"
+                pos="relative"
+              >
                 {gifs.map((gif: string, index: number) => (
                   <Image
                     key={index}
@@ -519,13 +525,13 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     top="0"
                     left="0"
                     w="100%"
-                    maxH={{ base: "100px", sm: "unset" }}
+                    h="100%"
                     src={gif}
                     opacity={gif?.includes("透明度65") ? 0.65 : 1}
                     zIndex={index}
                   />
                 ))}
-              </Box>
+              </Center>
             </Box>
 
             <Flex
@@ -539,7 +545,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 textStyle="en_special_md_bold"
               >
                 {["FX", "SAMPLE"].map((buttonLabel) => (
-                  <Box key={buttonLabel} bgColor="#EBEBEB" p="2px 16px">
+                  <Box key={buttonLabel} bgColor="#EBEBEB" p="2px 14px">
                     {buttonLabel}
                   </Box>
                 ))}
@@ -564,20 +570,11 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
           <HStack
             // 按鈕
-            spacing="4px"
+            pl="16px"
+            spacing="28px"
           >
-            <Image
-              w={{ base: "80px", sm: "21.5vw" }}
-              maxW="90px"
-              src="/images/bbbb.png"
-              cursor="pointer"
-            />
-            <Image
-              w={{ base: "80px", sm: "21.5vw" }}
-              maxW="90px"
-              src="/images/bbbb.png"
-              cursor="pointer"
-            />
+            <Image w="60px" src="/images/bbbb.png" cursor="pointer" />
+            <Image w="60px" src="/images/bbbb.png" cursor="pointer" />
           </HStack>
 
           <Box

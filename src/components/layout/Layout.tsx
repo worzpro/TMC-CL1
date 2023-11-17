@@ -79,7 +79,7 @@ const Layout = ({
         )}
         <Box
           w="calc(100vw - 10px)"
-          maxW={{ base: "365px", sm: "418px" }}
+          maxW="365px"
         >
           {children}
         </Box>

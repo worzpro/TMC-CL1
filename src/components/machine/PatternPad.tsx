@@ -46,7 +46,6 @@ const PatternPad = ({
     : isActive
     ? COLOR_MAP.active
     : COLOR_MAP.inactive;
-  
 
   useEffect(() => {
     let pressTimer: any;
@@ -63,13 +62,13 @@ const PatternPad = ({
     };
   }, [isPressing, onHold, index]);
 
-  const handleMouseDown = (e:any) => {
+  const handleMouseDown = (e: any) => {
     e.preventDefault();
     onMouseDown(name);
     setIsPressing(true);
   };
 
-  const handleMouseUp = (e:any) => {
+  const handleMouseUp = (e: any) => {
     e.preventDefault();
     setIsPressing(false);
   };
@@ -79,7 +78,7 @@ const PatternPad = ({
       pos="relative"
       p="2px"
       w="25%"
-      onTouchStart={(e:any)=>e.preventDefault()}
+      onTouchStart={(e: any) => e.preventDefault()}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}

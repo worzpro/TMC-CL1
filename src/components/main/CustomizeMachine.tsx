@@ -391,7 +391,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             direction="column"
             border="3px solid black"
             w="100%"
-            h={{ base: "182px", sm: "91vw" }}
+            h={{ base: "182px", sm: "310px" }}
             maxH="382px"
             borderRadius="8px"
             bgColor="rgb(197, 218, 227)"
@@ -472,16 +472,16 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
             <Flex
               // 功能按鈕區
-              pl="12px"
+              pl="2px"
               justify="space-between"
             >
               <HStack
                 color="#4D4D4D"
-                spacing="18px"
+                spacing="8px"
                 textStyle="en_special_md_bold"
               >
                 {["FX", "SAMPLE"].map((buttonLabel) => (
-                  <Box key={buttonLabel} bgColor="#EBEBEB" p="2px 16px">
+                  <Box key={buttonLabel} bgColor="#EBEBEB" p="2px 12px">
                     {buttonLabel}
                   </Box>
                 ))}
@@ -555,18 +555,17 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
           <HStack
             // 按鈕
-            spacing="4px"
+            pl="6px"
+            spacing="10px"
           >
             <Image
-              w={{ base: "80px", sm: "21.5vw" }}
-              maxW="90px"
+              w="60px"
               src="/images/bbbb.png"
               cursor="pointer"
               _hover={{ opacity: 0.7 }}
             />
             <Image
-              w={{ base: "80px", sm: "21.5vw" }}
-              maxW="90px"
+              w="60px"
               src="/images/bbbb.png"
               cursor="pointer"
               _hover={{ opacity: 0.7 }}
