@@ -63,12 +63,14 @@ const PatternPad = ({
     };
   }, [isPressing, onHold, index]);
 
-  const handleMouseDown = () => {
+  const handleMouseDown = (e:any) => {
+    e.preventDefault();
     onMouseDown(name);
     setIsPressing(true);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e:any) => {
+    e.preventDefault();
     setIsPressing(false);
   };
 

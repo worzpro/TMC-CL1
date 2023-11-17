@@ -181,7 +181,6 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         const loopStartBar = getSeqLoopStartBar(padState.seqs[curSeqIndex]);
 
         const loopEndBar = loopStartBar + (index + 1);
-        console.log(loopEndBar, loopStartBar, index);
         const loopEnd = `${loopEndBar}:0:0`;
         Tone.Transport.loopEnd = loopEnd;
 
