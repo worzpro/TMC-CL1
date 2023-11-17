@@ -29,23 +29,23 @@ const Layout = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentVid, setCurrentVid] = useState("");
   const [showQRcode, setShowQRcode] = useState(true);
-  const [windowHeight, setWindowHeight] = useState('100vh');
+  // const [windowHeight, setWindowHeight] = useState('100vh');
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowHeight(`${window.innerHeight}px`);
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setWindowHeight(`${window.innerHeight}px`);
+  //   };
 
-    window.addEventListener('resize', handleResize);
-    handleResize(); // 初始化
+  //   window.addEventListener('resize', handleResize);
+  //   handleResize(); // 初始化
 
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, []);
 
   return (
     <Center bgColor="rgb(199, 199, 199)" h="100vh" w="100vw" pos="relative">
       {/* Main Content */}
-      <Flex h="100%" maxH={windowHeight} overflow="hidden" gap="77px">
+      <Flex h="100%" overflow="hidden" gap="77px">
         {currentVid && (
           <>
             <Box
