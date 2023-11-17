@@ -13,14 +13,14 @@ import path from "path";
 
 interface MachineProps {
   isMenuOpen: boolean;
+  isToneStarted: boolean;
 }
 interface LooseObject {
   [key: string]: any;
 }
 
-const Machine = ({ isMenuOpen }: MachineProps) => {
+const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [isToneStarted, setIsToneStarted] = useState<boolean>(false);
   const [curSeq, setCurSeq] = useState<string>("SEQ.1");
   const [pendingSeq, setPendingSeq] = useState<string | null>(null);
   const [gifs, setGifs] = useState<string[]>([]);
@@ -38,13 +38,6 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
   const playerRef = useRef<any>(null);
 
   const handler = {
-    initiateTone: async () => {
-      await Tone.loaded();
-      console.log("Audio Ready");
-      await Tone.start();
-      console.log("Audio context started!");
-      setIsToneStarted(true);
-    },
     createNewLoopedAndSyncedPlayer: (src: string) => {
       const newPlayer = new Tone.Player(src).toDestination();
       newPlayer.loop = true;
@@ -266,14 +259,9 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
         }
       }
       if (curSeq == "SEQ.2") {
-        if (
-          padName == "1" ||
-          padName == "2" 
-        ) {
+        if (padName == "1" || padName == "2") {
           setGifs((prev: any) => {
-            let newGifs = [...prev].filter(
-              (item) =>item !== curGifData.src
-            );
+            let newGifs = [...prev].filter((item) => item !== curGifData.src);
             newGifs.push(curGifData.src);
 
             return newGifs;
@@ -286,10 +274,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
           }, curGifData.duration);
         }
 
-        if (
-          padName == "3" ||
-          padName == "4" 
-        ) {
+        if (padName == "3" || padName == "4") {
           setGifs((prev: any) => {
             let newGifs = [...prev].filter(
               (item) =>
@@ -310,10 +295,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
           }, curGifData.duration);
         }
 
-        if (
-          padName == "5" ||
-          padName == "6" 
-        ) {
+        if (padName == "5" || padName == "6") {
           setGifs([curGifData.src]);
           setTimeout(() => {
             setGifs((prev: any) => {
@@ -325,7 +307,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
           }, curGifData.duration);
         }
 
-        if (padName == "7"|| padName == "8") {
+        if (padName == "7" || padName == "8") {
           setGifs((prev: any) => {
             let newGifs = [...prev].filter((item) => item !== curGifData.src);
             newGifs.push(curGifData.src);
@@ -339,7 +321,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
           }, curGifData.duration);
         }
       }
-      if (curSeq == 'SEQ.3' || curSeq == 'SEQ.4') {
+      if (curSeq == "SEQ.3" || curSeq == "SEQ.4") {
         setGifs((prev: any) => {
           let newGifs = [...prev].filter((item) => item !== curGifData.src);
           newGifs.push(curGifData.src);
@@ -406,28 +388,23 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
     },
   };
 
+  // 初始化預設gifs
   useEffect(() => {
-    // 初始化預設gifs
     if (!curSeqData) return;
     setGifs(curSeqData.waitGif);
   }, [curSeqData]);
 
+  // 判斷使用者裝置
   useEffect(() => {
-    // 判斷使用者裝置
     const userAgent = navigator.userAgent;
     const mobileKeywords = /Mobile|Android|iPhone|iPad|iPod|Windows Phone/i;
     setIsMobile(mobileKeywords.test(userAgent));
-
-    // 初始化 Tone
-    handler.initiateTone();
-
-    // 初始化 playerRef
-    playerRef.current = handler.createPlayers();
   }, []);
 
+  // 初始化
   useEffect(() => {
-    // 初始化 bpm, jam, player
-    if (isToneStarted && playerRef.current) {
+    if (isToneStarted) {
+      playerRef.current = handler.createPlayers();
       const { bpm } = curSeqData.audios.seqAudio;
       Tone.Transport.bpm.value = bpm;
       const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
@@ -435,7 +412,7 @@ const Machine = ({ isMenuOpen }: MachineProps) => {
       fullPlayer.start(0);
       jamPlayer.start(0);
     }
-  }, [isToneStarted, playerRef.current]);
+  }, [isToneStarted]);
 
   return (
     <Box

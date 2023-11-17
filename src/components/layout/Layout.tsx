@@ -7,18 +7,16 @@ import {
   Link,
   Hide,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 
 import Sidebar from "./Sidebar";
-import Hint from "./Hint";
+
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentVid, setCurrentVid] = useState("");
   const [showQRcode, setShowQRcode] = useState(true);
-  const [showHint, setShowHint] = useState(true);
-
 
   return (
     <Center bgColor="rgb(199, 199, 199)" h="100vh" w="100vw" pos="relative">
@@ -71,13 +69,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </Box>
       </Flex>
-
-      {/* Hint: absolute */}
-      {showHint && (
-        <Hint
-          setShowHint={setShowHint}
-        />
-      )}
 
       {/* Sidebar: absolute */}
       <Sidebar

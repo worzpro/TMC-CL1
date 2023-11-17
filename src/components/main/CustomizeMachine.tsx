@@ -36,6 +36,7 @@ import { SEQ_INDEX_MAP, PATTERN_INDEX_MAP } from "@/map";
 
 interface MachineProps {
   isMenuOpen: boolean;
+  isToneStarted: boolean;
 }
 interface LooseObject {
   [key: string]: any;
@@ -61,9 +62,8 @@ const debouncedSetBpm = debounce((value) => {
 }, 500);
 ////////////////////////////////////////////////////
 
-const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
+const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [isToneStarted, setIsToneStarted] = useState<boolean>(false);
 
   const [bpm, setBpm] = useState(120);
   const [playMetronome, setPlayMetronome] = useState<boolean>(false);
@@ -95,14 +95,6 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
   const loopStartRef = useRef("1:0:0");
 
   const handler = {
-    initiateTone: async () => {
-      await Tone.loaded();
-      console.log("Audio Ready");
-      await Tone.start();
-      console.log("Audio context started!");
-
-      setIsToneStarted(true);
-    },
     createSamplePlayers: () => {
       // 將所有的sample創建成player
       let samplePlayer: LooseObject = {};
@@ -281,23 +273,22 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
     },
   };
 
-  // 判斷使用者裝置、初始化 Tone、refs賦值
+  // 判斷使用者裝置
   useEffect(() => {
     const userAgent = navigator.userAgent;
     const mobileKeywords = /Mobile|Android|iPhone|iPad|iPod|Windows Phone/i;
     setIsMobile(mobileKeywords.test(userAgent));
-
-    handler.initiateTone();
-    samplePlayers.current = handler.createSamplePlayers();
-    playerRef.current = handler.createPlayerRef();
-    slotsRef.current = cloneAllSlots(padState.slots);
-    metronome1Player.current = handler.createMetronomePlayer().metronome1;
-    metronome2Player.current = handler.createMetronomePlayer().metronome2;
   }, []);
 
   // initialize
   useEffect(() => {
     if (isToneStarted) {
+      samplePlayers.current = handler.createSamplePlayers();
+      playerRef.current = handler.createPlayerRef();
+      slotsRef.current = cloneAllSlots(padState.slots);
+      metronome1Player.current = handler.createMetronomePlayer().metronome1;
+      metronome2Player.current = handler.createMetronomePlayer().metronome2;
+
       Tone.Transport.loop = true;
       Tone.Transport.setLoopPoints("1:0:0", "2:0:0");
       Tone.Transport.position = "1:0:0";
@@ -639,7 +630,6 @@ const CustomizeMachine = ({ isMenuOpen }: MachineProps) => {
                     name={pad.name}
                     imageSrc={pad.imageSrc}
                     isMobile={isMobile}
-                    
                     labelIndex={labelIndex}
                     isRegistered={padState["slots"][curSample.index][slotIndex]}
                     isActive={isPlaying && curPosition === pad.nameslotIndex}

@@ -5,23 +5,36 @@ import { useRouter } from "next/router";
 import Menu from "@/components/main/Menu";
 import Machine from "@/components/main/Machine";
 import CustomizeMachine from "@/components/main/CustomizeMachine";
+import Hint from "@/components/main/Hint";
 
 const MainArea = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showHint, setShowHint] = useState(true);
+  const [isToneStarted, setIsToneStarted] = useState(false);
   const router = useRouter();
 
   return (
-    <VStack pos="relative" >
-      <Menu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+    <>
+      <Hint
+        showHint={showHint}
+        setShowHint={setShowHint}
+        setIsToneStarted={setIsToneStarted}
+      />
+      <VStack pos="relative">
+        <Menu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
-      {router.pathname !== "/cassettes/customize" && (
-        <Machine isMenuOpen={isMenuOpen} />
-      )}
+        {router.pathname !== "/cassettes/customize" && (
+          <Machine isMenuOpen={isMenuOpen} isToneStarted={isToneStarted} />
+        )}
 
-      {router.pathname === "/cassettes/customize" && (
-        <CustomizeMachine isMenuOpen={isMenuOpen} />
-      )}
-    </VStack>
+        {router.pathname === "/cassettes/customize" && (
+          <CustomizeMachine
+            isMenuOpen={isMenuOpen}
+            isToneStarted={isToneStarted}
+          />
+        )}
+      </VStack>
+    </>
   );
 };
 

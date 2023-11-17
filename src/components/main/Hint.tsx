@@ -1,10 +1,14 @@
 import { Center, Box, Image } from "@chakra-ui/react";
+import * as Tone from "tone";
 
 interface HintProps {
+  showHint: boolean;
   setShowHint: Function;
+  setIsToneStarted: Function;
 }
 
-const Hint = ({ setShowHint }: HintProps) => {
+const Hint = ({ showHint, setShowHint, setIsToneStarted }: HintProps) => {
+  if (!showHint) return null;
   return (
     <Center
       pos="absolute"
@@ -25,7 +29,15 @@ const Hint = ({ setShowHint }: HintProps) => {
           w={{ base: "60vw", lg: "260px" }}
           transform="translateX(-50%)"
           cursor="pointer"
-          onClick={() => setShowHint(false)}
+          onClick={async () => {
+            setShowHint(false);
+            await Tone.loaded();
+            console.log("Audio Ready");
+            await Tone.start();
+            console.log("Audio context started!");
+
+            setIsToneStarted(true);
+          }}
         ></Box>
       </Box>
     </Center>

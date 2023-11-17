@@ -1,8 +1,9 @@
 import MainArea from "@/components/main/MainArea"
 
 const PuzzlemanPage = () => {
+  
   return (
-    <MainArea />
+    <MainArea  />
   )
 }
 
