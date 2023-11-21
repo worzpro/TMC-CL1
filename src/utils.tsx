@@ -6,6 +6,7 @@ import {
   PREP_BEAT_BARS,
   PREP_BEAT_SLOTS,
 } from "@/dummy/constants";
+import * as Tone from "tone";
 import { SEQ_INDEX_MAP } from "@/map";
 
 type FunctionType = (this: any, ...args: any[]) => void;
@@ -59,4 +60,77 @@ export const getSeqLoopStartBar = (seq: LooseObject) => {
 
 export const getSeqLoopEndBar = (seq: LooseObject) => {
   return parseInt(seq.loopEnd.split(":")[0]);
+};
+
+const getSettingsFromVariables = (variables: any[]) => {
+  return variables.reduce((acc, variable) => {
+    const { variableKey, defaultValue } = variable;
+    acc[variableKey] = defaultValue;
+    return acc;
+  }, {});
+};
+
+export const createChainedInsertAudioEffects = (effects: LooseObject) => {
+  let audioEffects: LooseObject = {};
+  let prev: any;
+  const effectKeys = Object.keys(effects);
+  effectKeys.forEach((effectKey, index) => {
+    const { defaultArguments = [], variables } = effects[effectKey];
+
+    const effect = new effects[effectKey].toneClass(...defaultArguments);
+
+    effect.set(getSettingsFromVariables(variables));
+    audioEffects[effectKey] = {
+      effect: effect,
+    };
+    if (prev) {
+      prev.connect(effect);
+    }
+
+    prev = effect;
+
+    if (index === 0) {
+      audioEffects.input = effect;
+    }
+    if (index === effectKeys.length - 1) {
+      audioEffects.output = effect;
+    }
+    return;
+  });
+
+  return audioEffects;
+};
+
+export const createSendAudioEffects = (effects: LooseObject) => {
+  const audioEffects: LooseObject = {};
+  const effectKeys = Object.keys(effects);
+
+  effectKeys.forEach((effectKey: string, index: number) => {
+    const {
+      defaultArguments = [],
+      variables,
+      channelVariables,
+    } = effects[effectKey];
+
+    const preEffect = new Tone.Filter(400, "highpass");
+    const effect = new effects[effectKey].toneClass(
+      ...defaultArguments
+    ).toDestination();
+    effect.set(getSettingsFromVariables(variables));
+
+    const effectChannel = new Tone.Channel();
+    effectChannel.set(getSettingsFromVariables(channelVariables));
+
+    preEffect.connect(effect);
+    effectChannel.connect(preEffect);
+    effectChannel.receive(effectKey);
+
+    audioEffects[effectKey] = {
+      effect: effect,
+      channel: effectChannel,
+    };
+
+    return;
+  });
+  return audioEffects;
 };

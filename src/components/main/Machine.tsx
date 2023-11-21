@@ -9,7 +9,7 @@ import pads from "@/dummy/pads";
 import PadLight from "@/components/machine/PadLight";
 import RecordingLight from "@/components/machine/RecordingLight";
 import Loading from "@/components/machine/Loading";
-import path from "path";
+import FxPanel from "@/components/machine/FxPanel";
 
 interface MachineProps {
   isMenuOpen: boolean;
@@ -21,6 +21,9 @@ interface LooseObject {
 
 const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isHold, setIsHold] = useState<boolean>(false);
+  const [showFX, setShowFX] = useState<boolean>(false);
+  const [showSample, setShowSample] = useState<boolean>(false);
   const [curSeq, setCurSeq] = useState<string>("SEQ.1");
   const [pendingSeq, setPendingSeq] = useState<string | null>(null);
   const [gifs, setGifs] = useState<string[]>([]);
@@ -494,64 +497,111 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               ))}
             </HStack>
 
-            <Box pos="relative" flex="1" my="8px">
-              {/* Jam */}
-              <Image
-                pos="absolute"
-                top="0"
-                right="0"
-                w="85px"
-                src={isJamming ? "/images/jam_on.png" : "/images/jam_off.png"}
-                cursor="pointer"
-                onClick={() => {
-                  handler.toggleJam(curSeq);
-                  setIsJamming((prev) => !prev);
-                }}
-                zIndex="100"
-              />
+            {!showFX && !showSample && (
+              <Box pos="relative" flex="1" my="8px">
+                {/* Jam */}
+                <Image
+                  pos="absolute"
+                  top="0"
+                  right="0"
+                  w="85px"
+                  src={isJamming ? "/images/jam_on.png" : "/images/jam_off.png"}
+                  cursor="pointer"
+                  onClick={() => {
+                    handler.toggleJam(curSeq);
+                    setIsJamming((prev) => !prev);
+                  }}
+                  zIndex="100"
+                />
 
-              {/* Gif */}
-              <Center
-                w="100%"
-                h="100%"
-                maxH={{ base: "95px", sm: "240px" }}
-                overflow="hidden"
-                pos="relative"
-              >
-                {gifs.map((gif: string, index: number) => (
-                  <Image
-                    key={index}
-                    pos="absolute"
-                    top="0"
-                    left="0"
-                    w="100%"
-                    h="100%"
-                    src={gif}
-                    opacity={gif?.includes("透明度65") ? 0.65 : 1}
-                    zIndex={index}
-                  />
-                ))}
-              </Center>
-            </Box>
+                {/* Gif */}
+                <Center
+                  w="100%"
+                  h="100%"
+                  maxH={{ base: "95px", sm: "240px" }}
+                  overflow="hidden"
+                  pos="relative"
+                >
+                  {gifs.map((gif: string, index: number) => (
+                    <Image
+                      key={index}
+                      pos="absolute"
+                      top="0"
+                      left="0"
+                      w="100%"
+                      h="100%"
+                      src={gif}
+                      opacity={gif?.includes("透明度65") ? 0.65 : 1}
+                      zIndex={index}
+                    />
+                  ))}
+                </Center>
+              </Box>
+            )}
+            {showFX && <FxPanel isHold={isHold} />}
 
             <Flex
               // 功能按鈕區
-              pl="12px"
+              pl="2px"
               justify="space-between"
+              gap="6px"
             >
               <HStack
                 color="#4D4D4D"
-                spacing="18px"
+                spacing="0px"
                 textStyle="en_special_md_bold"
               >
-                {["FX", "SAMPLE"].map((buttonLabel) => (
-                  <Box key={buttonLabel} bgColor="#EBEBEB" p="2px 14px">
-                    {buttonLabel}
+                <HStack pos="relative">
+                  <Box bgColor="#EBEBEB" p="2px 14px">
+                    FX
                   </Box>
-                ))}
+                  {showFX && (
+                    <Image
+                      pos="absolute"
+                      src="/images/screen-arrow.svg"
+                      alt="arrow"
+                      transform="translateY(-50%)"
+                      top="50%"
+                      right="-8px"
+                    />
+                  )}
+                </HStack>
+                <HStack pos="relative">
+                  <Box ml="18px" bgColor="#EBEBEB" p="2px 14px">
+                    SAMPLE
+                  </Box>
+                  {showSample && (
+                    <Image
+                      pos="absolute"
+                      src="/images/screen-arrow.svg"
+                      alt="arrow"
+                      transform="translateY(-50%)"
+                      top="50%"
+                      right="-8px"
+                    />
+                  )}
+                </HStack>
               </HStack>
-              <HStack>
+              <HStack w={showFX  ? "100%" : "auto"}>
+                {showFX && (
+                  <Box
+                    flex="1"
+                    border={isHold ? "3px solid #896C42" : "3px solid black"}
+                    textAlign="center"
+                    rounded="20px"
+                    bgColor={isHold ? "#E0B472" : "#686F73"}
+                    color="#4D4D4D"
+                    textStyle="en_special_md_bold"
+                    cursor="pointer"
+                    onClick={() => {
+                      setIsHold((prev) => !prev);
+                    }}
+                  >
+                    Hold
+                  </Box>
+                )}
                 <Image
+                  w="26px"
                   src="/images/restart.svg"
                   alt="restart"
                   cursor="pointer"
@@ -570,11 +620,27 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
           <HStack
             // 按鈕
-            pl="16px"
+            pl="6px"
             spacing="28px"
           >
-            <Image w="60px" src="/images/bbbb.png" cursor="pointer" />
-            <Image w="60px" src="/images/bbbb.png" cursor="pointer" />
+            <Image
+              w="60px"
+              src="/images/bbbb.png"
+              cursor="pointer"
+              onClick={() => {
+                if (showSample) setShowSample(false);
+                setShowFX((prev) => !prev);
+              }}
+            />
+            <Image
+              w="60px"
+              src="/images/bbbb.png"
+              cursor="pointer"
+              onClick={() => {
+                if (showFX) setShowFX(false);
+                setShowSample((prev) => !prev);
+              }}
+            />
           </HStack>
 
           <Box
