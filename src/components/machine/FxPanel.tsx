@@ -148,7 +148,7 @@ const FxPanel = ({ isHold }: FxPanelProps) => {
             onTouchStart={(e) => handleTouchStart(index, e)}
           >
             <Text mt="4px">{fx.label}</Text>
-            <Text mt="4px">{Math.round(barPositions[index])}</Text>
+            {/* <Text mt="4px">{Math.round(barPositions[index])}</Text> */}
             <Box
               id="bar"
               pos="absolute"

@@ -478,13 +478,11 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               // 功能按鈕區
               pl="2px"
               justify="space-between"
-             
             >
               <HStack
                 color="#4D4D4D"
                 textStyle="en_special_md_bold"
                 fontSize="14px"
-               
                 spacing="18px"
               >
                 <HStack pos="relative">
@@ -509,23 +507,45 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 </HStack>
               </HStack>
               <HStack spacing="4px">
-                <Bpm onChange={handler.onBpmChange} />
-                <Image
-                  src="/images/stop.svg"
-                  alt="stop"
-                  cursor="pointer"
-                  onClick={() => {
-                    Tone.Transport.stop();
-                    handler.clearAllSlots();
-                    Tone.Transport.loopStart = "0:0:0";
-                    Tone.Transport.position = "0:0:0";
-                    handler.unmuteMetronome();
-                    setIsRecording(true);
-                    setCurPosition(0);
-                    Tone.Transport.start();
-                    setIsPlaying(true);
-                  }}
-                />
+                {showFX && (
+                  <Box
+                    w="90px"
+                    border={isHold ? "3px solid #896C42" : "3px solid black"}
+                    textAlign="center"
+                    rounded="20px"
+                    bgColor={isHold ? "#E0B472" : "#686F73"}
+                    color="#4D4D4D"
+                    // textStyle="en_special_md_bold"
+                    fontWeight="bold"
+                    cursor="pointer"
+                    onClick={() => {
+                      setIsHold((prev) => !prev);
+                    }}
+                  >
+                    Hold
+                  </Box>
+                )}
+                {!showFX && (
+                  <>
+                    <Bpm onChange={handler.onBpmChange} />
+                    <Image
+                      src="/images/stop.svg"
+                      alt="stop"
+                      cursor="pointer"
+                      onClick={() => {
+                        Tone.Transport.stop();
+                        handler.clearAllSlots();
+                        Tone.Transport.loopStart = "0:0:0";
+                        Tone.Transport.position = "0:0:0";
+                        handler.unmuteMetronome();
+                        setIsRecording(true);
+                        setCurPosition(0);
+                        Tone.Transport.start();
+                        setIsPlaying(true);
+                      }}
+                    />
+                  </>
+                )}
                 <Image
                   src="/images/restart.svg"
                   alt="restart"
@@ -649,10 +669,9 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   PATTERN_INDEX_MAP[curPattern] * NUMBER_OF_SLOTS;
                 const slotIndex = fixedIndex + patternOffest + seqOffset;
                 const labelIndex = fixedIndex + patternOffest;
-                if(index==1){
-                  
+                if (index == 1) {
                 }
-          
+
                 return (
                   <SlotPad
                     key={slotIndex}
