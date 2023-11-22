@@ -24,7 +24,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
   return (
     <VStack
       spacing="0"
-      pt={{ base: "20px", md: "40px" }}
+      pt={{ base: "10px", md: "40px" }}
       px="50px"
       h={isMenuOpen ? "calc(100vh - 230px)" : "auto"}
       pos="relative"
@@ -47,7 +47,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
       <Image
         w="150px"
         pos="absolute"
-        top={{base: isMenuOpen ? "110px" : "45px", md: isMenuOpen ? "110px" : "75px"}}
+        top={{base: isMenuOpen ? "110px" : "35px", md: isMenuOpen ? "110px" : "75px"}}
         src={cassetteObj.imageSrc}
         alt={cassetteObj.name}
         transition="all 0.3s ease-out"

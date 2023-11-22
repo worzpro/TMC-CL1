@@ -425,7 +425,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       w="100%"
       borderRadius="8px"
       top={{
-        base: isMenuOpen ? "700px" : "70px",
+        base: isMenuOpen ? "700px" : "60px",
         md: isMenuOpen ? "700px" : "100px",
       }}
       zIndex="7999"

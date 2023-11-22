@@ -114,8 +114,8 @@ const Layout = ({
       {/* Link: absolute */}
       <Link
         pos="absolute"
-        top="20px"
-        right="20px"
+        top="10px"
+        right="10px"
         href="https://www.tmccloud.taipei/announcements"
         isExternal
       >
