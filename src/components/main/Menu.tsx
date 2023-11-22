@@ -2,6 +2,7 @@ import { VStack, HStack, Image, Text, Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
+
 import cassettes from "@/dummy/cassettes";
 
 interface MenuProps {
@@ -92,7 +93,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
             <Button
               variant="play"
               colorScheme="blue"
-              onClick={() => {
+              onClick={async() => {
                 setIsMenuOpen(false);
                 setCurCassette(cassetteObj.id);
                 setTimeout(() => {

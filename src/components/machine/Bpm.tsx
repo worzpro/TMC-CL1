@@ -1,7 +1,11 @@
-import { Input, HStack, Image, Box } from "@chakra-ui/react";
+import {  Box } from "@chakra-ui/react";
 import { useState, useCallback, useEffect, use } from "react";
 
-const Bpm = ({ onChange }: { onChange: (value: number) => void }) => {
+interface BpmProps {
+  onChange: (value: number) => void;
+}
+
+const Bpm = ({ onChange }: BpmProps) => {
   const [value, setValue] = useState(120);
   const [isDraggable, setIsDraggable] = useState<boolean>(false);
 

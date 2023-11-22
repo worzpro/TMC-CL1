@@ -8,6 +8,7 @@ import PatternPad from "@/components/machine/PatternPad";
 import SlotPad from "@/components/machine/SlotPad";
 import Bpm from "@/components/machine/Bpm";
 import SampleSelectPanel from "@/components/machine/SampleSelectPanel";
+import FxPanel from "@/components/machine/FxPanel";
 
 import pads from "@/dummy/pads";
 import allSamples from "@/dummy/allSamples";
@@ -70,6 +71,8 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [showSelectPanel, setShowSelectPanel] = useState<boolean>(false);
+  const [showFX, setShowFX] = useState<boolean>(false);
+  const [isHold, setIsHold] = useState<boolean>(false);
 
   const [curSeq, setCurSeq] = useState<string>("SEQ.1");
   const [pendingSeq, setPendingSeq] = useState<string | null>(null);
@@ -444,9 +447,10 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   playerRef={playerRef}
                 />
               )}
+              {showFX && <FxPanel isHold={isHold} />}
 
               {/* curSamples */}
-              {!showSelectPanel && (
+              {!showSelectPanel && !showFX && (
                 <Flex justify="center" wrap="wrap" gap="4px">
                   {curSamples.map((sample, index) => {
                     return (
@@ -474,17 +478,35 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               // 功能按鈕區
               pl="2px"
               justify="space-between"
+             
             >
               <HStack
                 color="#4D4D4D"
-                spacing="8px"
                 textStyle="en_special_md_bold"
+                fontSize="14px"
+               
+                spacing="18px"
               >
-                {["FX", "SAMPLE"].map((buttonLabel) => (
-                  <Box key={buttonLabel} bgColor="#EBEBEB" p="2px 12px">
-                    {buttonLabel}
+                <HStack pos="relative">
+                  <Box bgColor="#EBEBEB" p="2px 12px">
+                    FX
                   </Box>
-                ))}
+                  {showFX && (
+                    <Image
+                      pos="absolute"
+                      src="/images/screen-arrow.svg"
+                      alt="arrow"
+                      transform="translateY(-50%)"
+                      top="50%"
+                      right="-8px"
+                    />
+                  )}
+                </HStack>
+                <HStack pos="relative">
+                  <Box bgColor="#EBEBEB" p="2px 12px">
+                    SAMPLE
+                  </Box>
+                </HStack>
               </HStack>
               <HStack spacing="4px">
                 <Bpm onChange={handler.onBpmChange} />
@@ -555,14 +577,17 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
           <HStack
             // 按鈕
-            pl="6px"
-            spacing="10px"
+            pl="4px"
+            spacing="18px"
           >
             <Image
               w="60px"
               src="/images/bbbb.png"
               cursor="pointer"
               _hover={{ opacity: 0.7 }}
+              onClick={() => {
+                setShowFX((prev) => !prev);
+              }}
             />
             <Image
               w="60px"
@@ -570,7 +595,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               cursor="pointer"
               _hover={{ opacity: 0.7 }}
               onClick={() => {
-                setShowSelectPanel(!showSelectPanel);
+                setShowSelectPanel((prev) => !prev);
               }}
             />
           </HStack>
@@ -624,7 +649,10 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   PATTERN_INDEX_MAP[curPattern] * NUMBER_OF_SLOTS;
                 const slotIndex = fixedIndex + patternOffest + seqOffset;
                 const labelIndex = fixedIndex + patternOffest;
-
+                if(index==1){
+                  
+                }
+          
                 return (
                   <SlotPad
                     key={slotIndex}
@@ -633,7 +661,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     isMobile={isMobile}
                     labelIndex={labelIndex}
                     isRegistered={padState["slots"][curSample.index][slotIndex]}
-                    isActive={isPlaying && curPosition === pad.nameslotIndex}
+                    isActive={isPlaying && curPosition === slotIndex}
                     onClick={() => {
                       handler.onSlotPadClick(slotIndex);
                     }}

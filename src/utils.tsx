@@ -134,3 +134,29 @@ export const createSendAudioEffects = (effects: LooseObject) => {
   });
   return audioEffects;
 };
+
+export const createDefaultValues = (effects: LooseObject) => {
+  return Object.entries(effects).reduce(
+    (acc: LooseObject, [effectKey, effectObj]) => {
+      const effectValues = effectObj.variables.reduce(
+        (acc: LooseObject, variable: LooseObject) => {
+          const { variableKey, defaultValue } = variable;
+          acc[variableKey] = defaultValue;
+          return acc;
+        },
+        {}
+      );
+      const channelValues = effectObj.channelVariables?.reduce(
+        (acc: LooseObject, variable: LooseObject) => {
+          const { variableKey, defaultValue } = variable;
+          acc[variableKey] = defaultValue;
+          return acc;
+        },
+        {}
+      );
+      acc[effectKey] = { ...effectValues, ...channelValues };
+      return acc;
+    },
+    {}
+  );
+};

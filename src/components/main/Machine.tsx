@@ -11,6 +11,13 @@ import RecordingLight from "@/components/machine/RecordingLight";
 import Loading from "@/components/machine/Loading";
 import FxPanel from "@/components/machine/FxPanel";
 
+import { INSERT_EFFECTS, SEND_EFFECTS } from "@/dummy/constants";
+import {
+  createChainedInsertAudioEffects,
+  createSendAudioEffects,
+  createDefaultValues,
+} from "@/utils";
+
 interface MachineProps {
   isMenuOpen: boolean;
   isToneStarted: boolean;
@@ -18,6 +25,13 @@ interface MachineProps {
 interface LooseObject {
   [key: string]: any;
 }
+
+// const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
+// const sendEffects = createSendAudioEffects(SEND_EFFECTS);
+// const defaultValues = createDefaultValues({
+//   ...INSERT_EFFECTS,
+//   ...SEND_EFFECTS
+// });
 
 const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -30,15 +44,20 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [activePad, setActivePad] = useState<string>("");
   const [isJamming, setIsJamming] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  // const [effectValues, setEffectValues] = useState(defaultValues);
+
   const router = useRouter();
   const pathName = router.pathname.split("/")[2];
   let timeoutID: any = null;
+
 
   // dummy data 後處理
   const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
   const curSeqData = artists[pathName]?.[curSeq];
 
   const playerRef = useRef<any>(null);
+  const insertEffectsRef = useRef<any>();
+  const sendEffectsRef = useRef<any>();
 
   const handler = {
     createNewLoopedAndSyncedPlayer: (src: string) => {
@@ -414,6 +433,9 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       handler.setJam(curSeq, isJamming);
       fullPlayer.start(0);
       jamPlayer.start(0);
+
+      //FX相關
+      
     }
   }, [isToneStarted]);
 

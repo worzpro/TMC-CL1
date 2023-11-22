@@ -1,5 +1,6 @@
-import { Box, Flex, Text,  } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useState, useEffect, useRef, useCallback } from "react";
+
 
 interface FxPanelProps {
   isHold: boolean;
@@ -8,6 +9,9 @@ interface FxPanelProps {
 interface LooseObject {
   [key: string]: any;
 }
+
+
+
 const FXs = [
   {
     label: "Pitch Shift",
@@ -43,12 +47,15 @@ const FXs = [
   },
 ];
 
-const FxPanel = ({isHold}:FxPanelProps) => {
+const FxPanel = ({ isHold }: FxPanelProps) => {
   const [barPositions, setBarPositions] = useState<number[]>(
     FXs.map((fx) => fx.initPos)
   );
   const containerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const insertEffectsRef = useRef<any>(null);
+  const sendEffectsRef = useRef<any>(null);
 
+  
   useEffect(() => {
     containerRefs.current = containerRefs.current.slice(0, FXs.length);
   }, [FXs]);
