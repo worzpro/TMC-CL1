@@ -442,7 +442,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         playerRef.current[curSeq].fullPlayer.unsync()
         playerRef.current[curSeq].jamPlayer.unsync()
       }
-      
     }
   }, [isToneStarted]);
 
