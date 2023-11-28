@@ -437,6 +437,12 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       //FX相關
       
     }
+    return () => {
+      if (playerRef.current) {
+        playerRef.current[curSeq].fullPlayer.unsync()
+        playerRef.current[curSeq].jamPlayer.unsync()
+      }
+    }
   }, [isToneStarted]);
 
   return (
