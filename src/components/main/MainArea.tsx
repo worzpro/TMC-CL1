@@ -8,11 +8,10 @@ import CustomizeMachine from "@/components/main/CustomizeMachine";
 
 const MainArea = ({ isToneStarted }: { isToneStarted: boolean }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const router = useRouter();
 
   return (
-    <VStack pos="relative" >
+    <VStack pos="relative">
       <Menu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
       {router.pathname !== "/cassettes/customize" && (
