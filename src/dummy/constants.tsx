@@ -1,3 +1,6 @@
+interface LooseObject {
+  [key: string]: any;
+}
 import * as Tone from "tone";
 
 export const NUMBER_OF_SEQ = 4;
@@ -7,6 +10,25 @@ export const NUMBER_OF_SLOTS = 8;
 
 export const PREP_BEAT_BARS = 1;
 export const PREP_BEAT_SLOTS = 8;
+
+export const SEQ_LOOP_POINTS:LooseObject = {
+  "SEQ.1": {
+    start: "0:0:0",
+    end: "8:0:0"
+  },
+  "SEQ.2": {
+    start: "8:0:0",
+    end: "16:0:0"
+  },
+  "SEQ.3": {
+    start: "16:0:0",
+    end: "24:0:0"
+  },
+  "SEQ.4": {
+    start: "24:0:0",
+    end: "32:0:0"
+  }
+};
 
 export const INSERT_EFFECTS = {
   pitchShift: {

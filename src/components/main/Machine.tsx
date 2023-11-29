@@ -6,12 +6,17 @@ import * as Tone from "tone";
 import artists from "@/dummy/artists";
 import pads from "@/dummy/pads";
 
+import SeqBtn from "@/components/machine/SeqBtn";
 import PadLight from "@/components/machine/PadLight";
 import RecordingLight from "@/components/machine/RecordingLight";
 import Loading from "@/components/machine/Loading";
 import FxPanel from "@/components/machine/FxPanel";
 
-import { INSERT_EFFECTS, SEND_EFFECTS } from "@/dummy/constants";
+import {
+  INSERT_EFFECTS,
+  SEND_EFFECTS,
+  SEQ_LOOP_POINTS,
+} from "@/dummy/constants";
 import {
   createChainedInsertAudioEffects,
   createSendAudioEffects,
@@ -27,6 +32,7 @@ interface LooseObject {
 }
 
 // const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
+// console.log(insertEffects)
 // const sendEffects = createSendAudioEffects(SEND_EFFECTS);
 // const defaultValues = createDefaultValues({
 //   ...INSERT_EFFECTS,
@@ -39,6 +45,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [showFX, setShowFX] = useState<boolean>(false);
   const [showSample, setShowSample] = useState<boolean>(false);
   const [curSeq, setCurSeq] = useState<string>("SEQ.1");
+  const [progress, setProgress] = useState(0);
   const [pendingSeq, setPendingSeq] = useState<string | null>(null);
   const [gifs, setGifs] = useState<string[]>([]);
   const [activePad, setActivePad] = useState<string>("");
@@ -50,7 +57,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const pathName = router.pathname.split("/")[2];
   let timeoutID: any = null;
 
-
   // dummy data 後處理
   const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
   const curSeqData = artists[pathName]?.[curSeq];
@@ -60,29 +66,55 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const sendEffectsRef = useRef<any>();
 
   const handler = {
+    createAudioMap: (artistData: LooseObject) => {
+      let AUDIO_MAP: LooseObject = {};
+      Object.entries(artistData).map(([seqLabel, seqData]: any) => {
+        const { bpm, src, srcJam } = seqData.audios.seqAudio;
+        const samples = seqData.audios.sampleAudios;
+        AUDIO_MAP[seqLabel] = {
+          label: seqLabel,
+          bpm,
+          src,
+          srcJam,
+          samples,
+        };
+      });
+      return AUDIO_MAP;
+    },
     createNewLoopedAndSyncedPlayer: (src: string) => {
       const newPlayer = new Tone.Player(src).toDestination();
-      newPlayer.loop = true;
       newPlayer.volume.value = -10;
       newPlayer.sync();
       return newPlayer;
     },
-    createPlayers: () => {
-      const artistData = artists[pathName];
-      const players = Object.entries(artistData).map(
-        ([seqName, seqData]: any) => {
-          const { src, srcJam } = seqData.audios.seqAudio;
-          const samplesAudios = seqData.audios.sampleAudios;
-          const fullPlayer = handler.createNewLoopedAndSyncedPlayer(src);
-          const jamPlayer = handler.createNewLoopedAndSyncedPlayer(srcJam);
-          const samplePlayers = samplesAudios.map((sampleAudio: LooseObject) =>
-            new Tone.Player(sampleAudio.src).toDestination()
-          );
-          return [seqName, { fullPlayer, jamPlayer, samplePlayers }];
-        }
-      );
+    createPlayers: (audioMap: LooseObject) => {
+      const players = Object.entries(audioMap).map(([key, seq]) => {
+        const { src, srcJam, samples } = seq;
+        const fullPlayer = handler.createNewLoopedAndSyncedPlayer(src);
+        const jamPlayer = handler.createNewLoopedAndSyncedPlayer(srcJam);
+
+        const samplePlayers = samples.map((sample: LooseObject) =>
+          new Tone.Player(sample.src).toDestination()
+        );
+
+        return [
+          key,
+          {
+            fullPlayer,
+            jamPlayer,
+            samplePlayers,
+          },
+        ];
+      });
 
       return Object.fromEntries(players);
+    },
+    startPlayersAtDesinatedBar: (playersObj: LooseObject) => {
+      Object.entries(playersObj).forEach(([seq, { fullPlayer, jamPlayer }]) => {
+        const { start, end } = SEQ_LOOP_POINTS[seq];
+        fullPlayer.start(start).stop(end);
+        jamPlayer.start(start).stop(end);
+      });
     },
     clearAllPlayerScheduledEvents: () => {
       Object.values(playerRef.current).forEach((player: any) => {
@@ -104,35 +136,35 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       jamPlayer.mute = isJamming;
     },
     onSeqClick: (seq: string) => {
-      if (curSeq === seq) return;
+      if (seq === curSeq) return;
 
       if (isPlaying) {
         // switch seq on the next first beat
         setPendingSeq(seq);
         const curTick = Tone.Transport.getTicksAtTime();
         const curMeasure = Math.floor(curTick / (192 * 4));
-
         const switch_time = `${curMeasure + 1}:0:0`;
-        playerRef.current[curSeq].fullPlayer.stop(switch_time);
-        playerRef.current[curSeq].jamPlayer.stop(switch_time);
 
         handler.setJam(seq, isJamming);
-        playerRef.current[seq].fullPlayer.start(switch_time);
-        playerRef.current[seq].jamPlayer.start(switch_time);
 
         Tone.Transport.scheduleOnce(() => {
+          const { start, end } = SEQ_LOOP_POINTS[seq];
+          Tone.Transport.loopStart = start;
+          Tone.Transport.loopEnd = end;
+          Tone.Transport.position = start;
           setPendingSeq(null);
           setCurSeq(seq);
+          setProgress(0);
         }, switch_time);
       } else {
-        handler.clearAllPlayerScheduledEvents();
         const { bpm } = curSeqData.audios.seqAudio;
-        const { fullPlayer, jamPlayer } = playerRef.current[seq];
+        const { start, end } = SEQ_LOOP_POINTS[seq];
         Tone.Transport.bpm.value = bpm;
-
-        fullPlayer.start(0);
-        jamPlayer.start(0);
+        Tone.Transport.loopStart = start;
+        Tone.Transport.loopEnd = end;
+        Tone.Transport.position = start;
         setCurSeq(seq);
+        setProgress(0);
       }
     },
     onChangeGif: (curGifData: LooseObject, padName: string) => {
@@ -396,16 +428,12 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
           setIsPlaying(false);
         }
       } else if (event.detail === 2) {
+        const { start, end } = SEQ_LOOP_POINTS[curSeq];
         Tone.Transport.stop();
-
-        // reset Transport
-        handler.clearAllPlayerScheduledEvents();
-
-        const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
-        const { bpm } = curSeqData.audios.seqAudio;
-        Tone.Transport.bpm.value = bpm;
-        fullPlayer.start(0);
-        jamPlayer.start(0);
+        Tone.Transport.loopStart = start;
+        Tone.Transport.loopEnd = end;
+        Tone.Transport.position = start;
+        setProgress(0);
       }
     },
   };
@@ -426,25 +454,59 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   // 初始化
   useEffect(() => {
     if (isToneStarted) {
-      playerRef.current = handler.createPlayers();
       const { bpm } = curSeqData.audios.seqAudio;
+      const { start, end } = SEQ_LOOP_POINTS[curSeq];
+      Tone.Transport.loop = true;
+      Tone.Transport.loopStart = start;
+      Tone.Transport.loopEnd = end;
       Tone.Transport.bpm.value = bpm;
-      const { fullPlayer, jamPlayer } = playerRef.current[curSeq];
-      handler.setJam(curSeq, isJamming);
-      fullPlayer.start(0);
-      jamPlayer.start(0);
 
-      //FX相關
-      
+      const AUDIO_MAP = handler.createAudioMap(artists[pathName]);
+      playerRef.current = handler.createPlayers(AUDIO_MAP);
+      handler.setJam(curSeq, isJamming);
+      handler.startPlayersAtDesinatedBar(playerRef.current);
     }
+
+    // 切換卡帶時重置player
     return () => {
       if (playerRef.current) {
-        playerRef.current[curSeq].fullPlayer.unsync()
-        playerRef.current[curSeq].jamPlayer.unsync()
+        playerRef.current[curSeq].fullPlayer.unsync();
+        playerRef.current[curSeq].jamPlayer.unsync();
       }
-    }
+    };
   }, [isToneStarted]);
 
+  // count beat
+  useEffect(() => {
+    let eventId: any;
+    if (isPlaying) {
+      eventId = Tone.Transport.scheduleRepeat((time) => {
+        // console.log(
+        //   Math.floor(
+        //     (Math.floor(Tone.Transport.getTicksAtTime() / 192) % 4) + 1
+        //   )
+        // );
+      }, "4n");
+    }
+    return () => {
+      Tone.Transport.clear(eventId);
+    };
+  }, [isPlaying]);
+
+  // count progress
+  useEffect(() => {
+    const id = Tone.Transport.scheduleRepeat((time) => {
+      Tone.Draw.schedule(() => {
+        setProgress(Tone.Transport.progress * 100);
+      }, time);
+    }, "64n");
+
+    return () => {
+      Tone.Transport.clear(id);
+    };
+  }, []);
+
+  
   return (
     <Box
       // 外層容器
@@ -503,25 +565,14 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               spacing="6px"
             >
               {["SEQ.1", "SEQ.2", "SEQ.3", "SEQ.4"].map((seq) => (
-                <Center
-                  flex="1"
+                <SeqBtn
                   key={seq}
-                  bgColor={
-                    curSeq === seq
-                      ? "#292929"
-                      : pendingSeq == seq
-                      ? "#a27533"
-                      : "#687074"
-                  }
-                  color="white"
-                  textStyle="en_special_md_bold"
-                  cursor="pointer"
-                  onClick={() => {
-                    handler.onSeqClick(seq);
-                  }}
-                >
-                  {seq}
-                </Center>
+                  seq={seq}
+                  curSeq={curSeq}
+                  pendingSeq={pendingSeq}
+                  progress={progress}
+                  onSeqClick={handler.onSeqClick}
+                />
               ))}
             </HStack>
 
@@ -610,7 +661,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   )}
                 </HStack>
               </HStack>
-              <HStack w={showFX  ? "100%" : "auto"}>
+              <HStack w={showFX ? "100%" : "auto"}>
                 {showFX && (
                   <Box
                     flex="1"

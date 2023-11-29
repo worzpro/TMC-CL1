@@ -70,7 +70,7 @@ const FxPanel = ({ isHold }: FxPanelProps) => {
       if (container) {
         const rect = container.getBoundingClientRect();
         let newHeight = ((rect.bottom - clientY) / rect.height) * 100;
-        newHeight = Math.max(0, Math.min(95, newHeight)); // 保證在 0 到 95 的範圍內
+        newHeight = Math.round(Math.max(0, Math.min(95, newHeight))); // 保證在 0 到 95 的範圍內
         setBarPositions((prev) =>
           prev.map((pos, idx) => (idx === index ? newHeight : pos))
         );
@@ -148,7 +148,7 @@ const FxPanel = ({ isHold }: FxPanelProps) => {
             onTouchStart={(e) => handleTouchStart(index, e)}
           >
             <Text mt="4px">{fx.label}</Text>
-            {/* <Text mt="4px">{Math.round(barPositions[index])}</Text> */}
+            <Text mt="4px">{Math.round(barPositions[index])}</Text>
             <Box
               id="bar"
               pos="absolute"
