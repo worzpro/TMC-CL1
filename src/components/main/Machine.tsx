@@ -116,15 +116,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         jamPlayer.start(start).stop(end);
       });
     },
-    clearAllPlayerScheduledEvents: () => {
-      Object.values(playerRef.current).forEach((player: any) => {
-        const { fullPlayer, jamPlayer } = player;
-        fullPlayer.unsync();
-        jamPlayer.unsync();
-        fullPlayer.sync();
-        jamPlayer.sync();
-      });
-    },
     setJam: (seq: string, isJamming: boolean) => {
       const { fullPlayer, jamPlayer } = playerRef.current[seq];
       fullPlayer.mute = isJamming;
@@ -411,9 +402,8 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         console.log(err);
       }
     },
-    onPlayOrPause: async () => {
+    onPlayOrPause: () => {
       if (!isPlaying) {
-        await Tone.loaded();
         Tone.Transport.start();
         setIsPlaying(true);
       } else {
@@ -506,7 +496,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     };
   }, []);
 
-  
   return (
     <Box
       // 外層容器
