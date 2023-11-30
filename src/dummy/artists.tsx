@@ -812,17 +812,17 @@ const artists: { [key: string]: any } = {
         {
           pad: "2",
           src: "/images/gif/enno-chunho/enno_seq2_sample02_月娘(暫留在畫面).webp",
-          duration: 4000,
+          duration: 2000,
         },
         {
           pad: "3",
           src: "/images/gif/enno-chunho/enno_seq2_sample03_一世人(暫留在畫面).webp",
-          duration: 4000,
+          duration: 1500,
         },
         {
           pad: "4",
           src: "/images/gif/enno-chunho/enno_seq2_sample04_咱的路(暫留在畫面).webp",
-          duration: 4000,
+          duration: 1500,
         },
         {
           pad: "5",
@@ -932,7 +932,7 @@ const artists: { [key: string]: any } = {
         {
           pad: "8",
           src: "/images/gif/enno-chunho/enno_seq3_sample08_Umm_4.webp",
-          duration: 6000,
+          duration: 4000,
         },
       ],
       waitGif: ["/images/gif/enno-chunho/enno_seq3_BG.webp"],
@@ -984,42 +984,42 @@ const artists: { [key: string]: any } = {
         {
           pad: "1",
           src: "/images/gif/enno-chunho/enno_seq4_sample01_我會聽(暫留在畫面).webp",
-          duration: 5000,
+          duration: 4000,
         },
         {
           pad: "2",
           src: "/images/gif/enno-chunho/enno_seq4_sample02_在夜晚(暫留在畫面).webp",
-          duration: 5000,
+          duration: 4000,
         },
         {
           pad: "3",
           src: "/images/gif/enno-chunho/enno_seq4_sample03_的盡頭(暫留在畫面).webp",
-          duration: 5000,
+          duration: 4000,
         },
         {
           pad: "4",
           src: "/images/gif/enno-chunho/enno_seq4_sample04_我(暫留在畫面).webp",
-          duration: 5000,
+          duration: 4000,
         },
         {
           pad: "5",
           src: "/images/gif/enno-chunho/enno_seq4_sample05_會(暫留在畫面).webp",
-          duration: 5000,
+          duration: 4000,
         },
         {
           pad: "6",
           src: "/images/gif/enno-chunho/enno_seq4_sample06_聽(暫留在畫面).webp",
-          duration: 5000,
+          duration: 4000,
         },
         {
           pad: "7",
           src: "/images/gif/enno-chunho/enno_seq4_sample07_你(暫留在畫面).webp",
-          duration: 5000,
+          duration: 4000,
         },
         {
           pad: "8",
           src: "/images/gif/enno-chunho/enno_seq4_sample08_說(暫留在畫面).webp",
-          duration: 5000,
+          duration: 4000,
         },
       ],
       waitGif: ["/images/gif/enno-chunho/enno_seq4_White BG.webp"],
@@ -1443,7 +1443,7 @@ const artists: { [key: string]: any } = {
         {
           pad: "5",
           src: "/images/gif/sonia/sonia_seq1_sample05_bass-drop.webp",
-          duration: 3000,
+          duration: 1500,
         },
         {
           pad: "6",
