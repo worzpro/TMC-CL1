@@ -1,61 +1,24 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { useState, useEffect, useRef, useCallback } from "react";
-
+import { INSERT_EFFECTS, SEND_EFFECTS } from "@/dummy/constants";
 
 interface FxPanelProps {
   isHold: boolean;
+  onFxChange: Function;
 }
 
 interface LooseObject {
   [key: string]: any;
 }
 
+const FXs = [...Object.values(INSERT_EFFECTS), ...Object.values(SEND_EFFECTS)];
 
-
-const FXs = [
-  {
-    label: "Pitch Shift",
-    initPos: 50,
-  },
-  {
-    label: "Filter",
-    initPos: 0,
-  },
-  {
-    label: "Frequency Shifter",
-    initPos: 0,
-  },
-  {
-    label: "Distortion",
-    initPos: 0,
-  },
-  {
-    label: "Phaser",
-    initPos: 0,
-  },
-  {
-    label: "Ping Pong Delay",
-    initPos: 0,
-  },
-  {
-    label: "Tmc Hall",
-    initPos: 0,
-  },
-  {
-    label: "Tmc Chamber",
-    initPos: 0,
-  },
-];
-
-const FxPanel = ({ isHold }: FxPanelProps) => {
+const FxPanel = ({ isHold, onFxChange }: FxPanelProps) => {
   const [barPositions, setBarPositions] = useState<number[]>(
-    FXs.map((fx) => fx.initPos)
+    FXs.map((fx) => fx.defaultPosition)
   );
   const containerRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const insertEffectsRef = useRef<any>(null);
-  const sendEffectsRef = useRef<any>(null);
 
-  
   useEffect(() => {
     containerRefs.current = containerRefs.current.slice(0, FXs.length);
   }, [FXs]);
@@ -65,12 +28,23 @@ const FxPanel = ({ isHold }: FxPanelProps) => {
   }, [isHold]);
 
   const updateBarPosition = useCallback(
-    (index: number, clientY: number) => {
+    (index: number, clientY: number, fx: LooseObject) => {
       const container = containerRefs.current[index];
       if (container) {
         const rect = container.getBoundingClientRect();
         let newHeight = ((rect.bottom - clientY) / rect.height) * 100;
-        newHeight = Math.round(Math.max(0, Math.min(95, newHeight))); // 保證在 0 到 95 的範圍內
+        newHeight = Math.round(Math.max(0, Math.min(100, newHeight))); // 保證在 0 到 100 的範圍內
+
+        // 計算出新的值
+        const { min, max, step, defaultValue } =
+          fx.type == "insert" ? fx.variables[0] : fx.channelVariables[0];
+        const valueRange = max - min;
+        const fxValue =
+          Math.round(((newHeight / 100) * valueRange + min) / step) * step;
+        newHeight = ((fxValue - min) / valueRange) * 100;
+        // console.log("fxValue", fxValue);
+        onFxChange(fx, fxValue);
+
         setBarPositions((prev) =>
           prev.map((pos, idx) => (idx === index ? newHeight : pos))
         );
@@ -80,29 +54,43 @@ const FxPanel = ({ isHold }: FxPanelProps) => {
   );
 
   const resetBarPosition = useCallback(
-    (index?: number) => {
-      if (index) {
+    (fx?: LooseObject, index?: number) => {
+      if (fx && index) {
+        if (fx.type == "send") {
+          onFxChange(fx, fx.channelVariables[0].defaultValue);
+        } else {
+          onFxChange(fx, fx.variables[0].defaultValue);
+        }
+
         setBarPositions((prev) => {
           const newBarPositions = [...prev];
-          newBarPositions[index] = FXs[index].initPos;
+          newBarPositions[index] = FXs[index].defaultPosition;
           return newBarPositions;
         });
       } else {
-        setBarPositions(FXs.map((fx) => fx.initPos));
+        FXs.forEach((fx: LooseObject) => {
+          if (fx.type == "send") {
+            onFxChange(fx, fx.channelVariables[0].defaultValue);
+          } else {
+            onFxChange(fx, fx.variables[0].defaultValue);
+          }
+        });
+        setBarPositions(FXs.map((fx) => fx.defaultPosition));
       }
     },
     [barPositions]
   );
 
   const handleMouseDown = useCallback(
-    (index: number, event: any) => {
-      updateBarPosition(index, event.clientY);
+    (index: number, event: any, fx: LooseObject) => {
+      updateBarPosition(index, event.clientY, fx);
 
-      const handleMouseMove = (e: any) => updateBarPosition(index, e.clientY);
+      const handleMouseMove = (e: any) =>
+        updateBarPosition(index, e.clientY, fx);
       const handleMouseUp = () => {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
-        !isHold && resetBarPosition(index);
+        !isHold && resetBarPosition(fx, index);
       };
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
@@ -111,14 +99,14 @@ const FxPanel = ({ isHold }: FxPanelProps) => {
   );
 
   const handleTouchStart = useCallback(
-    (index: number, event: any) => {
-      updateBarPosition(index, event.touches[0].clientY);
+    (index: number, event: any, fx: LooseObject) => {
+      updateBarPosition(index, event.touches[0].clientY, fx);
       const handleTouchMove = (e: any) =>
-        updateBarPosition(index, e.touches[0].clientY);
+        updateBarPosition(index, e.touches[0].clientY, fx);
       const handleTouchEnd = () => {
         document.removeEventListener("touchmove", handleTouchMove);
         document.removeEventListener("touchend", handleTouchEnd);
-        !isHold && resetBarPosition(index);
+        !isHold && resetBarPosition(fx, index);
       };
       document.addEventListener("touchmove", handleTouchMove);
       document.addEventListener("touchend", handleTouchEnd);
@@ -144,8 +132,9 @@ const FxPanel = ({ isHold }: FxPanelProps) => {
             bgColor="#3B3B3B"
             color="#C6DAE2"
             fontWeight="bold"
-            onMouseDown={(e) => handleMouseDown(index, e)}
-            onTouchStart={(e) => handleTouchStart(index, e)}
+            overflow="hidden"
+            onMouseDown={(e) => handleMouseDown(index, e, fx)}
+            onTouchStart={(e) => handleTouchStart(index, e, fx)}
           >
             <Text mt="4px">{fx.label}</Text>
             <Text mt="4px">{Math.round(barPositions[index])}</Text>
@@ -157,6 +146,7 @@ const FxPanel = ({ isHold }: FxPanelProps) => {
               w="100%"
               h="5px"
               bg="white"
+              transform="translateY(50%)"
             />
           </Box>
         ))}

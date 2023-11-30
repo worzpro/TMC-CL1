@@ -20,7 +20,7 @@ const Hint = ({ showHint, setShowHint, setIsToneStarted }: HintProps) => {
       zIndex="10000"
     >
       <Box pos="relative">
-        <Image w={{ base: "80vw", lg: "350px" }} src="/images/modal.png" />
+        <Image w="350px" src="/images/modal.png" />
         <Box
           pos="absolute"
           bottom={{ base: "30px", lg: "40px" }}

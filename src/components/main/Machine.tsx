@@ -20,7 +20,7 @@ import {
 import {
   createChainedInsertAudioEffects,
   createSendAudioEffects,
-  createDefaultValues,
+  getBasicVersionPlayers,
 } from "@/utils";
 
 interface MachineProps {
@@ -30,14 +30,6 @@ interface MachineProps {
 interface LooseObject {
   [key: string]: any;
 }
-
-// const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
-// console.log(insertEffects)
-// const sendEffects = createSendAudioEffects(SEND_EFFECTS);
-// const defaultValues = createDefaultValues({
-//   ...INSERT_EFFECTS,
-//   ...SEND_EFFECTS
-// });
 
 const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -51,7 +43,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [activePad, setActivePad] = useState<string>("");
   const [isJamming, setIsJamming] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  // const [effectValues, setEffectValues] = useState(defaultValues);
 
   const router = useRouter();
   const pathName = router.pathname.split("/")[2];
@@ -62,8 +53,8 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const curSeqData = artists[pathName]?.[curSeq];
 
   const playerRef = useRef<any>(null);
-  const insertEffectsRef = useRef<any>();
-  const sendEffectsRef = useRef<any>();
+  const insertEffectsRef = useRef<any>(null);
+  const sendEffectsRef = useRef<any>(null);
 
   const handler = {
     createAudioMap: (artistData: LooseObject) => {
@@ -426,6 +417,27 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         setProgress(0);
       }
     },
+    onFxChange: (effectObj: LooseObject, value: number) => {
+      const isChannel = effectObj.channelVariables !== undefined;
+      const { key } = effectObj;
+      if (isChannel) {
+        const { variableKey, defaultValue } = effectObj.channelVariables[0];
+        sendEffectsRef.current[key].channel.set({
+          [variableKey]: value,
+        });
+        if (value == defaultValue) {
+          console.log("mute!");
+          sendEffectsRef.current[key].effect.disconnect();
+        } else {
+          sendEffectsRef.current[key].effect.toDestination();
+        }
+      } else {
+        const { variableKey, defaultValue } = effectObj.variables[0];
+        insertEffectsRef.current[key].effect.set({
+          [variableKey]: value,
+        });
+      }
+    },
   };
 
   // 初始化預設gifs
@@ -452,9 +464,29 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       Tone.Transport.bpm.value = bpm;
 
       const AUDIO_MAP = handler.createAudioMap(artists[pathName]);
-      playerRef.current = handler.createPlayers(AUDIO_MAP);
+      const playerObj = handler.createPlayers(AUDIO_MAP);
+
+      ///// FX相關
+      const players = getBasicVersionPlayers(playerObj);
+      const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
+      players.forEach((player: any) => {
+        player.connect(insertEffects.input);
+      });
+      // main channel as opposed to auxiliary channels
+      const playerChannel = new Tone.Channel().toDestination();
+      insertEffects.output.connect(playerChannel);
+      // auxiliary channels, i.e. send effects
+      const sendEffects = createSendAudioEffects(SEND_EFFECTS);
+      const sendEffectKeys = Object.keys(SEND_EFFECTS);
+      sendEffectKeys.forEach((sendEffectKey: string) => {
+        playerChannel.send(sendEffectKey);
+      });
+
+      playerRef.current = playerObj;
+      insertEffectsRef.current = insertEffects;
+      sendEffectsRef.current = sendEffects;
       handler.setJam(curSeq, isJamming);
-      handler.startPlayersAtDesinatedBar(playerRef.current);
+      handler.startPlayersAtDesinatedBar(playerObj);
     }
 
     // 切換卡帶時重置player
@@ -606,7 +638,9 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 </Center>
               </Box>
             )}
-            {showFX && <FxPanel isHold={isHold} />}
+            {showFX && (
+              <FxPanel isHold={isHold} onFxChange={handler.onFxChange} />
+            )}
 
             <Flex
               // 功能按鈕區

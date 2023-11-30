@@ -32,48 +32,62 @@ export const SEQ_LOOP_POINTS:LooseObject = {
 
 export const INSERT_EFFECTS = {
   pitchShift: {
-    toneClass: Tone.PitchShift,
+    type: "insert",
+    key: "pitchShift",
     label: "Pitch Shift",
+    defaultPosition: 50,
+    toneClass: Tone.PitchShift,
+    defaultArguments: [],
     variables: [
       {
         variableKey: "pitch",
         min: -12,
         max: 12,
         step: 1,
-        defaultValue: 0
-      }
-    ]
+        defaultValue: 0,
+      },
+    ],
   },
   filter: {
-    toneClass: Tone.Filter,
+    type: "insert",
+    key: "filter",
     label: "Filter",
+    defaultPosition: 0,
+    toneClass: Tone.Filter,
     defaultArguments: [5000, "lowpass", -24],
     variables: [
       {
         variableKey: "frequency",
-        min: 200,
-        max: 5000,
-        step: 200,
-        defaultValue: 5000
-      }
-    ]
+        min: 5000,
+        max: 200,
+        step: -200,
+        defaultValue: 5000,
+      },
+    ],
   },
   frequencyShifter: {
-    toneClass: Tone.FrequencyShifter,
+    type: "insert",
+    key: "frequencyShifter",
     label: "Frequency Shifter",
+    defaultPosition: 0,
+    toneClass: Tone.FrequencyShifter,
+    defaultArguments: [],
     variables: [
       {
         variableKey: "frequency",
         min: 0,
         max: 1000,
         step: 20,
-        defaultValue: 0
-      }
-    ]
+        defaultValue: 0,
+      },
+    ],
   },
   distortion: {
-    toneClass: Tone.Distortion,
+    type: "insert",
+    key: "distortion",
     label: "Distortion",
+    defaultPosition: 0,
+    toneClass: Tone.Distortion,
     defaultArguments: [0.5],
     variables: [
       {
@@ -81,66 +95,59 @@ export const INSERT_EFFECTS = {
         min: 0,
         max: 1,
         step: 0.1,
-        defaultValue: 0
-      }
-    ]
+        defaultValue: 0,
+      },
+    ],
   },
   phaser: {
-    toneClass: Tone.Phaser,
+    type: "insert",
+    key: "phaser",
     label: "Phaser",
+    defaultPosition: 0,
+    toneClass: Tone.Phaser,
+    defaultArguments: [
+      {
+        octaves: 5,
+        baseFrequency: 1000,
+      },
+    ], // Tone.Phaser accepts an object
     variables: [
       {
         variableKey: "frequency",
         min: 0,
         max: 20,
         step: 1,
-        defaultValue: 0
+        defaultValue: 0,
       },
-      {
-        variableKey: "octaves",
-        min: 0,
-        max: 10,
-        step: 1,
-        defaultValue: 5
-      },
-      {
-        variableKey: "baseFrequency",
-        min: 200,
-        max: 2000,
-        step: 200,
-        defaultValue: 1000
-      }
-    ]
+    ],
   }
 };
 
 export const SEND_EFFECTS = {
   pingPongDelay: {
-    toneClass: Tone.PingPongDelay,
+    type: "send",
+    key: "pingPongDelay",
     label: "Ping Pong Delay",
+    defaultPosition: 0,
+    toneClass: Tone.PingPongDelay,
     defaultArguments: ["4n", 0.2], // delayTime, feedback
-    variables: [
-      {
-        variableKey: "feedback",
-        min: 0,
-        max: 1.0,
-        step: 0.05,
-        defaultValue: 0.2
-      }
-    ],
+    variables: [],
     channelVariables: [
       {
         variableKey: "volume",
         min: -60,
         max: 5,
         step: 5,
-        defaultValue: -60
-      }
-    ]
+        defaultValue: -60,
+      },
+    ],
   },
   tmcHall: {
-    toneClass: Tone.Convolver,
+    type: "send",
+    key: "tmcHall",
     label: "TMC Hall",
+    defaultPosition: 0,
+    toneClass: Tone.Convolver,
     defaultArguments: ["/audio/Concert-Hall-Middle.wav"],
     variables: [],
     channelVariables: [
@@ -149,14 +156,17 @@ export const SEND_EFFECTS = {
         min: -60,
         max: 5,
         step: 5,
-        defaultValue: -60
-      }
-    ]
+        defaultValue: -60,
+      },
+    ],
   },
   tmcChamber: {
-    toneClass: Tone.Convolver,
+    type: "send",
+    key: "tmcChamber",
     label: "TMC Chamber",
-    defaultArguments: ['/audio/Live_House_A.wav'],
+    defaultPosition: 0,
+    toneClass: Tone.Convolver,
+    defaultArguments: ["/audio/Live_House_A.wav"],
     variables: [],
     channelVariables: [
       {
@@ -164,8 +174,8 @@ export const SEND_EFFECTS = {
         min: -60,
         max: 5,
         step: 5,
-        defaultValue: -60
-      }
-    ]
+        defaultValue: -60,
+      },
+    ],
   }
 };

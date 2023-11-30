@@ -22,6 +22,9 @@ import {
   getSeqSlotOffsetFromIndex,
   getSeqLoopStartBar,
   getSeqLoopEndBar,
+  createChainedInsertAudioEffects,
+  createSendAudioEffects,
+  getCustomizationPlayers,
 } from "@/utils";
 import { createSequencer } from "@/model";
 
@@ -32,6 +35,8 @@ import {
   NUMBER_OF_SLOTS,
   PREP_BEAT_BARS,
   PREP_BEAT_SLOTS,
+  INSERT_EFFECTS,
+  SEND_EFFECTS,
 } from "@/dummy/constants";
 import { SEQ_INDEX_MAP, PATTERN_INDEX_MAP } from "@/map";
 
@@ -94,6 +99,8 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const samplePlayers = useRef<any>(null); // 全部sample的player
   const slotsRef = useRef<any>(null);
   const playerRef = useRef<any>(null);
+  const insertEffectsRef = useRef<any>(null);
+  const sendEffectsRef = useRef<any>(null);
   const lengthRef = useRef(NUMBER_OF_SLOTS);
   const loopStartRef = useRef("1:0:0");
 
@@ -273,6 +280,27 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         return { ...prevState, slots: newSlots };
       });
     },
+    onFxChange: (effectObj: LooseObject, value: number) => {
+      const isChannel = effectObj.channelVariables !== undefined;
+      const { key } = effectObj;
+      if (isChannel) {
+        const { variableKey, defaultValue } = effectObj.channelVariables[0];
+        sendEffectsRef.current[key].channel.set({
+          [variableKey]: value,
+        });
+        if (value == defaultValue) {
+          console.log("mute!");
+          sendEffectsRef.current[key].effect.disconnect();
+        } else {
+          sendEffectsRef.current[key].effect.toDestination();
+        }
+      } else {
+        const { variableKey, defaultValue } = effectObj.variables[0];
+        insertEffectsRef.current[key].effect.set({
+          [variableKey]: value,
+        });
+      }
+    },
   };
 
   // 判斷使用者裝置
@@ -282,11 +310,32 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     setIsMobile(mobileKeywords.test(userAgent));
   }, []);
 
-  // initialize
+  // 初始化
   useEffect(() => {
     if (isToneStarted) {
       samplePlayers.current = handler.createSamplePlayers();
-      playerRef.current = handler.createPlayerRef();
+      const playerObj = handler.createPlayerRef();
+
+      const players = getCustomizationPlayers(playerObj);
+      const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
+      players.forEach((player: any) => {
+        // player可能為undefined(若沒錄sample)
+        player?.connect(insertEffects.input);
+      });
+      // main channel as opposed to auxiliary channels
+      const playerChannel = new Tone.Channel().toDestination();
+      insertEffects.output.connect(playerChannel);
+      // auxiliary channels, i.e. send effects
+      const sendEffects = createSendAudioEffects(SEND_EFFECTS);
+      const sendEffectKeys = Object.keys(SEND_EFFECTS);
+      sendEffectKeys.forEach((sendEffectKey: string) => {
+        playerChannel.send(sendEffectKey);
+      });
+
+      playerRef.current = playerObj;
+      insertEffectsRef.current = insertEffects;
+      sendEffectsRef.current = sendEffects;
+
       slotsRef.current = cloneAllSlots(padState.slots);
       metronome1Player.current = handler.createMetronomePlayer().metronome1;
       metronome2Player.current = handler.createMetronomePlayer().metronome2;
@@ -447,7 +496,9 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   playerRef={playerRef}
                 />
               )}
-              {showFX && <FxPanel isHold={isHold} />}
+              {showFX && (
+                <FxPanel isHold={isHold} onFxChange={handler.onFxChange} />
+              )}
 
               {/* curSamples */}
               {!showSelectPanel && !showFX && (

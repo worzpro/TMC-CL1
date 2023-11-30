@@ -160,3 +160,19 @@ export const createDefaultValues = (effects: LooseObject) => {
     {}
   );
 };
+
+export const getBasicVersionPlayers = (playersObj: LooseObject) => {
+  return Object.values(playersObj).reduce((acc, playerObj) => {
+    const { fullPlayer, jamPlayer, samplePlayers } = playerObj;
+    acc = [...acc, fullPlayer, jamPlayer, ...samplePlayers];
+    return acc;
+  }, []);
+}
+
+export const getCustomizationPlayers = (samplePlayers: LooseObject) => {
+  return Object.values(samplePlayers).reduce((acc, player) => {
+    acc = [...acc, player];
+    return acc;
+  }, []);
+};
+
