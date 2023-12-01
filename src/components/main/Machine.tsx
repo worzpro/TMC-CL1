@@ -1,5 +1,5 @@
 import { Box, Image, Flex, HStack, Center } from "@chakra-ui/react";
-import { useState, useEffect, useRef, use } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import * as Tone from "tone";
 
@@ -720,7 +720,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     bgColor={isHold ? "#E0B472" : "#686F73"}
                     color="#4D4D4D"
                     textStyle="en_special_md_bold"
-                    fontWeight="bold"
                     cursor="pointer"
                     onClick={() => {
                       setIsHold((prev) => !prev);

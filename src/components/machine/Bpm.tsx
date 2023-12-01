@@ -3,9 +3,10 @@ import { useState, useCallback, useEffect, use } from "react";
 
 interface BpmProps {
   onChange: (value: number) => void;
+  toggleMetronome: Function
 }
 
-const Bpm = ({ onChange }: BpmProps) => {
+const Bpm = ({ onChange,toggleMetronome }: BpmProps) => {
   const [value, setValue] = useState(120);
   const [isDraggable, setIsDraggable] = useState<boolean>(false);
 
@@ -52,7 +53,10 @@ const Bpm = ({ onChange }: BpmProps) => {
   return (
     <>
       <Box
-        onClick={() => setIsDraggable(!isDraggable)}
+        onClick={() => {
+          setIsDraggable(!isDraggable);
+          toggleMetronome()
+        }}
         onMouseDown={startDrag}
         onTouchStart={startDrag}
         cursor={isDraggable ? "ns-resize" : "pointer"}

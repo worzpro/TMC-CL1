@@ -33,7 +33,6 @@ import {
   NUMBER_OF_PATTERNS,
   NUMBER_OF_SAMPLES,
   NUMBER_OF_SLOTS,
-  PREP_BEAT_BARS,
   PREP_BEAT_SLOTS,
   INSERT_EFFECTS,
   SEND_EFFECTS,
@@ -62,16 +61,11 @@ const scheduledRegister = generate2DArray(
   NUMBER_OF_SAMPLES
 );
 
-const debouncedSetBpm = debounce((value) => {
-  console.log("set bpm to: ", value);
-  Tone.Transport.bpm.value = value;
-}, 500);
 ////////////////////////////////////////////////////
 
 const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
-  const [bpm, setBpm] = useState(120);
   const [playMetronome, setPlayMetronome] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -92,7 +86,6 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [curPattern, setCurPattern] = useState<string>("a"); // 目前選擇的段落(a,b,c,d)
 
   const [padState, setPadState] = useState<any>(createSequencer()); // 4個seq所有slot的狀態
-  const [activePad, setActivePad] = useState<string>(""); // TODO: 這個變數有用到嗎？
 
   const metronome1Player = useRef<any>(null);
   const metronome2Player = useRef<any>(null);
@@ -150,7 +143,10 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       );
     },
     onBpmChange: (value: number) => {
-      setBpm(value);
+      const debouncedSetBpm = debounce((value) => {
+        console.log("set bpm to: ", value);
+        Tone.Transport.bpm.value = value;
+      }, 500);
       debouncedSetBpm(value);
     },
     toggleMetronome: () => {
@@ -566,8 +562,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     rounded="20px"
                     bgColor={isHold ? "#E0B472" : "#686F73"}
                     color="#4D4D4D"
-                    // textStyle="en_special_md_bold"
-                    fontWeight="bold"
+                    textStyle="en_special_md_bold"
                     cursor="pointer"
                     onClick={() => {
                       setIsHold((prev) => !prev);
@@ -578,7 +573,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 )}
                 {!showFX && (
                   <>
-                    <Bpm onChange={handler.onBpmChange} />
+                    <Bpm onChange={handler.onBpmChange} toggleMetronome={handler.toggleMetronome} />
                     <Image
                       src="/images/stop.svg"
                       alt="stop"
