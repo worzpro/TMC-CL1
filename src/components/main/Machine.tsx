@@ -1,5 +1,5 @@
 import { Box, Image, Flex, HStack, Center } from "@chakra-ui/react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, use } from "react";
 import { useRouter } from "next/router";
 import * as Tone from "tone";
 
@@ -46,7 +46,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
   const router = useRouter();
   const pathName = router.pathname.split("/")[2];
-  let timeoutID: any = null;
+  const timeoutID = useRef<any>(null);
 
   // dummy data 後處理
   const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
@@ -153,11 +153,16 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       if (!curGifData?.src) return;
 
       if (pathName !== "sonia" && pathName !== "enno-chunho") {
-        setGifs(curSeqData.waitGif);
-        setGifs([...gifs, curGifData.src]);
+        // 如果之前有計時器，先清除
+        if (timeoutID.current !== null) {
+          clearTimeout(timeoutID.current);
+        }
+        const newGifSrc = curGifData.src + "?rand=" + Math.random();
+        setGifs([...curSeqData.waitGif, newGifSrc]);
 
-        setTimeout(() => {
+        timeoutID.current = setTimeout(() => {
           setGifs(curSeqData.waitGif);
+          timeoutID.current = null;
         }, curGifData.duration);
       }
 
@@ -170,18 +175,20 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     },
     soniaChangeGif: (curGifData: LooseObject, padName: string) => {
       if (padName == "1" || padName == "2") {
+        // 如果之前有計時器，先清除
+        if (timeoutID.current !== null) {
+          clearTimeout(timeoutID.current);
+        }
+        const newGifSrc = curGifData.src + "?rand=" + Math.random();
         setGifs((prev: any) => {
           let newGifs = [...prev];
-          newGifs[0] = curGifData.src;
+          newGifs[0] = newGifSrc;
           return newGifs;
         });
-        // 如果之前有計時器，先清除
-        if (timeoutID) {
-          clearTimeout(timeoutID);
-        }
         // 設定新的計時器
-        timeoutID = setTimeout(() => {
+        timeoutID.current = setTimeout(() => {
           setGifs(curSeqData.waitGif);
+          timeoutID.current = null;
         }, curGifData.duration);
       }
 
@@ -266,29 +273,36 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
           }, curGifData.duration);
         }
         if (padName == "6") {
+          // 如果之前有計時器，先清除
+          if (timeoutID.current !== null) {
+            clearTimeout(timeoutID.current);
+          }
+          const newGifSrcArr = curGifData.src.map(
+            (src: string) => src + "?rand=" + Math.random()
+          );
           setGifs((prev: any) => {
             let newGifs = [...prev];
-            newGifs = [...newGifs, ...curGifData.src];
+            newGifs = [...newGifs, ...newGifSrcArr];
             return newGifs;
           });
-          // 如果之前有計時器，先清除
-          if (timeoutID) {
-            clearTimeout(timeoutID);
-          }
           // 設定新的計時器
-          timeoutID = setTimeout(() => {
+          timeoutID.current = setTimeout(() => {
             setGifs(curSeqData.waitGif);
+            timeoutID.current = null;
           }, curGifData.duration);
         }
         if (padName == "8") {
           setGifs((prev: any) => {
-            let newGifs = [...prev].filter((item) => item !== curGifData.src);
-            newGifs.push(curGifData.src);
+            const newGifScr = curGifData.src + "?rand=" + Math.random();
+            let newGifs = [...prev].filter(
+              (item) => !item.includes(curGifData.src)
+            );
+            newGifs.push(newGifScr);
             return newGifs;
           });
           setTimeout(() => {
             setGifs((prev: any) => {
-              let newGifs = [...prev].filter((item) => item !== curGifData.src);
+              let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
               return newGifs;
             });
           }, curGifData.duration);
@@ -297,14 +311,15 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       if (curSeq == "SEQ.2") {
         if (padName == "1" || padName == "2") {
           setGifs((prev: any) => {
-            let newGifs = [...prev].filter((item) => item !== curGifData.src);
-            newGifs.push(curGifData.src);
+            const newGifScr = curGifData.src + "?rand=" + Math.random();
+            let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
+            newGifs.push(newGifScr);
 
             return newGifs;
           });
           setTimeout(() => {
             setGifs((prev: any) => {
-              let newGifs = [...prev].filter((item) => item !== curGifData.src);
+              let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
               return newGifs;
             });
           }, curGifData.duration);
@@ -345,13 +360,14 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
         if (padName == "7" || padName == "8") {
           setGifs((prev: any) => {
-            let newGifs = [...prev].filter((item) => item !== curGifData.src);
-            newGifs.push(curGifData.src);
+            const newGifScr = curGifData.src + "?rand=" + Math.random();
+            let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
+            newGifs.push(newGifScr);
             return newGifs;
           });
           setTimeout(() => {
             setGifs((prev: any) => {
-              let newGifs = [...prev].filter((item) => item !== curGifData.src);
+              let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
               return newGifs;
             });
           }, curGifData.duration);
@@ -359,13 +375,14 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       }
       if (curSeq == "SEQ.3" || curSeq == "SEQ.4") {
         setGifs((prev: any) => {
-          let newGifs = [...prev].filter((item) => item !== curGifData.src);
-          newGifs.push(curGifData.src);
+          const newGifScr = curGifData.src + "?rand=" + Math.random();
+          let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
+          newGifs.push(newGifScr);
           return newGifs;
         });
         setTimeout(() => {
           setGifs((prev: any) => {
-            let newGifs = [...prev].filter((item) => item !== curGifData.src);
+            let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
             return newGifs;
           });
         }, curGifData.duration);
@@ -525,6 +542,15 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
     return () => {
       Tone.Transport.clear(id);
+    };
+  }, []);
+
+  // 組件卸載時清理計時器
+  useEffect(() => {
+    return () => {
+      if (timeoutID.current !== null) {
+        clearTimeout(timeoutID.current);
+      }
     };
   }, []);
 

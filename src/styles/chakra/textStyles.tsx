@@ -25,8 +25,6 @@ const textStyles = {
     fontWeight: 300,
   },
 
-
-  
   en_special_xs_md: {
     fontSize: "12px",
     lineHeight: "12px",
