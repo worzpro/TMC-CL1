@@ -18,7 +18,7 @@ const SampleBtn = memo(
         h={{ base: "30px", sm: "72px" }}
         bg={isActive ? "#791930" : "#2B2929"}
         color="#ADADAD"
-        fontSize="12px"
+        textStyle='en_special_xs_md'
         cursor="pointer"
         onMouseDown={() => {
           if (isMobile) return;

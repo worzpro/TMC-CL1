@@ -70,7 +70,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
                 }
               }}
             />
-            <Text textStyle="en_special_lg_bold">{cassetteObj.name}</Text>
+            <Text textStyle="en_special_xl_md">{cassetteObj.name}</Text>
             <Image
               src="/images/music-list-left-right-arrow.svg"
               alt="RightArrow"
@@ -85,7 +85,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
               }}
             />
           </HStack>
-          <Text minH="120px" textStyle="ch_normal_md_light">
+          <Text minH="120px" textStyle="ch_normal_md">
             {cassetteObj.description}
           </Text>
           <HStack w="100%" justify="space-between">

@@ -136,8 +136,7 @@ const FxPanel = ({ isHold, onFxChange }: FxPanelProps) => {
             onMouseDown={(e) => handleMouseDown(index, e, fx)}
             onTouchStart={(e) => handleTouchStart(index, e, fx)}
           >
-            <Text mt="4px">{fx.label}</Text>
-            <Text mt="4px">{Math.round(barPositions[index])}</Text>
+            <Text mt="4px" textStyle='en_special_xs_bold'>{fx.label}</Text>
             <Box
               id="bar"
               pos="absolute"

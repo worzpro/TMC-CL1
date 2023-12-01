@@ -693,7 +693,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     rounded="20px"
                     bgColor={isHold ? "#E0B472" : "#686F73"}
                     color="#4D4D4D"
-                    // textStyle="en_special_md_bold"
+                    textStyle="en_special_md_bold"
                     fontWeight="bold"
                     cursor="pointer"
                     onClick={() => {
