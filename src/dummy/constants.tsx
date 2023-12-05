@@ -12,22 +12,96 @@ export const PREP_BEAT_BARS = 1;
 export const PREP_BEAT_SLOTS = 8;
 
 export const SEQ_LOOP_POINTS:LooseObject = {
-  "SEQ.1": {
-    start: "0:0:0",
-    end: "8:0:0"
+  puzzleman: {
+    "SEQ.1": {
+      start: "0:0:0",
+      end: "8:0:0"
+    },
+    "SEQ.2": {
+      start: "8:0:0",
+      end: "16:0:0"
+    },
+    "SEQ.3": {
+      start: "16:0:0",
+      end: "24:0:0"
+    },
+    "SEQ.4": {
+      start: "24:0:0",
+      end: "27:3:2"
+    }
   },
-  "SEQ.2": {
-    start: "8:0:0",
-    end: "16:0:0"
+  'sunset-rollercoaster': {
+    "SEQ.1": {
+      start: "0:0:0",
+      end: "4:0:0"
+    },
+    "SEQ.2": {
+      start: "4:0:0",
+      end: "8:0:0"
+    },
+    "SEQ.3": {
+      start: "8:0:0",
+      end: "12:0:0"
+    },
+    "SEQ.4": {
+      start: "12:0:0",
+      end: "16:0:0"
+    }
   },
-  "SEQ.3": {
-    start: "16:0:0",
-    end: "24:0:0"
+  'enno-chunho': {
+    "SEQ.1": {
+      start: "0:0:0",
+      end: "8:0:0"
+    },
+    "SEQ.2": {
+      start: "8:0:0",
+      end: "16:0:0"
+    },
+    "SEQ.3": {
+      start: "16:0:0",
+      end: "24:0:0"
+    },
+    "SEQ.4": {
+      start: "24:0:0",
+      end: "32:0:0"
+    }
   },
-  "SEQ.4": {
-    start: "24:0:0",
-    end: "32:0:0"
-  }
+  'l8ching': {
+    "SEQ.1": {
+      start: "0:0:0",
+      end: "8:0:0"
+    },
+    "SEQ.2": {
+      start: "8:0:0",
+      end: "16:0:0"
+    },
+    "SEQ.3": {
+      start: "16:0:0",
+      end: "24:0:0"
+    },
+    "SEQ.4": {
+      start: "24:0:0",
+      end: "32:0:0"
+    }
+  },
+  'sonia': {
+    "SEQ.1": {
+      start: "0:0:0",
+      end: "8:0:0"
+    },
+    "SEQ.2": {
+      start: "8:0:0",
+      end: "16:0:0"
+    },
+    "SEQ.3": {
+      start: "16:0:0",
+      end: "24:0:0"
+    },
+    "SEQ.4": {
+      start: "24:0:0",
+      end: "32:0:0"
+    }
+  },
 };
 
 export const INSERT_EFFECTS = {

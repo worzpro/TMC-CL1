@@ -43,6 +43,8 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [activePad, setActivePad] = useState<string>("");
   const [isJamming, setIsJamming] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const DOUBLE_CLICK_DELAY = 300; // 雙擊間隔時間（毫秒）
+  let lastTap = 0;
 
   const router = useRouter();
   const pathName = router.pathname.split("/")[2];
@@ -73,7 +75,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       return AUDIO_MAP;
     },
     createNewLoopedAndSyncedPlayer: (src: string) => {
-      const newPlayer = new Tone.Player(src).toDestination();
+      const newPlayer = new Tone.Player(src);
       newPlayer.volume.value = -10;
       newPlayer.sync();
       return newPlayer;
@@ -84,8 +86,8 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         const fullPlayer = handler.createNewLoopedAndSyncedPlayer(src);
         const jamPlayer = handler.createNewLoopedAndSyncedPlayer(srcJam);
 
-        const samplePlayers = samples.map((sample: LooseObject) =>
-          new Tone.Player(sample.src).toDestination()
+        const samplePlayers = samples.map(
+          (sample: LooseObject) => new Tone.Player(sample.src)
         );
 
         return [
@@ -102,7 +104,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     },
     startPlayersAtDesinatedBar: (playersObj: LooseObject) => {
       Object.entries(playersObj).forEach(([seq, { fullPlayer, jamPlayer }]) => {
-        const { start, end } = SEQ_LOOP_POINTS[seq];
+        const { start, end } = SEQ_LOOP_POINTS[pathName][seq];
         fullPlayer.start(start).stop(end);
         jamPlayer.start(start).stop(end);
       });
@@ -130,7 +132,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         handler.setJam(seq, isJamming);
 
         Tone.Transport.scheduleOnce(() => {
-          const { start, end } = SEQ_LOOP_POINTS[seq];
+          const { start, end } = SEQ_LOOP_POINTS[pathName][seq];
           Tone.Transport.loopStart = start;
           Tone.Transport.loopEnd = end;
           Tone.Transport.position = start;
@@ -140,7 +142,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         }, switch_time);
       } else {
         const { bpm } = curSeqData.audios.seqAudio;
-        const { start, end } = SEQ_LOOP_POINTS[seq];
+        const { start, end } = SEQ_LOOP_POINTS[pathName][seq];
         Tone.Transport.bpm.value = bpm;
         Tone.Transport.loopStart = start;
         Tone.Transport.loopEnd = end;
@@ -302,7 +304,9 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
           });
           setTimeout(() => {
             setGifs((prev: any) => {
-              let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
+              let newGifs = [...prev].filter(
+                (item) => !item.includes(curGifData.src)
+              );
               return newGifs;
             });
           }, curGifData.duration);
@@ -312,14 +316,18 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         if (padName == "1" || padName == "2") {
           setGifs((prev: any) => {
             const newGifScr = curGifData.src + "?rand=" + Math.random();
-            let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
+            let newGifs = [...prev].filter(
+              (item) => !item.includes(curGifData.src)
+            );
             newGifs.push(newGifScr);
 
             return newGifs;
           });
           setTimeout(() => {
             setGifs((prev: any) => {
-              let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
+              let newGifs = [...prev].filter(
+                (item) => !item.includes(curGifData.src)
+              );
               return newGifs;
             });
           }, curGifData.duration);
@@ -361,13 +369,17 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         if (padName == "7" || padName == "8") {
           setGifs((prev: any) => {
             const newGifScr = curGifData.src + "?rand=" + Math.random();
-            let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
+            let newGifs = [...prev].filter(
+              (item) => !item.includes(curGifData.src)
+            );
             newGifs.push(newGifScr);
             return newGifs;
           });
           setTimeout(() => {
             setGifs((prev: any) => {
-              let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
+              let newGifs = [...prev].filter(
+                (item) => !item.includes(curGifData.src)
+              );
               return newGifs;
             });
           }, curGifData.duration);
@@ -376,13 +388,17 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       if (curSeq == "SEQ.3" || curSeq == "SEQ.4") {
         setGifs((prev: any) => {
           const newGifScr = curGifData.src + "?rand=" + Math.random();
-          let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
+          let newGifs = [...prev].filter(
+            (item) => !item.includes(curGifData.src)
+          );
           newGifs.push(newGifScr);
           return newGifs;
         });
         setTimeout(() => {
           setGifs((prev: any) => {
-            let newGifs = [...prev].filter((item) => !item.includes(curGifData.src));
+            let newGifs = [...prev].filter(
+              (item) => !item.includes(curGifData.src)
+            );
             return newGifs;
           });
         }, curGifData.duration);
@@ -420,19 +436,26 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       }
     },
     onStop: (event: any) => {
-      if (event.detail === 1) {
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTap;
+      const isDoubleTap = tapLength < DOUBLE_CLICK_DELAY && tapLength > 0;
+
+      if (event.detail === 1 || !isDoubleTap) {
         Tone.Transport.pause();
         if (isPlaying) {
           setIsPlaying(false);
         }
-      } else if (event.detail === 2) {
-        const { start, end } = SEQ_LOOP_POINTS[curSeq];
+      }
+      if(event.detail === 2 || isDoubleTap){
+        const { start, end } = SEQ_LOOP_POINTS[pathName][curSeq];
         Tone.Transport.stop();
         Tone.Transport.loopStart = start;
         Tone.Transport.loopEnd = end;
         Tone.Transport.position = start;
         setProgress(0);
       }
+
+      lastTap = currentTime;
     },
     onFxChange: (effectObj: LooseObject, value: number) => {
       const isChannel = effectObj.channelVariables !== undefined;
@@ -457,6 +480,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     },
   };
 
+
   // 初始化預設gifs
   useEffect(() => {
     if (!curSeqData) return;
@@ -474,7 +498,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   useEffect(() => {
     if (isToneStarted) {
       const { bpm } = curSeqData.audios.seqAudio;
-      const { start, end } = SEQ_LOOP_POINTS[curSeq];
+      const { start, end } = SEQ_LOOP_POINTS[pathName][curSeq];
       Tone.Transport.loop = true;
       Tone.Transport.loopStart = start;
       Tone.Transport.loopEnd = end;

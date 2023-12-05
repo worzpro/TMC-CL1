@@ -145,7 +145,7 @@ const FxPanel = ({ isHold, onFxChange }: FxPanelProps) => {
               w="100%"
               h="5px"
               bg="white"
-              transform="translateY(50%)"
+              transform={`translateY(${barPositions[index]}%)`}
             />
           </Box>
         ))}

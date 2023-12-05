@@ -39,6 +39,7 @@ const SeqBtn = ({
           w='4px'
           h="100%"
           bgColor="white"
+          transform={`translateX(-${progress}%)`}
         ></Box>
       )}
     </Center>

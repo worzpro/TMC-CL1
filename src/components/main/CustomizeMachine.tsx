@@ -96,6 +96,8 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const sendEffectsRef = useRef<any>(null);
   const lengthRef = useRef(NUMBER_OF_SLOTS);
   const loopStartRef = useRef("1:0:0");
+  const DOUBLE_CLICK_DELAY = 300; // 雙擊間隔時間（毫秒）
+  let lastTap = 0;
 
   const handler = {
     createSamplePlayers: () => {
@@ -103,7 +105,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       let samplePlayer: LooseObject = {};
       SAMPLES.forEach((sample: LooseObject) => {
         if (sample.src) {
-          samplePlayer[sample.id] = new Tone.Player(sample.src).toDestination();
+          samplePlayer[sample.id] = new Tone.Player(sample.src);
         }
       });
       return samplePlayer;
@@ -571,26 +573,28 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     Hold
                   </Box>
                 )}
+                <Bpm
+                  showFX={showFX}
+                  onChange={handler.onBpmChange}
+                  toggleMetronome={handler.toggleMetronome}
+                />
                 {!showFX && (
-                  <>
-                    <Bpm onChange={handler.onBpmChange} toggleMetronome={handler.toggleMetronome} />
-                    <Image
-                      src="/images/stop.svg"
-                      alt="stop"
-                      cursor="pointer"
-                      onClick={() => {
-                        Tone.Transport.stop();
-                        handler.clearAllSlots();
-                        Tone.Transport.loopStart = "0:0:0";
-                        Tone.Transport.position = "0:0:0";
-                        handler.unmuteMetronome();
-                        setIsRecording(true);
-                        setCurPosition(0);
-                        Tone.Transport.start();
-                        setIsPlaying(true);
-                      }}
-                    />
-                  </>
+                  <Image
+                  src="/images/stop.svg"
+                  alt="stop"
+                  cursor="pointer"
+                  onClick={() => {
+                    Tone.Transport.stop();
+                    handler.clearAllSlots();
+                    Tone.Transport.loopStart = "0:0:0";
+                    Tone.Transport.position = "0:0:0";
+                    handler.unmuteMetronome();
+                    setIsRecording(true);
+                    setCurPosition(0);
+                    Tone.Transport.start();
+                    setIsPlaying(true);
+                  }}
+                />
                 )}
                 <Image
                   src="/images/restart.svg"
@@ -599,7 +603,13 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   onClick={(e) => {
                     const curSeqIndex = SEQ_INDEX_MAP[curSeq];
                     handler.stopRecording();
-                    if (e.detail === 1) {
+
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    const isDoubleTap =
+                      tapLength < DOUBLE_CLICK_DELAY && tapLength > 0;
+
+                    if (e.detail === 1 || !isDoubleTap) {
                       if (isRecording) {
                         Tone.Transport.stop();
                         Tone.Transport.position =
@@ -608,12 +618,16 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                       }
                       Tone.Transport.pause();
                       setIsPlaying(false);
-                    } else if (e.detail === 2) {
+                    }
+
+                    if (e.detail === 2 || isDoubleTap) {
                       Tone.Transport.stop();
                       Tone.Transport.position =
                         padState.seqs[curSeqIndex].loopStart;
                       setCurPosition(0);
                     }
+
+                    lastTap = currentTime;
                   }}
                 />
                 <Box
