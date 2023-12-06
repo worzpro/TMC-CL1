@@ -1,17 +1,18 @@
 import { Circle } from "@chakra-ui/react";
 
-const RecordingLight = () => {
-  const colorMap: { [key: string]: string } = {
-    active: "#7ED37E",
-    inactive: "#DF201C",
-  };
+interface RecordingLightProps {
+  state: string;
+}
+
+const RecordingLight = ({state}:RecordingLightProps) => {
+ 
   return (
     <Circle
       pos="absolute"
       top="5px"
       right="10px"
       size="10px"
-      bgColor={colorMap.inactive}
+      bgColor={state == 'registered' ? '#7ED37E' : '#DF201C'}
     />
   );
 };

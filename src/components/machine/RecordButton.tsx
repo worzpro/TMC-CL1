@@ -1,42 +1,32 @@
-import { Button } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
-const getLabel = (recordState: string) => {
-  let label = "";
-  switch (recordState) {
-    case "empty":
-      label = "record";
-      break;
-    case "recording":
-      label = "stop";
-      break;
-    case "registered":
-      label = "play";
-      break;
-    default:
-      break;
-  }
-  return label;
-};
+import PadLight from "@/components/machine/PadLight";
+import RecordingLight from "@/components/machine/RecordingLight";
 
-interface RecordBtnProps {
-  key: string;
+interface RecordButtonProps {
+  isMobile: boolean;
+  pad: any;
+  index: number;
+  recordState: any[];
+  activePad: string;
   onRecordMouseDown: Function;
   onRecordHold: Function;
   onRecordMouseUp: Function;
-  recordState: string;
-  isActive: boolean;
 }
 
-const RecordBtn = ({
-  key,
+const RecordButton = ({
+  isMobile,
+  pad,
+  index,
+  recordState,
+  activePad,
   onRecordMouseDown,
   onRecordHold,
   onRecordMouseUp,
-  recordState,
-  isActive,
-}: RecordBtnProps) => {
+}: RecordButtonProps) => {
   const [isPressing, setIsPressing] = useState(false);
+
   useEffect(() => {
     let pressTimer: any;
     if (isPressing) {
@@ -48,7 +38,7 @@ const RecordBtn = ({
     }
 
     return () => {
-      clearTimeout(pressTimer); // Cleanup the timeout on component unmount or when isPressing changes
+      clearTimeout(pressTimer);
     };
   }, [isPressing, onRecordHold]);
 
@@ -62,16 +52,20 @@ const RecordBtn = ({
     setIsPressing(false);
   };
 
+
   return (
-    <Button
-      key={key}
-      colorScheme={isActive ? "red" : "gray"}
+    <Box
+      pos="relative"
+      p="2px"
+      w="25%"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      {getLabel(recordState)}
-    </Button>
+      <PadLight myPadName={pad.name} activePad={activePad} />
+      <RecordingLight state={recordState[index]} />
+      <Image src={pad.imageSrc} alt={pad.name} cursor="pointer" />
+    </Box>
   );
 };
 
-export default RecordBtn;
+export default RecordButton;

@@ -11,6 +11,14 @@ import PadLight from "@/components/machine/PadLight";
 import RecordingLight from "@/components/machine/RecordingLight";
 import Loading from "@/components/machine/Loading";
 import FxPanel from "@/components/machine/FxPanel";
+import RecordButton from "@/components/machine/RecordButton";
+import WaveSurferPlayer from "@/components/machine/WaveSurferPlayer";
+
+import WaveSurfer from "wavesurfer.js";
+import RecordPlugin from "wavesurfer.js/dist/plugins/record.js";
+import RegionsPlugin from "wavesurfer.js/dist/plugins/regions.js";
+
+import Recording from "@/recording";
 
 import {
   INSERT_EFFECTS,
@@ -31,6 +39,24 @@ interface LooseObject {
   [key: string]: any;
 }
 
+const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
+const RECORD_PADS = padsArr.slice(0, 4);
+const SAMPLE_PADS = padsArr.slice(4, 12);
+
+const RECORDING_WAVECOLOR = "#691620";
+const READY_WAVECOLOR = "#F1EFEF";
+const RECORD_TIME_LIMIT = 5;
+const NUMBER_OF_RECORDS = 4;
+const DEFAULT_WS_OPTIONS = {
+  width: 303,
+  height: 100,
+  waveColor: READY_WAVECOLOR,
+  progressColor: "transparent",
+};
+const REGION_OPTIONS = {
+  color: "rgba(250, 0, 25, 0.1)",
+};
+
 const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isHold, setIsHold] = useState<boolean>(false);
@@ -43,20 +69,34 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [activePad, setActivePad] = useState<string>("");
   const [isJamming, setIsJamming] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const router = useRouter();
+  
+  const pathName = router.pathname.split("/")[2];
+  const curSeqData = artists[pathName]?.[curSeq];
   const DOUBLE_CLICK_DELAY = 300; // 雙擊間隔時間（毫秒）
   let lastTap = 0;
-
-  const router = useRouter();
-  const pathName = router.pathname.split("/")[2];
+  
   const timeoutID = useRef<any>(null);
-
-  // dummy data 後處理
-  const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
-  const curSeqData = artists[pathName]?.[curSeq];
-
   const playerRef = useRef<any>(null);
   const insertEffectsRef = useRef<any>(null);
   const sendEffectsRef = useRef<any>(null);
+
+  // record
+  const recordContainerRef = useRef<HTMLDivElement>(null);
+  const recordRef = useRef<any>();
+  const resultContainerRef = useRef<HTMLDivElement[]>([]);
+  const resultWaveSurferRef = useRef<any>();
+  const intervalRef = useRef<any>();
+  const primaryWsRef = useRef<any>();
+  const effectRef = useRef<any>();
+  const [recordState, setRecordState] = useState<any[]>([
+    "empty",
+    "empty",
+    "empty",
+    "empty",
+  ]);
+  const [count, setCount] = useState<number>(RECORD_TIME_LIMIT);
+  const [curRecordSlotIndex, setCurRecordSlotIndex] = useState<number>(-1);
 
   const handler = {
     createAudioMap: (artistData: LooseObject) => {
@@ -446,7 +486,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
           setIsPlaying(false);
         }
       }
-      if(event.detail === 2 || isDoubleTap){
+      if (event.detail === 2 || isDoubleTap) {
         const { start, end } = SEQ_LOOP_POINTS[pathName][curSeq];
         Tone.Transport.stop();
         Tone.Transport.loopStart = start;
@@ -478,8 +518,112 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         });
       }
     },
-  };
+    onRecordDelete: () => {
+      resultWaveSurferRef.current[curRecordSlotIndex].clearRecording();
 
+      setRecordState((prev) => {
+        const newState = [...prev];
+        newState[curRecordSlotIndex] = "empty";
+        return newState;
+      });
+    },
+    onRecordEnd: async (blob: any) => {
+      recordRef.current.stopMic();
+      primaryWsRef.current.setOptions({
+        waveColor: READY_WAVECOLOR,
+      });
+      const sampleUrl = URL.createObjectURL(blob);
+
+      await resultWaveSurferRef.current[curRecordSlotIndex].player.load(
+        sampleUrl
+      );
+      // create new ws of the recording
+      const ws = WaveSurfer.create({
+        ...DEFAULT_WS_OPTIONS,
+        container: resultContainerRef.current[curRecordSlotIndex],
+        url: sampleUrl,
+      });
+
+      resultWaveSurferRef.current[curRecordSlotIndex].ws = ws;
+
+      // enable region selection i.e. chopping the sample
+      const wsRegions = ws.registerPlugin(RegionsPlugin.create());
+      wsRegions.enableDragSelection(REGION_OPTIONS);
+      wsRegions.on("region-created", (region) => {
+        resultWaveSurferRef.current[curRecordSlotIndex].setRegion(
+          region.start,
+          region.end
+        );
+        resultWaveSurferRef.current[curRecordSlotIndex].hasRegion = true;
+      });
+      wsRegions.on("region-updated", (region) => {
+        resultWaveSurferRef.current[curRecordSlotIndex].setRegion(
+          region.start,
+          region.end
+        );
+      });
+
+      setRecordState((prev) => {
+        const newState = [...prev];
+        newState[curRecordSlotIndex] = "registered";
+        return newState;
+      });
+    },
+    startRecording: () => {
+      resultWaveSurferRef.current[curRecordSlotIndex].clearRecording();
+
+      primaryWsRef.current.setOptions({
+        waveColor: RECORDING_WAVECOLOR,
+      });
+
+      recordRef.current.startRecording();
+      setRecordState((prev) => {
+        const newState = [...prev];
+        newState[curRecordSlotIndex] = "recording";
+        return newState;
+      });
+    },
+    stopRecording: () => {
+      recordRef.current.stopRecording();
+      clearInterval(intervalRef.current);
+      setCount(RECORD_TIME_LIMIT);
+    },
+    onRecordMouseDown: (padName: string, index: number) => {
+      handler.onChangePadLight(padName);
+      // stop the current playing sample
+      if (curRecordSlotIndex !== -1) {
+        resultWaveSurferRef.current[curRecordSlotIndex].stop();
+      }
+
+      setCurRecordSlotIndex(index);
+      if (recordState[index] === "empty") {
+        return;
+      } else if (recordState[index] === "registered") {
+        resultWaveSurferRef.current[index].start();
+      }
+    },
+    onRecordHold: (index: number) => {
+      if (recordState[index] !== "empty" || !showSample) {
+        return;
+      }
+      let count = RECORD_TIME_LIMIT;
+      handler.startRecording();
+      const timer = setInterval(function () {
+        setCount((prev) => prev - 1);
+        count--;
+        if (count < 0) {
+          handler.stopRecording();
+        }
+      }, 1000);
+
+      intervalRef.current = timer;
+    },
+    onRecordMouseUp: (index: number) => {
+      if (recordState[index] === "recording") {
+        handler.stopRecording();
+      }
+    },
+  };
 
   // 初始化預設gifs
   useEffect(() => {
@@ -528,6 +672,12 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       sendEffectsRef.current = sendEffects;
       handler.setJam(curSeq, isJamming);
       handler.startPlayersAtDesinatedBar(playerObj);
+
+      // record
+      const DEFAULT_SAMPLE_REF = Array(NUMBER_OF_RECORDS)
+        .fill(0)
+        .map(() => new Recording());
+      resultWaveSurferRef.current = DEFAULT_SAMPLE_REF;
     }
 
     // 切換卡帶時重置player
@@ -577,6 +727,25 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       }
     };
   }, []);
+
+  // record
+  useEffect(() => {
+    if (!recordContainerRef.current) return;
+
+    const ws = WaveSurfer.create({
+      ...DEFAULT_WS_OPTIONS,
+      container: recordContainerRef.current,
+    });
+    primaryWsRef.current = ws;
+    const record = ws.registerPlugin(RecordPlugin.create());
+    const unSubscribe = record.on("record-end", handler.onRecordEnd);
+    recordRef.current = record;
+
+    return () => {
+      ws.destroy();
+      unSubscribe();
+    };
+  }, [recordContainerRef, curRecordSlotIndex, showSample]);
 
   return (
     <Box
@@ -631,21 +800,23 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             overflow="hidden"
           >
             <Loading />
-            <HStack
-              // SEQs
-              spacing="6px"
-            >
-              {["SEQ.1", "SEQ.2", "SEQ.3", "SEQ.4"].map((seq) => (
-                <SeqBtn
-                  key={seq}
-                  seq={seq}
-                  curSeq={curSeq}
-                  pendingSeq={pendingSeq}
-                  progress={progress}
-                  onSeqClick={handler.onSeqClick}
-                />
-              ))}
-            </HStack>
+            {!showSample && (
+              <HStack
+                // SEQs
+                spacing="6px"
+              >
+                {["SEQ.1", "SEQ.2", "SEQ.3", "SEQ.4"].map((seq) => (
+                  <SeqBtn
+                    key={seq}
+                    seq={seq}
+                    curSeq={curSeq}
+                    pendingSeq={pendingSeq}
+                    progress={progress}
+                    onSeqClick={handler.onSeqClick}
+                  />
+                ))}
+              </HStack>
+            )}
 
             {!showFX && !showSample && (
               <Box pos="relative" flex="1" my="8px">
@@ -690,6 +861,15 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             )}
             {showFX && (
               <FxPanel isHold={isHold} onFxChange={handler.onFxChange} />
+            )}
+            {showSample && (
+              <WaveSurferPlayer
+                recordState={recordState}
+                curRecordSlotIndex={curRecordSlotIndex}
+                recordContainerRef={recordContainerRef}
+                resultContainerRef={resultContainerRef}
+                count={count}
+              />
             )}
 
             <Flex
@@ -752,20 +932,31 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     Hold
                   </Box>
                 )}
-                <Image
-                  w="26px"
-                  src="/images/restart.svg"
-                  alt="restart"
-                  cursor="pointer"
-                  onClick={handler.onStop}
-                />
-                <Box cursor="pointer" onClick={handler.onPlayOrPause}>
-                  {isPlaying ? (
-                    <Image src="/images/pause.svg" alt="pause" />
-                  ) : (
-                    <Image src="/images/play.svg" alt="play" />
-                  )}
-                </Box>
+                {showSample ? (
+                  <Image
+                    src="/images/screen-delete.svg"
+                    alt="delete"
+                    cursor="pointer"
+                    onClick={handler.onRecordDelete}
+                  />
+                ) : (
+                  <>
+                    <Image
+                      w="26px"
+                      src="/images/restart.svg"
+                      alt="restart"
+                      cursor="pointer"
+                      onClick={handler.onStop}
+                    />
+                    <Box cursor="pointer" onClick={handler.onPlayOrPause}>
+                      {isPlaying ? (
+                        <Image src="/images/pause.svg" alt="pause" />
+                      ) : (
+                        <Image src="/images/play.svg" alt="play" />
+                      )}
+                    </Box>
+                  </>
+                )}
               </HStack>
             </Flex>
           </Flex>
@@ -791,6 +982,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               onClick={() => {
                 if (showFX) setShowFX(false);
                 setShowSample((prev) => !prev);
+                navigator.mediaDevices.getUserMedia({ audio: true });
               }}
             />
           </HStack>
@@ -803,7 +995,22 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             borderRadius="8px"
           >
             <Flex wrap="wrap">
-              {padsArr.map((pad) => (
+              {RECORD_PADS.map((pad, index) => (
+                <RecordButton
+                  key={index}
+                  isMobile={isMobile}
+                  index={index}
+                  pad={pad}
+                  activePad={activePad}
+                  recordState={recordState}
+                  onRecordMouseDown={() =>
+                    handler.onRecordMouseDown(pad.name, index)
+                  }
+                  onRecordHold={() => handler.onRecordHold(index)}
+                  onRecordMouseUp={() => handler.onRecordMouseUp(index)}
+                />
+              ))}
+              {SAMPLE_PADS.map((pad, index) => (
                 <Box
                   key={pad.id}
                   pos="relative"
@@ -819,7 +1026,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   }}
                 >
                   <PadLight myPadName={pad.name} activePad={activePad} />
-                  {pad.id < 5 && <RecordingLight />}
                   <Image src={pad.imageSrc} alt={pad.name} cursor="pointer" />
                 </Box>
               ))}

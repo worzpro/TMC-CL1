@@ -1,3 +1,4 @@
+
 import {
   NUMBER_OF_SEQ,
   NUMBER_OF_PATTERNS,
@@ -35,3 +36,5 @@ export const createSequencer = (numberOfSequence = NUMBER_OF_SEQ) => {
     slots,
   };
 }
+
+
