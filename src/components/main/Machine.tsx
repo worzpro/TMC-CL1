@@ -49,7 +49,6 @@ const RECORD_TIME_LIMIT = 5;
 const NUMBER_OF_RECORDS = 4;
 const DEFAULT_WS_OPTIONS = {
   width: 303,
-  height: 100,
   waveColor: READY_WAVECOLOR,
   progressColor: "transparent",
 };
@@ -70,12 +69,12 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isJamming, setIsJamming] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const router = useRouter();
-  
+
   const pathName = router.pathname.split("/")[2];
   const curSeqData = artists[pathName]?.[curSeq];
   const DOUBLE_CLICK_DELAY = 300; // 雙擊間隔時間（毫秒）
   let lastTap = 0;
-  
+
   const timeoutID = useRef<any>(null);
   const playerRef = useRef<any>(null);
   const insertEffectsRef = useRef<any>(null);
@@ -540,6 +539,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       // create new ws of the recording
       const ws = WaveSurfer.create({
         ...DEFAULT_WS_OPTIONS,
+        height: isMobile ? 124 : 252,
         container: resultContainerRef.current[curRecordSlotIndex],
         url: sampleUrl,
       });
@@ -734,6 +734,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
     const ws = WaveSurfer.create({
       ...DEFAULT_WS_OPTIONS,
+      height: isMobile ? 124 : 252,
       container: recordContainerRef.current,
     });
     primaryWsRef.current = ws;
@@ -998,7 +999,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               {RECORD_PADS.map((pad, index) => (
                 <RecordButton
                   key={index}
-                  isMobile={isMobile}
                   index={index}
                   pad={pad}
                   activePad={activePad}

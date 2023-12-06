@@ -13,6 +13,7 @@ const WaveSurferDisplayer = ({
 }: WaveSurferDisplayerProps) => {
   const CONTAINER_STYLE = {
     backgroundColor: "#2B2929",
+    width: "100%",
     minHeight: "100px",
     height: "100%",
   };

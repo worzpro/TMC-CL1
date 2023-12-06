@@ -22,6 +22,7 @@ const WaveSurferPlayer = ({
     <>
       {/* 未註冊時介面 */}
       <Box
+        w="100%"
         h="100%"
         mb="10px"
         pos="relative"
@@ -48,6 +49,7 @@ const WaveSurferPlayer = ({
       {RECORD_SLOTS.map((label: string, index: number) => (
         <Box
           key={index}
+          w="100%"
           h="100%"
           mb="10px"
           pos="relative"

@@ -5,7 +5,6 @@ import PadLight from "@/components/machine/PadLight";
 import RecordingLight from "@/components/machine/RecordingLight";
 
 interface RecordButtonProps {
-  isMobile: boolean;
   pad: any;
   index: number;
   recordState: any[];
@@ -16,7 +15,6 @@ interface RecordButtonProps {
 }
 
 const RecordButton = ({
-  isMobile,
   pad,
   index,
   recordState,
@@ -60,6 +58,8 @@ const RecordButton = ({
       w="25%"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      onTouchStart={handleMouseDown}
+      onTouchEnd={handleMouseUp}
     >
       <PadLight myPadName={pad.name} activePad={activePad} />
       <RecordingLight state={recordState[index]} />
