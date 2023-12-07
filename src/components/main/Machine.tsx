@@ -550,14 +550,11 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       const wsRegions = ws.registerPlugin(RegionsPlugin.create());
       wsRegions.enableDragSelection(REGION_OPTIONS);
       wsRegions.on("region-created", (region) => {
-        resultWaveSurferRef.current[curRecordSlotIndex].setRegion(
-          region.start,
-          region.end
-        );
-        resultWaveSurferRef.current[curRecordSlotIndex].hasRegion = true;
+        resultWaveSurferRef.current[curRecordSlotIndex].clearRegion();
+        resultWaveSurferRef.current[curRecordSlotIndex].setRegion(region);
       });
       wsRegions.on("region-updated", (region) => {
-        resultWaveSurferRef.current[curRecordSlotIndex].setRegion(
+        resultWaveSurferRef.current[curRecordSlotIndex].setRegionBoundary(
           region.start,
           region.end
         );
