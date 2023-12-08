@@ -550,14 +550,11 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       const wsRegions = ws.registerPlugin(RegionsPlugin.create());
       wsRegions.enableDragSelection(REGION_OPTIONS);
       wsRegions.on("region-created", (region) => {
-        resultWaveSurferRef.current[curRecordSlotIndex].setRegion(
-          region.start,
-          region.end
-        );
-        resultWaveSurferRef.current[curRecordSlotIndex].hasRegion = true;
+        resultWaveSurferRef.current[curRecordSlotIndex].clearRegion();
+        resultWaveSurferRef.current[curRecordSlotIndex].setRegion(region);
       });
       wsRegions.on("region-updated", (region) => {
-        resultWaveSurferRef.current[curRecordSlotIndex].setRegion(
+        resultWaveSurferRef.current[curRecordSlotIndex].setRegionBoundary(
           region.start,
           region.end
         );
@@ -651,8 +648,13 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       const AUDIO_MAP = handler.createAudioMap(artists[pathName]);
       const playerObj = handler.createPlayers(AUDIO_MAP);
 
+      // record
+      const DEFAULT_SAMPLE_REF = Array(NUMBER_OF_RECORDS)
+        .fill(0)
+        .map(() => new Recording());
+      
       ///// FX相關
-      const players = getBasicVersionPlayers(playerObj);
+      const players = [...getBasicVersionPlayers(playerObj), ...DEFAULT_SAMPLE_REF];
       const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
       players.forEach((player: any) => {
         player.connect(insertEffects.input);
@@ -668,16 +670,11 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       });
 
       playerRef.current = playerObj;
+      resultWaveSurferRef.current = DEFAULT_SAMPLE_REF;
       insertEffectsRef.current = insertEffects;
       sendEffectsRef.current = sendEffects;
       handler.setJam(curSeq, isJamming);
       handler.startPlayersAtDesinatedBar(playerObj);
-
-      // record
-      const DEFAULT_SAMPLE_REF = Array(NUMBER_OF_RECORDS)
-        .fill(0)
-        .map(() => new Recording());
-      resultWaveSurferRef.current = DEFAULT_SAMPLE_REF;
     }
 
     // 切換卡帶時重置player

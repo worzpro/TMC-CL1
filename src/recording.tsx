@@ -5,6 +5,7 @@ export default class Recording {
   end: number;
   hasRegion: boolean;
   ws: any;
+  region: any;
 
   constructor() {
     this.player = new Tone.Player();
@@ -12,6 +13,7 @@ export default class Recording {
     this.end = 0;
     this.hasRegion = false;
     this.ws = null;
+    this.region = null;
   }
 
   start() {
@@ -26,14 +28,27 @@ export default class Recording {
     this.player?.stop();
   }
 
-  setRegion(start: number, end: number) {
+  setRegionBoundary(start: number, end: number) {
     this.offset = start;
     this.end = end;
+  }
+
+  setRegion(region: any) {
+    this.region = region;
+    this.setRegionBoundary(region.start, region.end);
+    this.hasRegion = true;
   }
 
   connect(node: any) {
     this.player.connect(node);
     return this.player;
+  }
+
+  clearRegion() {
+    if (this.hasRegion) {
+      this.region.remove();
+      this.hasRegion = false;
+    }
   }
 
   clearRecording() {
