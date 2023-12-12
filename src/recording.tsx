@@ -56,7 +56,11 @@ export default class Recording {
     this.hasRegion = false;
   }
 
-  cleanup() {
+  unsync() {
+    this.player?.unsync();
+  }
+
+  dispose() {
     this.ws?.destroy();
     this.player?.dispose();
   }

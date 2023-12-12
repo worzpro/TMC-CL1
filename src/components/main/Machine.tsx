@@ -637,54 +637,56 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
   // 初始化
   useEffect(() => {
-    if (isToneStarted) {
-      const { bpm } = curSeqData.audios.seqAudio;
-      const { start, end } = SEQ_LOOP_POINTS[pathName][curSeq];
-      Tone.Transport.loop = true;
-      Tone.Transport.loopStart = start;
-      Tone.Transport.loopEnd = end;
-      Tone.Transport.bpm.value = bpm;
+    const { bpm } = curSeqData.audios.seqAudio;
+    const { start, end } = SEQ_LOOP_POINTS[pathName][curSeq];
+    Tone.Transport.loop = true;
+    Tone.Transport.loopStart = start;
+    Tone.Transport.loopEnd = end;
+    Tone.Transport.bpm.value = bpm;
 
-      const AUDIO_MAP = handler.createAudioMap(artists[pathName]);
-      const playerObj = handler.createPlayers(AUDIO_MAP);
+    const AUDIO_MAP = handler.createAudioMap(artists[pathName]);
+    const playerObj = handler.createPlayers(AUDIO_MAP);
+    
+    // record
+    const DEFAULT_SAMPLE_REF = Array(NUMBER_OF_RECORDS)
+      .fill(0)
+      .map(() => new Recording());
+    
+    ///// FX相關
+    const players = [...getBasicVersionPlayers(playerObj), ...DEFAULT_SAMPLE_REF];
+    const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
+    players.forEach((player: any) => {
+      player.connect(insertEffects.input);
+    });
+    // main channel as opposed to auxiliary channels
+    const playerChannel = new Tone.Channel().toDestination();
+    insertEffects.output.connect(playerChannel);
+    // auxiliary channels, i.e. send effects
+    const sendEffects = createSendAudioEffects(SEND_EFFECTS);
+    const sendEffectKeys = Object.keys(SEND_EFFECTS);
+    sendEffectKeys.forEach((sendEffectKey: string) => {
+      playerChannel.send(sendEffectKey);
+    });
 
-      // record
-      const DEFAULT_SAMPLE_REF = Array(NUMBER_OF_RECORDS)
-        .fill(0)
-        .map(() => new Recording());
-      
-      ///// FX相關
-      const players = [...getBasicVersionPlayers(playerObj), ...DEFAULT_SAMPLE_REF];
-      const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
-      players.forEach((player: any) => {
-        player.connect(insertEffects.input);
-      });
-      // main channel as opposed to auxiliary channels
-      const playerChannel = new Tone.Channel().toDestination();
-      insertEffects.output.connect(playerChannel);
-      // auxiliary channels, i.e. send effects
-      const sendEffects = createSendAudioEffects(SEND_EFFECTS);
-      const sendEffectKeys = Object.keys(SEND_EFFECTS);
-      sendEffectKeys.forEach((sendEffectKey: string) => {
-        playerChannel.send(sendEffectKey);
-      });
-
-      playerRef.current = playerObj;
-      resultWaveSurferRef.current = DEFAULT_SAMPLE_REF;
-      insertEffectsRef.current = insertEffects;
-      sendEffectsRef.current = sendEffects;
-      handler.setJam(curSeq, isJamming);
+    playerRef.current = playerObj;
+    resultWaveSurferRef.current = DEFAULT_SAMPLE_REF;
+    insertEffectsRef.current = insertEffects;
+    sendEffectsRef.current = sendEffects;
+    handler.setJam(curSeq, isJamming);
+    Tone.loaded().then(() => {
+      // ensure the audio is loaded before starting
       handler.startPlayersAtDesinatedBar(playerObj);
-    }
+    })
 
     // 切換卡帶時重置player
     return () => {
-      if (playerRef.current) {
-        playerRef.current[curSeq].fullPlayer.unsync();
-        playerRef.current[curSeq].jamPlayer.unsync();
-      }
+      Tone.Transport.stop();
+      players.forEach((player: any) => {
+        player.unsync();
+        player.dispose();
+      });
     };
-  }, [isToneStarted]);
+  }, []);
 
   // count beat
   useEffect(() => {
