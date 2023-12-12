@@ -12,7 +12,7 @@ import FxPanel from "@/components/machine/FxPanel";
 
 import pads from "@/dummy/pads";
 import allSamples from "@/dummy/allSamples";
-import defaultSamples, { defaultSampleIDs } from "@/dummy/customize/defaultSamples";
+import defaultSamples from "@/dummy/customize/defaultSamples";
 
 import {
   debounce,
