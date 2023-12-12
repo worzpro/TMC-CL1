@@ -12,7 +12,7 @@ import FxPanel from "@/components/machine/FxPanel";
 
 import pads from "@/dummy/pads";
 import allSamples from "@/dummy/allSamples";
-import defaultSamples from "@/dummy/customize/defaultSamples";
+import defaultSamples, { defaultSampleIDs } from "@/dummy/customize/defaultSamples";
 
 import {
   debounce,
@@ -89,7 +89,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
   const metronome1Player = useRef<any>(null);
   const metronome2Player = useRef<any>(null);
-  const samplePlayers = useRef<any>(null); // 全部sample的player
+  const samplePlayerRef = useRef<any>(null); // 全部sample的player
   const slotsRef = useRef<any>(null);
   const playerRef = useRef<any>(null);
   const insertEffectsRef = useRef<any>(null);
@@ -102,17 +102,17 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const handler = {
     createSamplePlayers: () => {
       // 將所有的sample創建成player
-      let samplePlayer: LooseObject = {};
+      let samplePlayers: LooseObject = {};
       SAMPLES.forEach((sample: LooseObject) => {
         if (sample.src) {
-          samplePlayer[sample.id] = new Tone.Player(sample.src);
+          samplePlayers[sample.id] = new Tone.Player(sample.src);
         }
       });
-      return samplePlayer;
+      return samplePlayers;
     },
-    createPlayerRef: () => {
+    getDefaultPlayer: (samplePlayers: LooseObject) => {
       return DEFAULT_SAMPLES.map(
-        ({ id }: { id: string }) => samplePlayers.current[id]
+        ({ id }: { id: string }) => samplePlayers[id]
       );
     },
     createMetronomePlayer: () => {
@@ -311,10 +311,10 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   // 初始化
   useEffect(() => {
     if (isToneStarted) {
-      samplePlayers.current = handler.createSamplePlayers();
-      const playerObj = handler.createPlayerRef();
+      const samplePlayers = handler.createSamplePlayers();
+      const defaultPlayers = handler.getDefaultPlayer(samplePlayers);
 
-      const players = getCustomizationPlayers(playerObj);
+      const players = getCustomizationPlayers(samplePlayers);
       const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
       players.forEach((player: any) => {
         // player可能為undefined(若沒錄sample)
@@ -330,7 +330,8 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         playerChannel.send(sendEffectKey);
       });
 
-      playerRef.current = playerObj;
+      playerRef.current = defaultPlayers;
+      samplePlayerRef.current = samplePlayers;
       insertEffectsRef.current = insertEffects;
       sendEffectsRef.current = sendEffects;
 
@@ -490,7 +491,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   setCurSample={setCurSample}
                   curSamples={curSamples}
                   setCurSamples={setCurSamples}
-                  samplePlayers={samplePlayers}
+                  samplePlayerRef={samplePlayerRef}
                   playerRef={playerRef}
                 />
               )}

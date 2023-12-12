@@ -73,4 +73,15 @@ const defaultSamples = [
   },
 ];
 
+export const defaultSampleIDs = [
+  "customize-18",
+  "customize-19",
+  "customize-20",
+  "customize-21",
+  "customize-37",
+  "customize-71",
+  "customize-22",
+  "customize-38",
+];
+
 export default defaultSamples;

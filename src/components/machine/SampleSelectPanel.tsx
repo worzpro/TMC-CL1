@@ -12,7 +12,7 @@ interface SampleSelectPanelProps {
   setCurSample: Function;
   curSamples: any[];
   setCurSamples: Function;
-  samplePlayers: any;
+  samplePlayerRef: any;
   playerRef: any;
 }
 
@@ -22,7 +22,7 @@ const SampleSelectPanel = ({
   setCurSample,
   curSamples,
   setCurSamples,
-  samplePlayers,
+  samplePlayerRef,
   playerRef,
 }: SampleSelectPanelProps) => {
   const cassetteArr = Object.values(cassettes);
@@ -126,7 +126,7 @@ const SampleSelectPanel = ({
                 isActive={sample.id === curSamples[curSample.index].id}
                 isMobile={isMobile}
                 onTouch={() => {
-                  samplePlayers.current[sample.id]?.start();
+                  samplePlayerRef.current[sample.id]?.start();
 
                   setCurSample((prev: any) => ({
                     ...prev,
@@ -138,7 +138,7 @@ const SampleSelectPanel = ({
                   let newCurSamples: any[] = [...curSamples];
                   newCurSamples[curSample.index] = sample;
                   setCurSamples(newCurSamples);
-                  playerRef.current[curSample.index] = samplePlayers.current[sample.id];
+                  playerRef.current[curSample.index] = samplePlayerRef.current[sample.id];
                 }}
               />
             );
