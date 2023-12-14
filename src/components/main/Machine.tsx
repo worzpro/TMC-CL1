@@ -50,7 +50,7 @@ const NUMBER_OF_RECORDS = 4;
 const DEFAULT_WS_OPTIONS = {
   width: 303,
   waveColor: READY_WAVECOLOR,
-  progressColor: "transparent",
+  interact: false,
 };
 const REGION_OPTIONS = {
   color: "rgba(250, 0, 25, 0.1)",
