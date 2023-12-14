@@ -497,6 +497,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       lastTap = currentTime;
     },
     onFxChange: (effectObj: LooseObject, value: number) => {
+      if(!showFX) return;
       const isChannel = effectObj.channelVariables !== undefined;
       const { key } = effectObj;
       if (isChannel) {
@@ -868,18 +869,16 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 </Center>
               </Box>
             )}
-            {showFX && (
-              <FxPanel isHold={isHold} onFxChange={handler.onFxChange} />
-            )}
-            {showSample && (
-              <WaveSurferPlayer
+            <FxPanel hidden={!showFX} isHold={isHold} onFxChange={handler.onFxChange} />
+            <WaveSurferPlayer
+              hidden={!showSample}
                 recordState={recordState}
                 curRecordSlotIndex={curRecordSlotIndex}
                 recordContainerRef={recordContainerRef}
                 resultContainerRef={resultContainerRef}
                 count={count}
               />
-            )}
+
 
             <Flex
               // 功能按鈕區

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { INSERT_EFFECTS, SEND_EFFECTS } from "@/dummy/constants";
 
 interface FxPanelProps {
+  hidden: boolean;
   isHold: boolean;
   onFxChange: Function;
 }
@@ -13,7 +14,7 @@ interface LooseObject {
 
 const FXs = [...Object.values(INSERT_EFFECTS), ...Object.values(SEND_EFFECTS)];
 
-const FxPanel = ({ isHold, onFxChange }: FxPanelProps) => {
+const FxPanel = ({ hidden,isHold, onFxChange }: FxPanelProps) => {
   const [barPositions, setBarPositions] = useState<number[]>(
     FXs.map((fx) => fx.defaultPosition)
   );
@@ -115,7 +116,7 @@ const FxPanel = ({ isHold, onFxChange }: FxPanelProps) => {
   );
 
   return (
-    <Flex direction="column" gap="12px">
+    <Flex hidden={hidden} direction="column" gap="12px">
       <Flex wrap="wrap" gap="6px">
         {FXs.map((fx: LooseObject, index: number) => (
           <Box

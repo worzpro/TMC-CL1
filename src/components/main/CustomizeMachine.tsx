@@ -279,6 +279,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       });
     },
     onFxChange: (effectObj: LooseObject, value: number) => {
+      if(!showFX) return;
       const isChannel = effectObj.channelVariables !== undefined;
       const { key } = effectObj;
       if (isChannel) {
@@ -495,9 +496,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   playerRef={playerRef}
                 />
               )}
-              {showFX && (
-                <FxPanel isHold={isHold} onFxChange={handler.onFxChange} />
-              )}
+              <FxPanel hidden={!showFX} isHold={isHold} onFxChange={handler.onFxChange} />
 
               {/* curSamples */}
               {!showSelectPanel && !showFX && (

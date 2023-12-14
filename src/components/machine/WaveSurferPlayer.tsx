@@ -2,6 +2,7 @@ import { Box, Text, HStack } from "@chakra-ui/react";
 import WaveSurferDisplayer from "./WaveSurferDisplayer";
 
 interface WaveSurferPlayerProps {
+  hidden: boolean;
   recordState: any[];
   curRecordSlotIndex: number;
   recordContainerRef: any;
@@ -10,6 +11,7 @@ interface WaveSurferPlayerProps {
 }
 
 const WaveSurferPlayer = ({
+  hidden,
   recordState,
   curRecordSlotIndex,
   recordContainerRef,
@@ -19,7 +21,7 @@ const WaveSurferPlayer = ({
   const RECORD_SLOTS = ["a", "b", "c", "d"];
 
   return (
-    <>
+    <Box hidden={hidden}>
       {/* 未註冊時介面 */}
       <Box
         w="100%"
@@ -74,7 +76,7 @@ const WaveSurferPlayer = ({
           </HStack>
         </Box>
       ))}
-    </>
+    </Box>
   );
 };
 
