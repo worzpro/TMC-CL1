@@ -65,9 +65,9 @@ const SampleSelectPanel = ({
         >
           <HStack
             spacing="12px"
-            transform={`translateX(calc(-162px * ${
-              curCassetteId - 1
-            } + 107px))`}
+            transform={`translateX(calc(50% - ${
+              (curCassetteId - 1) * 150 + 75 + (curCassetteId - 1) * 11
+            }px))`}
             transition="all 0.3s ease-out"
           >
             {Object.values(cassettes).map((cassette) => (
@@ -134,11 +134,11 @@ const SampleSelectPanel = ({
                     artist: sample.artist,
                   }));
 
-
                   let newCurSamples: any[] = [...curSamples];
                   newCurSamples[curSample.index] = sample;
                   setCurSamples(newCurSamples);
-                  playerRef.current[curSample.index] = samplePlayerRef.current[sample.id];
+                  playerRef.current[curSample.index] =
+                    samplePlayerRef.current[sample.id];
                 }}
               />
             );

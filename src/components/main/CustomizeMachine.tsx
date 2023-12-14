@@ -409,7 +409,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       w="100%"
       borderRadius="8px"
       top={{
-        base: isMenuOpen ? "700px" : "60px",
+        base: isMenuOpen ? "700px" : "50px",
         md: isMenuOpen ? "700px" : "100px",
       }}
       zIndex="7999"
@@ -435,14 +435,14 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
           direction="column"
           p="20px 20px 15px 15px"
           h="100%"
-          gap="15px"
+          gap="8px"
         >
           <Flex
             // 螢幕容器
             direction="column"
             border="3px solid black"
             w="100%"
-            h={{ base: "182px", sm: "310px" }}
+            h={{ base: "182px", sm: "324px" }}
             maxH="382px"
             borderRadius="8px"
             bgColor="rgb(197, 218, 227)"

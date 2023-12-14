@@ -649,14 +649,17 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
     const AUDIO_MAP = handler.createAudioMap(artists[pathName]);
     const playerObj = handler.createPlayers(AUDIO_MAP);
-    
+
     // record
     const DEFAULT_SAMPLE_REF = Array(NUMBER_OF_RECORDS)
       .fill(0)
       .map(() => new Recording());
-    
+
     ///// FX相關
-    const players = [...getBasicVersionPlayers(playerObj), ...DEFAULT_SAMPLE_REF];
+    const players = [
+      ...getBasicVersionPlayers(playerObj),
+      ...DEFAULT_SAMPLE_REF,
+    ];
     const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
     players.forEach((player: any) => {
       player.connect(insertEffects.input);
@@ -679,7 +682,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     Tone.loaded().then(() => {
       // ensure the audio is loaded before starting
       handler.startPlayersAtDesinatedBar(playerObj);
-    })
+    });
 
     // 切換卡帶時重置player
     return () => {
@@ -742,7 +745,9 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     primaryWsRef.current = ws;
     const record = ws.registerPlugin(RecordPlugin.create());
     record.startMic();
-    const unSubscribe = record.on("record-end", (blob) => handler.onRecordEnd(blob, curRecordSlotIndex));
+    const unSubscribe = record.on("record-end", (blob) =>
+      handler.onRecordEnd(blob, curRecordSlotIndex)
+    );
     recordRef.current = record;
 
     return () => {
@@ -759,7 +764,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       w="100%"
       borderRadius="8px"
       top={{
-        base: isMenuOpen ? "700px" : "60px",
+        base: isMenuOpen ? "700px" : "50px",
         md: isMenuOpen ? "700px" : "100px",
       }}
       zIndex="7999"
@@ -785,14 +790,14 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
           direction="column"
           p="20px 20px 15px 15px"
           h="100%"
-          gap="15px"
+          gap="8px"
         >
           <Flex
             // 螢幕容器
             direction="column"
             border="3px solid black"
             w="100%"
-            h={{ base: "182px", sm: "310px" }}
+            h={{ base: "182px", sm: "324px" }}
             maxH="382px"
             borderRadius="8px"
             bgColor="rgb(197, 218, 227)"
