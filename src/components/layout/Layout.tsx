@@ -26,7 +26,7 @@ const Layout = ({
   setShowHint,
   setIsToneStarted,
 }: LayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentVid, setCurrentVid] = useState("");
   const [showQRcode, setShowQRcode] = useState(true);
   // const [windowHeight, setWindowHeight] = useState('100vh');
@@ -41,6 +41,17 @@ const Layout = ({
 
   //   return () => window.removeEventListener('resize', handleResize);
   // }, []);
+
+  // 判斷使用者裝置: mobile 不開啟 sidebar
+  useEffect(() => {
+    const userAgent = navigator.userAgent;
+    const mobileKeywords = /Mobile|Android|iPhone|iPad|iPod|Windows Phone/i;
+    const isMobile = mobileKeywords.test(userAgent);
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  }, []);
+
 
   return (
     <Center bgColor="rgb(199, 199, 199)" h="100vh" w="100vw" pos="relative">
