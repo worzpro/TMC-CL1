@@ -518,6 +518,9 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       }
     },
     onRecordDelete: () => {
+      if (recordRef.current && !recordRef.current.isRecording()) {
+        recordRef.current.startMic();
+      }
       resultWaveSurferRef.current[curRecordSlotIndex].clearRecording();
 
       setRecordState((prev) => {
@@ -736,6 +739,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     });
     primaryWsRef.current = ws;
     const record = ws.registerPlugin(RecordPlugin.create());
+    record.startMic();
     const unSubscribe = record.on("record-end", (blob) => handler.onRecordEnd(blob, curRecordSlotIndex));
     recordRef.current = record;
 
