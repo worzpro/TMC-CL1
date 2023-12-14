@@ -2,12 +2,12 @@ import { Box } from "@chakra-ui/react";
 import { useState, useCallback, useEffect, use } from "react";
 
 interface BpmProps {
-  showFX: boolean;
+  hidden: boolean;
   onChange: (value: number) => void;
   toggleMetronome: Function;
 }
 
-const Bpm = ({ showFX, onChange, toggleMetronome }: BpmProps) => {
+const Bpm = ({ hidden, onChange, toggleMetronome }: BpmProps) => {
   const [value, setValue] = useState(120);
   const [isDraggable, setIsDraggable] = useState<boolean>(false);
 
@@ -60,9 +60,7 @@ const Bpm = ({ showFX, onChange, toggleMetronome }: BpmProps) => {
       onMouseDown={startDrag}
       onTouchStart={startDrag}
       cursor={isDraggable ? "ns-resize" : "pointer"}
-      opacity={showFX ? 1 : 1}
-      position={showFX ? "absolute" : "relative"}
-      zIndex={showFX ? "-100" : "unset"}
+      hidden={hidden}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

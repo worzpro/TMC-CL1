@@ -24,6 +24,12 @@ import {
   INSERT_EFFECTS,
   SEND_EFFECTS,
   SEQ_LOOP_POINTS,
+  RECORD_TIME_LIMIT,
+  RECORDING_WAVECOLOR,
+  READY_WAVECOLOR,
+  NUMBER_OF_RECORDS,
+  DEFAULT_WS_OPTIONS,
+  REGION_OPTIONS,
 } from "@/dummy/constants";
 import {
   createChainedInsertAudioEffects,
@@ -42,19 +48,6 @@ interface LooseObject {
 const padsArr = Object.values(pads).sort((a, b) => a.id - b.id);
 const RECORD_PADS = padsArr.slice(0, 4);
 const SAMPLE_PADS = padsArr.slice(4, 12);
-
-const RECORDING_WAVECOLOR = "#691620";
-const READY_WAVECOLOR = "#F1EFEF";
-const RECORD_TIME_LIMIT = 5;
-const NUMBER_OF_RECORDS = 4;
-const DEFAULT_WS_OPTIONS = {
-  width: 303,
-  waveColor: READY_WAVECOLOR,
-  interact: false,
-};
-const REGION_OPTIONS = {
-  color: "rgba(250, 0, 25, 0.1)",
-};
 
 const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -81,8 +74,8 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const sendEffectsRef = useRef<any>(null);
 
   // record
-  const recordContainerRef = useRef<HTMLDivElement>(null);
   const recordRef = useRef<any>();
+  const recordContainerRef = useRef<HTMLDivElement>(null);
   const resultContainerRef = useRef<HTMLDivElement[]>([]);
   const resultWaveSurferRef = useRef<any>();
   const intervalRef = useRef<any>();
@@ -497,7 +490,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       lastTap = currentTime;
     },
     onFxChange: (effectObj: LooseObject, value: number) => {
-      if(!showFX) return;
+      if (!showFX) return;
       const isChannel = effectObj.channelVariables !== undefined;
       const { key } = effectObj;
       if (isChannel) {
@@ -869,16 +862,19 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 </Center>
               </Box>
             )}
-            <FxPanel hidden={!showFX} isHold={isHold} onFxChange={handler.onFxChange} />
+            <FxPanel
+              hidden={!showFX}
+              isHold={isHold}
+              onFxChange={handler.onFxChange}
+            />
             <WaveSurferPlayer
               hidden={!showSample}
-                recordState={recordState}
-                curRecordSlotIndex={curRecordSlotIndex}
-                recordContainerRef={recordContainerRef}
-                resultContainerRef={resultContainerRef}
-                count={count}
-              />
-
+              recordState={recordState}
+              curRecordSlotIndex={curRecordSlotIndex}
+              recordContainerRef={recordContainerRef}
+              resultContainerRef={resultContainerRef}
+              count={count}
+            />
 
             <Flex
               // 功能按鈕區

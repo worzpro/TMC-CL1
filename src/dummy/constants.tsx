@@ -11,6 +11,19 @@ export const NUMBER_OF_SLOTS = 8;
 export const PREP_BEAT_BARS = 1;
 export const PREP_BEAT_SLOTS = 8;
 
+export const RECORD_TIME_LIMIT = 5
+export const RECORDING_WAVECOLOR = "#691620";
+export const READY_WAVECOLOR = "#F1EFEF";
+export const NUMBER_OF_RECORDS = 4;
+export const DEFAULT_WS_OPTIONS = {
+  width: 303,
+  waveColor: READY_WAVECOLOR,
+  interact: false,
+};
+export const REGION_OPTIONS = {
+  color: "rgba(250, 0, 25, 0.1)",
+};
+
 export const SEQ_LOOP_POINTS:LooseObject = {
   puzzleman: {
     "SEQ.1": {

@@ -8,11 +8,17 @@ import PatternPad from "@/components/machine/PatternPad";
 import SlotPad from "@/components/machine/SlotPad";
 import Bpm from "@/components/machine/Bpm";
 import SampleSelectPanel from "@/components/machine/SampleSelectPanel";
+import WaveSurferPlayer from "@/components/machine/WaveSurferPlayer";
 import FxPanel from "@/components/machine/FxPanel";
 
 import pads from "@/dummy/pads";
 import allSamples from "@/dummy/allSamples";
 import defaultSamples from "@/dummy/customize/defaultSamples";
+
+import WaveSurfer from "wavesurfer.js";
+import RecordPlugin from "wavesurfer.js/dist/plugins/record.js";
+import RegionsPlugin from "wavesurfer.js/dist/plugins/regions.js";
+import Recording from "@/recording";
 
 import {
   debounce,
@@ -36,6 +42,12 @@ import {
   PREP_BEAT_SLOTS,
   INSERT_EFFECTS,
   SEND_EFFECTS,
+  RECORD_TIME_LIMIT,
+  RECORDING_WAVECOLOR,
+  READY_WAVECOLOR,
+  NUMBER_OF_RECORDS,
+  DEFAULT_WS_OPTIONS,
+  REGION_OPTIONS,
 } from "@/dummy/constants";
 import { SEQ_INDEX_MAP, PATTERN_INDEX_MAP } from "@/map";
 
@@ -71,12 +83,14 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [showSelectPanel, setShowSelectPanel] = useState<boolean>(false);
   const [showFX, setShowFX] = useState<boolean>(false);
+  const [showSampleRecord, setShowSampleRecord] = useState<boolean>(false);
   const [isHold, setIsHold] = useState<boolean>(false);
 
   const [curSeq, setCurSeq] = useState<string>("SEQ.1");
   const [pendingSeq, setPendingSeq] = useState<string | null>(null);
   const [curPosition, setCurPosition] = useState<number | null>(null);
 
+  const [activePad, setActivePad] = useState<string>("");
   const [curSamples, setCurSamples] = useState<any[]>(DEFAULT_SAMPLES); // 現在面板上的8個samples
   const [curSample, setCurSample] = useState<any>({
     id: "customize-37",
@@ -86,6 +100,21 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
   const [curPattern, setCurPattern] = useState<string>("a"); // 目前選擇的段落(a,b,c,d)
 
   const [padState, setPadState] = useState<any>(createSequencer()); // 4個seq所有slot的狀態
+  const [curRecordSlotIndex, setCurRecordSlotIndex] = useState<number>(0);
+  const [count, setCount] = useState<number>(RECORD_TIME_LIMIT);
+  const [recordState, setRecordState] = useState<any[]>([
+    "empty",
+    "empty",
+    "empty",
+    "empty",
+  ]);
+
+  const recordRef = useRef<any>();
+  const recordContainerRef = useRef<HTMLDivElement>(null);
+  const resultContainerRef = useRef<HTMLDivElement[]>([]);
+  const resultWaveSurferRef = useRef<any>();
+  const intervalRef = useRef<any>();
+  const primaryWsRef = useRef<any>();
 
   const metronome1Player = useRef<any>(null);
   const metronome2Player = useRef<any>(null);
@@ -111,9 +140,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       return samplePlayers;
     },
     getDefaultPlayer: (samplePlayers: LooseObject) => {
-      return DEFAULT_SAMPLES.map(
-        ({ id }: { id: string }) => samplePlayers[id]
-      );
+      return DEFAULT_SAMPLES.map(({ id }: { id: string }) => samplePlayers[id]);
     },
     createMetronomePlayer: () => {
       return {
@@ -209,7 +236,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       [setCurPattern]
     ),
     onSampleMouseDown: (id: string, artist: string, index: number) => {
-      playerRef.current[index].start();
+      playerRef.current?.[index]?.start();
       if (isRecording) {
         const slotIndex =
           (Math.round((Tone.Transport.getTicksAtTime() / 192) * 2 - 8) %
@@ -279,7 +306,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       });
     },
     onFxChange: (effectObj: LooseObject, value: number) => {
-      if(!showFX) return;
+      if (!showFX) return;
       const isChannel = effectObj.channelVariables !== undefined;
       const { key } = effectObj;
       if (isChannel) {
@@ -300,6 +327,119 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         });
       }
     },
+    onChangePadLight: (padId: string) => {
+      if (activePad !== "") setActivePad("");
+      setActivePad(padId);
+      setTimeout(() => {
+        setActivePad("");
+      }, 100);
+    },
+    onSampleRecordDelete: () => {
+      if (recordRef.current && !recordRef.current.isRecording()) {
+        recordRef.current.startMic();
+      }
+      resultWaveSurferRef.current[curRecordSlotIndex].clearRecording();
+
+      setRecordState((prev) => {
+        const newState = [...prev];
+        newState[curRecordSlotIndex] = "empty";
+        return newState;
+      });
+    },
+    onSampleRecordEnd: async (blob: any, curRecordSlotIndex: number) => {
+      recordRef.current.stopMic();
+      primaryWsRef.current.setOptions({
+        waveColor: READY_WAVECOLOR,
+      });
+      const sampleUrl = URL.createObjectURL(blob);
+
+      await resultWaveSurferRef.current[curRecordSlotIndex].player.load(
+        sampleUrl
+      );
+      // create new ws of the recording
+      const ws = WaveSurfer.create({
+        ...DEFAULT_WS_OPTIONS,
+        height: isMobile ? 124 : 252,
+        container: resultContainerRef.current[curRecordSlotIndex],
+        url: sampleUrl,
+      });
+
+      resultWaveSurferRef.current[curRecordSlotIndex].ws = ws;
+
+      // enable region selection i.e. chopping the sample
+      const wsRegions = ws.registerPlugin(RegionsPlugin.create());
+      wsRegions.enableDragSelection(REGION_OPTIONS);
+      wsRegions.on("region-created", (region) => {
+        resultWaveSurferRef.current[curRecordSlotIndex].clearRegion();
+        resultWaveSurferRef.current[curRecordSlotIndex].setRegion(region);
+      });
+      wsRegions.on("region-updated", (region) => {
+        resultWaveSurferRef.current[curRecordSlotIndex].setRegionBoundary(
+          region.start,
+          region.end
+        );
+      });
+
+      setRecordState((prev) => {
+        const newState = [...prev];
+        newState[curRecordSlotIndex] = "registered";
+        return newState;
+      });
+    },
+    startSampleRecording: () => {
+      resultWaveSurferRef.current[curRecordSlotIndex].clearRecording();
+
+      primaryWsRef.current.setOptions({
+        waveColor: RECORDING_WAVECOLOR,
+      });
+
+      recordRef.current.startRecording();
+      setRecordState((prev) => {
+        const newState = [...prev];
+        newState[curRecordSlotIndex] = "recording";
+        return newState;
+      });
+    },
+    stopSampleRecording: () => {
+      recordRef.current.stopRecording();
+      clearInterval(intervalRef.current);
+      setCount(RECORD_TIME_LIMIT);
+    },
+    onSampleRecordMouseDown: (padId: string, index: number) => {
+      handler.onChangePadLight(padId);
+      // stop the current playing sample
+      if (curRecordSlotIndex !== -1) {
+        resultWaveSurferRef.current[curRecordSlotIndex].stop();
+      }
+
+      setCurRecordSlotIndex(index);
+      if (recordState[index] === "empty") {
+        return;
+      } else if (recordState[index] === "registered") {
+        resultWaveSurferRef.current[index].start();
+      }
+    },
+    onSampleRecordHold: (index: number) => {
+      if (recordState[index] !== "empty" || !showSampleRecord) {
+        return;
+      }
+      let count = RECORD_TIME_LIMIT;
+      handler.startSampleRecording();
+      const timer = setInterval(function () {
+        setCount((prev) => prev - 1);
+        count--;
+        if (count < 0) {
+          handler.stopSampleRecording();
+        }
+      }, 1000);
+
+      intervalRef.current = timer;
+    },
+    onSampleRecordMouseUp: (index: number) => {
+      if (recordState[index] === "recording") {
+        handler.stopSampleRecording();
+      }
+    },
   };
 
   // 判斷使用者裝置
@@ -315,7 +455,15 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       const samplePlayers = handler.createSamplePlayers();
       const defaultPlayers = handler.getDefaultPlayer(samplePlayers);
 
-      const players = getCustomizationPlayers(samplePlayers);
+      // record
+      const DEFAULT_SAMPLE_REF = Array(NUMBER_OF_RECORDS)
+        .fill(0)
+        .map(() => new Recording());
+
+      const players = [
+        ...getCustomizationPlayers(samplePlayers),
+        ...DEFAULT_SAMPLE_REF,
+      ];
       const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
       players.forEach((player: any) => {
         // player可能為undefined(若沒錄sample)
@@ -332,6 +480,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       });
 
       playerRef.current = defaultPlayers;
+      resultWaveSurferRef.current = DEFAULT_SAMPLE_REF;
       samplePlayerRef.current = samplePlayers;
       insertEffectsRef.current = insertEffects;
       sendEffectsRef.current = sendEffects;
@@ -401,7 +550,29 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     };
   }, [isToneStarted]);
 
-  // console.log(slotPads)
+  // sample record
+  useEffect(() => {
+    if (!recordContainerRef.current) return;
+
+    const ws = WaveSurfer.create({
+      ...DEFAULT_WS_OPTIONS,
+      height: isMobile ? 124 : 252,
+      container: recordContainerRef.current,
+    });
+    primaryWsRef.current = ws;
+    const record = ws.registerPlugin(RecordPlugin.create());
+    record.startMic();
+    const unSubscribe = record.on("record-end", (blob) =>
+      handler.onSampleRecordEnd(blob, curRecordSlotIndex)
+    );
+    recordRef.current = record;
+
+    return () => {
+      ws.destroy();
+      unSubscribe();
+    };
+  }, [recordContainerRef, curRecordSlotIndex, showSampleRecord]);
+
   return (
     <Box
       // 外層容器
@@ -455,7 +626,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             overflow="hidden"
           >
             <Loading />
-            {!showSelectPanel && (
+            {!showSelectPanel && !showSampleRecord && (
               <HStack
                 // SEQs
                 spacing="6px"
@@ -484,7 +655,15 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               </HStack>
             )}
 
-            <Box pos="relative" mb="4px">
+            <WaveSurferPlayer
+              hidden={!showSampleRecord}
+              recordState={recordState}
+              curRecordSlotIndex={curRecordSlotIndex}
+              recordContainerRef={recordContainerRef}
+              resultContainerRef={resultContainerRef}
+              count={count}
+            />
+            <Box pos="relative" mb="4px" hidden={showSampleRecord}>
               {showSelectPanel && (
                 <SampleSelectPanel
                   isMobile={isMobile}
@@ -496,10 +675,13 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   playerRef={playerRef}
                 />
               )}
-              <FxPanel hidden={!showFX} isHold={isHold} onFxChange={handler.onFxChange} />
-
+              <FxPanel
+                hidden={!showFX}
+                isHold={isHold}
+                onFxChange={handler.onFxChange}
+              />
               {/* curSamples */}
-              {!showSelectPanel && !showFX && (
+              {!showSelectPanel && !showSampleRecord && !showFX && (
                 <Flex justify="center" wrap="wrap" gap="4px">
                   {curSamples.map((sample, index) => {
                     return (
@@ -538,48 +720,55 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   <Box bgColor="#EBEBEB" p="2px 12px">
                     FX
                   </Box>
-                  {showFX && (
-                    <Image
-                      pos="absolute"
-                      src="/images/screen-arrow.svg"
-                      alt="arrow"
-                      transform="translateY(-50%)"
-                      top="50%"
-                      right="-8px"
-                    />
-                  )}
+                  <Image
+                    hidden={!showFX}
+                    pos="absolute"
+                    src="/images/screen-arrow.svg"
+                    alt="arrow"
+                    transform="translateY(-50%)"
+                    top="50%"
+                    right="-8px"
+                  />
                 </HStack>
                 <HStack pos="relative">
                   <Box bgColor="#EBEBEB" p="2px 12px">
                     SAMPLE
                   </Box>
+                  <Image
+                    hidden={!showSampleRecord}
+                    pos="absolute"
+                    src="/images/screen-arrow.svg"
+                    alt="arrow"
+                    transform="translateY(-50%)"
+                    top="50%"
+                    right="-8px"
+                  />
                 </HStack>
               </HStack>
               <HStack spacing="4px">
-                {showFX && (
-                  <Box
-                    w="90px"
-                    border={isHold ? "3px solid #896C42" : "3px solid black"}
-                    textAlign="center"
-                    rounded="20px"
-                    bgColor={isHold ? "#E0B472" : "#686F73"}
-                    color="#4D4D4D"
-                    textStyle="en_special_md_bold"
-                    cursor="pointer"
-                    onClick={() => {
-                      setIsHold((prev) => !prev);
-                    }}
-                  >
-                    Hold
-                  </Box>
-                )}
+                <Box
+                  hidden={!showFX}
+                  w="90px"
+                  border={isHold ? "3px solid #896C42" : "3px solid black"}
+                  textAlign="center"
+                  rounded="20px"
+                  bgColor={isHold ? "#E0B472" : "#686F73"}
+                  color="#4D4D4D"
+                  textStyle="en_special_md_bold"
+                  cursor="pointer"
+                  onClick={() => {
+                    setIsHold((prev) => !prev);
+                  }}
+                >
+                  Hold
+                </Box>
                 <Bpm
-                  showFX={showFX}
+                  hidden={showFX || showSampleRecord}
                   onChange={handler.onBpmChange}
                   toggleMetronome={handler.toggleMetronome}
                 />
-                {!showFX && (
-                  <Image
+                <Image
+                  hidden={showFX || showSampleRecord}
                   src="/images/stop.svg"
                   alt="stop"
                   cursor="pointer"
@@ -595,8 +784,8 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     setIsPlaying(true);
                   }}
                 />
-                )}
                 <Image
+                  hidden={showSampleRecord}
                   src="/images/restart.svg"
                   alt="restart"
                   cursor="pointer"
@@ -631,6 +820,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   }}
                 />
                 <Box
+                  hidden={showSampleRecord}
                   cursor="pointer"
                   onClick={async () => {
                     if (isRecording) {
@@ -651,6 +841,13 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     <Image src="/images/play.svg" alt="play" />
                   )}
                 </Box>
+                <Image
+                  hidden={!showSampleRecord}
+                  src="/images/screen-delete.svg"
+                  alt="delete"
+                  cursor="pointer"
+                  onClick={handler.onSampleRecordDelete}
+                />
               </HStack>
             </Flex>
           </Flex>
@@ -666,6 +863,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               cursor="pointer"
               _hover={{ opacity: 0.7 }}
               onClick={() => {
+                if (showSampleRecord) setShowSampleRecord(false);
                 setShowFX((prev) => !prev);
               }}
             />
@@ -675,7 +873,13 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               cursor="pointer"
               _hover={{ opacity: 0.7 }}
               onClick={() => {
-                setShowSelectPanel((prev) => !prev);
+                if (curSample.artist == "self") {
+                  if (showFX) setShowFX(false);
+                  setShowSampleRecord((prev) => !prev);
+                  navigator.mediaDevices.getUserMedia({ audio: true });
+                } else {
+                  setShowSelectPanel((prev) => !prev);
+                }
               }}
             />
           </HStack>
@@ -714,8 +918,16 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     isActive={curPattern === pad.name}
                     isRegistered={isRegistered}
                     isBeingPlayed={isBeingPlayed}
+                    flashPadLight={pad.id === activePad}
                     onMouseDown={handler.onPatternMouseDown}
                     onHold={handler.onPatternHold}
+                    showSampleRecord={showSampleRecord}
+                    recordState={recordState}
+                    onRecordMouseDown={() =>
+                      handler.onSampleRecordMouseDown(pad.id, index)
+                    }
+                    onRecordHold={() => handler.onSampleRecordHold(index)}
+                    onRecordMouseUp={() => handler.onSampleRecordMouseUp(index)}
                   />
                 );
               })}

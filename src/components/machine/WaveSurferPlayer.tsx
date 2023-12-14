@@ -21,7 +21,7 @@ const WaveSurferPlayer = ({
   const RECORD_SLOTS = ["a", "b", "c", "d"];
 
   return (
-    <Box hidden={hidden}>
+    <Box hidden={hidden} h="100%" mb="8px">
       {/* 未註冊時介面 */}
       <Box
         w="100%"
@@ -30,9 +30,7 @@ const WaveSurferPlayer = ({
         pos="relative"
         hidden={recordState[curRecordSlotIndex] === "registered"}
       >
-        <WaveSurferDisplayer
-          containerRef={recordContainerRef}
-        />
+        <WaveSurferDisplayer containerRef={recordContainerRef} />
         <HStack
           pos="absolute"
           top="5px"

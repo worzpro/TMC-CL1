@@ -1,10 +1,4 @@
-import {
-  Box,
-  Image,
-  Circle,
-  keyframes,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Image, Circle, keyframes } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
 interface PatternPadProps {
@@ -14,8 +8,14 @@ interface PatternPadProps {
   isActive: boolean;
   isRegistered: boolean;
   isBeingPlayed: boolean;
+  flashPadLight: boolean;
   onHold: Function;
   onMouseDown: Function;
+  showSampleRecord: boolean;
+  recordState: any[];
+  onRecordMouseDown: Function;
+  onRecordHold: Function;
+  onRecordMouseUp: Function;
 }
 
 const COLOR_MAP: { [key: string]: string } = {
@@ -33,8 +33,14 @@ const PatternPad = ({
   isActive,
   isRegistered,
   isBeingPlayed,
+  flashPadLight,
   onHold,
   onMouseDown,
+  showSampleRecord,
+  recordState,
+  onRecordMouseDown,
+  onRecordHold,
+  onRecordMouseUp,
 }: PatternPadProps) => {
   const [isPressing, setIsPressing] = useState(false);
   const blink = keyframes`
@@ -51,7 +57,7 @@ const PatternPad = ({
     let pressTimer: any;
     if (isPressing) {
       pressTimer = setTimeout(() => {
-        onHold(index);
+        showSampleRecord ? onRecordHold() : onHold(index);
       }, 500);
     } else {
       clearTimeout(pressTimer);
@@ -62,14 +68,13 @@ const PatternPad = ({
     };
   }, [isPressing, onHold, index]);
 
-  const handleMouseDown = (e: any) => {
-    e.preventDefault();
-    onMouseDown(name);
+  const handleMouseDown = () => {
+    showSampleRecord ? onRecordMouseDown() : onMouseDown(name);
     setIsPressing(true);
   };
 
-  const handleMouseUp = (e: any) => {
-    e.preventDefault();
+  const handleMouseUp = () => {
+    showSampleRecord && onRecordMouseUp();
     setIsPressing(false);
   };
 
@@ -78,10 +83,10 @@ const PatternPad = ({
       pos="relative"
       p="2px"
       w="25%"
-      onTouchStart={(e: any) => e.preventDefault()}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
+      onTouchStart={handleMouseDown}
+      onTouchEnd={handleMouseUp}
     >
       <Image
         src={imageSrc}
@@ -94,7 +99,11 @@ const PatternPad = ({
         pos="absolute"
         w="10px"
         h="10px"
-        bgColor={bgColor}
+        bgColor={
+          bgColor == "#7ED37E"
+            ? bgColor
+            : COLOR_MAP[flashPadLight ? "active" : "inactive"]
+        }
         animation={animation}
         top="2px"
         left="50%"
