@@ -42,7 +42,12 @@ const SlotPad = ({
         left="50%"
         transform="translateX(-50%)"
       />
-      <Image src={imageSrc} alt={name} cursor="pointer" />
+      <Image
+        src={imageSrc}
+        alt={name}
+        cursor="pointer"
+        onTouchStart={(e: any) => e.preventDefault()}
+      />
     </Box>
   );
 };

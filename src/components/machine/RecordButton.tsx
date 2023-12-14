@@ -50,7 +50,6 @@ const RecordButton = ({
     setIsPressing(false);
   };
 
-
   return (
     <Box
       pos="relative"
@@ -63,7 +62,12 @@ const RecordButton = ({
     >
       <PadLight myPadName={pad.name} activePad={activePad} />
       <RecordingLight state={recordState[index]} />
-      <Image src={pad.imageSrc} alt={pad.name} cursor="pointer" />
+      <Image
+        src={pad.imageSrc}
+        alt={pad.name}
+        cursor="pointer"
+        onTouchStart={(e: any) => e.preventDefault()}
+      />
     </Box>
   );
 };

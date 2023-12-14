@@ -1034,7 +1034,12 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   }}
                 >
                   <PadLight myPadName={pad.name} activePad={activePad} />
-                  <Image src={pad.imageSrc} alt={pad.name} cursor="pointer" />
+                  <Image
+                    src={pad.imageSrc}
+                    alt={pad.name}
+                    cursor="pointer"
+                    onTouchStart={(e: any) => e.preventDefault()}
+                  />
                 </Box>
               ))}
             </Flex>
