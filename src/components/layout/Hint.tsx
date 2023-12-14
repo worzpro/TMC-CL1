@@ -31,8 +31,6 @@ const Hint = ({ showHint, setShowHint, setIsToneStarted }: HintProps) => {
           cursor="pointer"
           onClick={async () => {
             setShowHint(false);
-            await Tone.loaded();
-            console.log("Audio Ready");
             await Tone.start();
             console.log("Audio context started!");
 
