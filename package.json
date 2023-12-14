@@ -25,6 +25,6 @@
     "react-dom": "18.2.0",
     "tone": "^14.7.77",
     "typescript": "5.1.6",
-    "wavesurfer.js": "^7.4.12"
+    "wavesurfer.js": "^7.3.8"
   }
 }

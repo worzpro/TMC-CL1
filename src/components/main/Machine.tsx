@@ -526,7 +526,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         return newState;
       });
     },
-    onRecordEnd: async (blob: any) => {
+    onRecordEnd: async (blob: any, curRecordSlotIndex: number) => {
       recordRef.current.stopMic();
       primaryWsRef.current.setOptions({
         waveColor: READY_WAVECOLOR,
@@ -736,7 +736,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     });
     primaryWsRef.current = ws;
     const record = ws.registerPlugin(RecordPlugin.create());
-    const unSubscribe = record.on("record-end", handler.onRecordEnd);
+    const unSubscribe = record.on("record-end", (blob) => handler.onRecordEnd(blob, curRecordSlotIndex));
     recordRef.current = record;
 
     return () => {
