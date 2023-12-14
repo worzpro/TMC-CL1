@@ -29,7 +29,6 @@ const WaveSurferPlayer = ({
         hidden={recordState[curRecordSlotIndex] === "registered"}
       >
         <WaveSurferDisplayer
-          hidden={recordState[curRecordSlotIndex] === "registered"}
           containerRef={recordContainerRef}
         />
         <HStack

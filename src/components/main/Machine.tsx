@@ -50,7 +50,7 @@ const NUMBER_OF_RECORDS = 4;
 const DEFAULT_WS_OPTIONS = {
   width: 303,
   waveColor: READY_WAVECOLOR,
-  progressColor: "transparent",
+  interact: false,
 };
 const REGION_OPTIONS = {
   color: "rgba(250, 0, 25, 0.1)",
@@ -518,6 +518,9 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       }
     },
     onRecordDelete: () => {
+      if (recordRef.current && !recordRef.current.isRecording()) {
+        recordRef.current.startMic();
+      }
       resultWaveSurferRef.current[curRecordSlotIndex].clearRecording();
 
       setRecordState((prev) => {
@@ -526,7 +529,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         return newState;
       });
     },
-    onRecordEnd: async (blob: any) => {
+    onRecordEnd: async (blob: any, curRecordSlotIndex: number) => {
       recordRef.current.stopMic();
       primaryWsRef.current.setOptions({
         waveColor: READY_WAVECOLOR,
@@ -738,7 +741,8 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     });
     primaryWsRef.current = ws;
     const record = ws.registerPlugin(RecordPlugin.create());
-    const unSubscribe = record.on("record-end", handler.onRecordEnd);
+    record.startMic();
+    const unSubscribe = record.on("record-end", (blob) => handler.onRecordEnd(blob, curRecordSlotIndex));
     recordRef.current = record;
 
     return () => {
