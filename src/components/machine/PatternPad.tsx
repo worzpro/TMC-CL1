@@ -83,7 +83,12 @@ const PatternPad = ({
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
-      <Image src={imageSrc} alt={name} cursor="pointer" />
+      <Image
+        src={imageSrc}
+        alt={name}
+        cursor="pointer"
+        onTouchStart={(e: any) => e.preventDefault()}
+      />
 
       <Box
         pos="absolute"
