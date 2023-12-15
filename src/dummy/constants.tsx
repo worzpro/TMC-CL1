@@ -191,18 +191,21 @@ export const INSERT_EFFECTS = {
     key: "phaser",
     label: "Phaser",
     defaultPosition: 0,
+    shouldDisconnectOnMin: true,
     toneClass: Tone.Phaser,
     defaultArguments: [
       {
-        octaves: 5,
-        baseFrequency: 1000,
+        frequency: 20,
+        baseFrequency: 100,
+        // This is employed in conjunction with `shouldDisconnectOnMin`. It only works when the default value of the controllable parameter, octaves in this case, is zero
+        wet: 0
       },
     ], // Tone.Phaser accepts an object
     variables: [
       {
-        variableKey: "frequency",
+        variableKey: "octaves",
         min: 0,
-        max: 20,
+        max: 10,
         step: 1,
         defaultValue: 0,
       },
