@@ -738,7 +738,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     });
     primaryWsRef.current = ws;
     const record = ws.registerPlugin(RecordPlugin.create());
-    record.startMic();
+    showSample && record.startMic();
     const unSubscribe = record.on("record-end", (blob) =>
       handler.onRecordEnd(blob, curRecordSlotIndex)
     );

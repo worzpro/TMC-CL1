@@ -561,7 +561,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     });
     primaryWsRef.current = ws;
     const record = ws.registerPlugin(RecordPlugin.create());
-    record.startMic();
+    showSampleRecord && record.startMic();
     const unSubscribe = record.on("record-end", (blob) =>
       handler.onSampleRecordEnd(blob, curRecordSlotIndex)
     );

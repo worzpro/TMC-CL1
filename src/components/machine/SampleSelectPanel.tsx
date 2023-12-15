@@ -66,7 +66,7 @@ const SampleSelectPanel = ({
           <HStack
             spacing="12px"
             transform={`translateX(calc(50% - ${
-              (curCassetteId - 1) * 150 + 75 + (curCassetteId - 1) * 11
+              (curCassetteId - 1) * 150 + 75 + (curCassetteId - 1) * 11.5
             }px))`}
             transition="all 0.3s ease-out"
           >
