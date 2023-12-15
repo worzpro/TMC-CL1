@@ -822,7 +822,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             )}
 
             {!showFX && !showSample && (
-              <Box pos="relative" flex="1" my="8px">
+              <Box pos="relative" flex="1" mt="8px" mb="8px">
                 {/* Jam */}
                 <Image
                   pos="absolute"
@@ -886,11 +886,13 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 color="#4D4D4D"
                 spacing="0px"
                 textStyle="en_special_md_bold"
+                h="100%"
+                align="end"
               >
                 <HStack pos="relative">
-                  <Box bgColor="#EBEBEB" p="2px 14px">
+                  <Center bgColor="#EBEBEB" p="4px 14px">
                     FX
-                  </Box>
+                  </Center>
                   {showFX && (
                     <Image
                       pos="absolute"
@@ -903,9 +905,9 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   )}
                 </HStack>
                 <HStack pos="relative">
-                  <Box ml="18px" bgColor="#EBEBEB" p="2px 14px">
+                  <Center ml="18px" bgColor="#EBEBEB" p="4px 14px">
                     SAMPLE
-                  </Box>
+                  </Center>
                   {showSample && (
                     <Image
                       pos="absolute"
@@ -918,7 +920,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   )}
                 </HStack>
               </HStack>
-              <HStack w={showFX ? "100%" : "auto"}>
+              <HStack w={showFX ? "100%" : "auto"} mb="6px">
                 {showFX && (
                   <Box
                     flex="1"
@@ -928,6 +930,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     bgColor={isHold ? "#E0B472" : "#686F73"}
                     color="#4D4D4D"
                     textStyle="en_special_md_bold"
+                    lineHeight="20px"
                     cursor="pointer"
                     onClick={() => {
                       setIsHold((prev) => !prev);

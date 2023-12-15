@@ -715,9 +715,10 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 textStyle="en_special_md_bold"
                 fontSize="14px"
                 spacing="18px"
+                align="end"
               >
                 <HStack pos="relative">
-                  <Box bgColor="#EBEBEB" p="2px 12px">
+                  <Box bgColor="#EBEBEB" p="4px 12px">
                     FX
                   </Box>
                   <Image
@@ -731,7 +732,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   />
                 </HStack>
                 <HStack pos="relative">
-                  <Box bgColor="#EBEBEB" p="2px 12px">
+                  <Box bgColor="#EBEBEB" p="4px 12px">
                     SAMPLE
                   </Box>
                   <Image
@@ -745,7 +746,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   />
                 </HStack>
               </HStack>
-              <HStack spacing="4px">
+              <HStack spacing="4px" mb="6px" >
                 <Box
                   hidden={!showFX}
                   w="90px"
@@ -755,6 +756,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   bgColor={isHold ? "#E0B472" : "#686F73"}
                   color="#4D4D4D"
                   textStyle="en_special_md_bold"
+                  lineHeight="20px"
                   cursor="pointer"
                   onClick={() => {
                     setIsHold((prev) => !prev);
