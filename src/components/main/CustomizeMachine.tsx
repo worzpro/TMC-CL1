@@ -315,13 +315,26 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
           [variableKey]: value,
         });
         if (value == defaultValue) {
-          console.log("mute!");
           sendEffectsRef.current[key].effect.disconnect();
         } else {
           sendEffectsRef.current[key].effect.toDestination();
         }
       } else {
         const { variableKey, defaultValue } = effectObj.variables[0];
+        if (effectObj.shouldDisconnectOnMin) {
+          /* Currently, we are utilizing `wet`. An alternative approach could involve employing a double-linked list for our `insertEffectsRef`
+          * and utilizing the disconnect method to remove the effect when the value reaches the minimum.
+          */
+          if (value === defaultValue) {
+            insertEffectsRef.current[key].effect.set({
+              wet: 0,
+            });
+          } else {
+            insertEffectsRef.current[key].effect.set({
+              wet: 1,
+            });
+          }
+        }
         insertEffectsRef.current[key].effect.set({
           [variableKey]: value,
         });
