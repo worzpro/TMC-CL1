@@ -135,6 +135,9 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       SAMPLES.forEach((sample: LooseObject) => {
         if (sample.src) {
           samplePlayers[sample.id] = new Tone.Player(sample.src);
+        } else {
+          // recordings
+          samplePlayers[sample.id] = new Recording();
         }
       });
       return samplePlayers;
@@ -468,15 +471,8 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       const samplePlayers = handler.createSamplePlayers();
       const defaultPlayers = handler.getDefaultPlayer(samplePlayers);
 
-      // record
-      const DEFAULT_SAMPLE_REF = Array(NUMBER_OF_RECORDS)
-        .fill(0)
-        .map(() => new Recording());
 
-      const players = [
-        ...getCustomizationPlayers(samplePlayers),
-        ...DEFAULT_SAMPLE_REF,
-      ];
+      const players = getCustomizationPlayers(samplePlayers);
       const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
       players.forEach((player: any) => {
         // player可能為undefined(若沒錄sample)
@@ -493,7 +489,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       });
 
       playerRef.current = defaultPlayers;
-      resultWaveSurferRef.current = DEFAULT_SAMPLE_REF;
+      resultWaveSurferRef.current = defaultPlayers.slice(0, NUMBER_OF_RECORDS);
       samplePlayerRef.current = samplePlayers;
       insertEffectsRef.current = insertEffects;
       sendEffectsRef.current = sendEffects;

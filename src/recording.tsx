@@ -4,19 +4,26 @@ export default class Recording {
   offset: number;
   end: number;
   hasRegion: boolean;
+  removed: boolean;
   ws: any;
   region: any;
 
   constructor() {
-    this.player = new Tone.Player();
+    this.player = new Tone.Player(undefined, () => {
+      this.removed = false
+    });
     this.offset = 0;
     this.end = 0;
     this.hasRegion = false;
+    this.removed = false;
     this.ws = null;
     this.region = null;
   }
 
   start() {
+    if (!this.player.loaded || this.removed) {
+      return;
+    }
     if (this.hasRegion) {
       this.player.start(undefined, this.offset, this.end - this.offset);
     } else {
@@ -52,8 +59,9 @@ export default class Recording {
   }
 
   clearRecording() {
-    this.ws?.destroy();
     this.hasRegion = false;
+    this.ws?.destroy();
+    this.removed = true;
   }
 
   unsync() {
