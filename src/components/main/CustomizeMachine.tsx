@@ -431,7 +431,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       setCurRecordSlotIndex(index);
       if (recordState[index] === "empty") {
         return;
-      } else if (recordState[index] === "registered") {
+      } else if (recordState[index] === "registered") { 
         resultWaveSurferRef.current[index].start();
       }
     },
@@ -927,6 +927,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     index={index}
                     imageSrc={pad.imageSrc}
                     isActive={curPattern === pad.name}
+                    isMobile={isMobile}
                     isRegistered={isRegistered}
                     isBeingPlayed={isBeingPlayed}
                     flashPadLight={pad.id === activePad}
