@@ -550,7 +550,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       // create new ws of the recording
       const ws = WaveSurfer.create({
         ...DEFAULT_WS_OPTIONS,
-        height: 'auto',
+        height: "auto",
         container: resultContainerRef.current[curRecordSlotIndex],
         url: sampleUrl,
       });
@@ -967,9 +967,14 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                       src="/images/restart.svg"
                       alt="restart"
                       cursor="pointer"
-                      onClick={handler.onStop}
+                      onMouseDown={handler.onStop}
+                      onTouchStart={handler.onStop}
                     />
-                    <Box cursor="pointer" onClick={handler.onPlayOrPause}>
+                    <Box
+                      cursor="pointer"
+                      onMouseDown={handler.onPlayOrPause}
+                      onTouchStart={handler.onPlayOrPause}
+                    >
                       {isPlaying ? (
                         <Image src="/images/pause.svg" alt="pause" />
                       ) : (

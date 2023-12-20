@@ -181,6 +181,44 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       }, 500);
       debouncedSetBpm(value);
     },
+    onPlayOrPause: async () => {
+      if (isRecording) {
+        handler.stopRecording();
+      }
+      if (!isPlaying) {
+        Tone.Transport.start();
+        setIsPlaying(true);
+      } else {
+        Tone.Transport.pause();
+        setIsPlaying(false);
+      }
+    },
+    onStop: (e: any) => {
+      const curSeqIndex = SEQ_INDEX_MAP[curSeq];
+      handler.stopRecording();
+
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTap;
+      const isDoubleTap = tapLength < DOUBLE_CLICK_DELAY && tapLength > 0;
+
+      if (e.detail === 1 || !isDoubleTap) {
+        if (isRecording) {
+          Tone.Transport.stop();
+          Tone.Transport.position = padState.seqs[curSeqIndex].loopStart;
+          setCurPosition(0);
+        }
+        Tone.Transport.pause();
+        setIsPlaying(false);
+      }
+
+      if (e.detail === 2 || isDoubleTap) {
+        Tone.Transport.stop();
+        Tone.Transport.position = padState.seqs[curSeqIndex].loopStart;
+        setCurPosition(0);
+      }
+
+      lastTap = currentTime;
+    },
     toggleMetronome: () => {
       metronome1Player.current.mute = !metronome1Player.current.mute;
       metronome2Player.current.mute = !metronome2Player.current.mute;
@@ -326,8 +364,8 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
         const { variableKey, defaultValue } = effectObj.variables[0];
         if (effectObj.shouldDisconnectOnMin) {
           /* Currently, we are utilizing `wet`. An alternative approach could involve employing a double-linked list for our `insertEffectsRef`
-          * and utilizing the disconnect method to remove the effect when the value reaches the minimum.
-          */
+           * and utilizing the disconnect method to remove the effect when the value reaches the minimum.
+           */
           if (value === defaultValue) {
             insertEffectsRef.current[key].effect.set({
               wet: 0,
@@ -375,7 +413,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       // create new ws of the recording
       const ws = WaveSurfer.create({
         ...DEFAULT_WS_OPTIONS,
-        height: 'auto',
+        height: "auto",
         container: resultContainerRef.current[curRecordSlotIndex],
         url: sampleUrl,
       });
@@ -431,7 +469,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       setCurRecordSlotIndex(index);
       if (recordState[index] === "empty") {
         return;
-      } else if (recordState[index] === "registered") { 
+      } else if (recordState[index] === "registered") {
         resultWaveSurferRef.current[index].start();
       }
     },
@@ -470,7 +508,6 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     if (isToneStarted) {
       const samplePlayers = handler.createSamplePlayers();
       const defaultPlayers = handler.getDefaultPlayer(samplePlayers);
-
 
       const players = getCustomizationPlayers(samplePlayers);
       const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
@@ -755,7 +792,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   />
                 </HStack>
               </HStack>
-              <HStack spacing="4px" mb="6px" >
+              <HStack spacing="4px" mb="6px">
                 <Box
                   hidden={!showFX}
                   w="90px"
@@ -781,7 +818,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 <Image
                   hidden={showFX || showSampleRecord}
                   src="/images/stop.svg"
-                  alt="stop"
+                  alt="record"
                   cursor="pointer"
                   onClick={() => {
                     Tone.Transport.stop();
@@ -800,51 +837,14 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   src="/images/restart.svg"
                   alt="restart"
                   cursor="pointer"
-                  onClick={(e) => {
-                    const curSeqIndex = SEQ_INDEX_MAP[curSeq];
-                    handler.stopRecording();
-
-                    const currentTime = new Date().getTime();
-                    const tapLength = currentTime - lastTap;
-                    const isDoubleTap =
-                      tapLength < DOUBLE_CLICK_DELAY && tapLength > 0;
-
-                    if (e.detail === 1 || !isDoubleTap) {
-                      if (isRecording) {
-                        Tone.Transport.stop();
-                        Tone.Transport.position =
-                          padState.seqs[curSeqIndex].loopStart;
-                        setCurPosition(0);
-                      }
-                      Tone.Transport.pause();
-                      setIsPlaying(false);
-                    }
-
-                    if (e.detail === 2 || isDoubleTap) {
-                      Tone.Transport.stop();
-                      Tone.Transport.position =
-                        padState.seqs[curSeqIndex].loopStart;
-                      setCurPosition(0);
-                    }
-
-                    lastTap = currentTime;
-                  }}
+                  onMouseDown={handler.onStop}
+                  onTouchStart={handler.onStop}
                 />
                 <Box
                   hidden={showSampleRecord}
                   cursor="pointer"
-                  onClick={async () => {
-                    if (isRecording) {
-                      handler.stopRecording();
-                    }
-                    if (!isPlaying) {
-                      Tone.Transport.start();
-                      setIsPlaying(true);
-                    } else {
-                      Tone.Transport.pause();
-                      setIsPlaying(false);
-                    }
-                  }}
+                  onMouseDown={handler.onPlayOrPause}
+                  onTouchStart={handler.onPlayOrPause}
                 >
                   {isPlaying ? (
                     <Image src="/images/pause.svg" alt="pause" />
