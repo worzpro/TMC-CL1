@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { INSERT_EFFECTS, SEND_EFFECTS } from "@/dummy/constants";
 
 interface FxPanelProps {
+  isMobile: boolean;
   hidden: boolean;
   isHold: boolean;
   onFxChange: Function;
@@ -14,7 +15,7 @@ interface LooseObject {
 
 const FXs = [...Object.values(INSERT_EFFECTS), ...Object.values(SEND_EFFECTS)];
 
-const FxPanel = ({ hidden, isHold, onFxChange }: FxPanelProps) => {
+const FxPanel = ({ hidden, isHold, onFxChange, isMobile }: FxPanelProps) => {
   const [barPositions, setBarPositions] = useState<number[]>(
     FXs.map((fx) => fx.defaultPosition)
   );
@@ -84,6 +85,7 @@ const FxPanel = ({ hidden, isHold, onFxChange }: FxPanelProps) => {
 
   const handleMouseDown = useCallback(
     (index: number, event: any, fx: LooseObject) => {
+      if(isMobile) return;
       updateBarPosition(index, event.clientY, fx);
 
       const handleMouseMove = (e: any) =>
@@ -101,6 +103,7 @@ const FxPanel = ({ hidden, isHold, onFxChange }: FxPanelProps) => {
 
   const handleTouchStart = useCallback(
     (index: number, event: any, fx: LooseObject) => {
+      if(!isMobile) return;
       updateBarPosition(index, event.touches[0].clientY, fx);
       const handleTouchMove = (e: any) =>
         updateBarPosition(index, e.touches[0].clientY, fx);
@@ -117,14 +120,17 @@ const FxPanel = ({ hidden, isHold, onFxChange }: FxPanelProps) => {
 
   return (
     <Flex hidden={hidden} direction="column" gap="12px">
-      <Flex wrap="wrap" gap={{base:'2px',sm:"6px"}}>
+      <Flex wrap="wrap" gap={{ base: "2px", sm: "6px" }}>
         {FXs.map((fx: LooseObject, index: number) => (
           <Box
             id="container"
             ref={(el) => (containerRefs.current[index] = el)}
             key={fx.label}
             border="1px"
-            w={{base:"calc((100% - 6px) / 4)",sm:"calc((100% - 18px) / 4)"}}
+            w={{
+              base: "calc((100% - 6px) / 4)",
+              sm: "calc((100% - 18px) / 4)",
+            }}
             h={{ base: "50px", sm: "100px" }}
             mb={index < 4 ? "4px" : "0px"}
             textAlign="center"

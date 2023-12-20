@@ -877,6 +877,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
               </Box>
             )}
             <FxPanel
+              isMobile={isMobile}
               hidden={!showFX}
               isHold={isHold}
               onFxChange={handler.onFxChange}
@@ -967,22 +968,22 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                       src="/images/restart.svg"
                       alt="restart"
                       cursor="pointer"
-                      onMouseDown={(e)=>{
+                      onMouseDown={(e) => {
                         if (isMobile) return;
                         handler.onStop(e);
                       }}
-                      onTouchStart={(e)=>{
+                      onTouchStart={(e) => {
                         if (!isMobile) return;
                         handler.onStop(e);
                       }}
                     />
                     <Box
                       cursor="pointer"
-                      onMouseDown={()=>{
+                      onMouseDown={() => {
                         if (isMobile) return;
                         handler.onPlayOrPause();
                       }}
-                      onTouchStart={()=>{
+                      onTouchStart={() => {
                         if (!isMobile) return;
                         handler.onPlayOrPause();
                       }}

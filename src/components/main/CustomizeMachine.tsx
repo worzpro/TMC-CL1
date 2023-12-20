@@ -722,6 +722,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 />
               )}
               <FxPanel
+              isMobile={isMobile}
                 hidden={!showFX}
                 isHold={isHold}
                 onFxChange={handler.onFxChange}
