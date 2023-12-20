@@ -375,7 +375,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       // create new ws of the recording
       const ws = WaveSurfer.create({
         ...DEFAULT_WS_OPTIONS,
-        height: isMobile ? 124 : 252,
+        height: 'auto',
         container: resultContainerRef.current[curRecordSlotIndex],
         url: sampleUrl,
       });

@@ -21,12 +21,16 @@ const WaveSurferPlayer = ({
   const RECORD_SLOTS = ["a", "b", "c", "d"];
 
   return (
-    <Box hidden={hidden} h="100%" mb="8px">
+    <Box
+      hidden={hidden}
+      h="100%"
+      maxH={{ base: "134px", sm: "264px" }}
+      mb="8px"
+    >
       {/* 未註冊時介面 */}
       <Box
         w="100%"
         h="100%"
-        mb="10px"
         pos="relative"
         hidden={recordState[curRecordSlotIndex] === "registered"}
       >
@@ -50,7 +54,6 @@ const WaveSurferPlayer = ({
           key={index}
           w="100%"
           h="100%"
-          mb="10px"
           pos="relative"
           overflow="hidden"
           hidden={
