@@ -6,6 +6,7 @@ interface PatternPadProps {
   name: string;
   index: number;
   isActive: boolean;
+  isMobile: boolean;
   isRegistered: boolean;
   isBeingPlayed: boolean;
   flashPadLight: boolean;
@@ -31,6 +32,7 @@ const PatternPad = ({
   name,
   index,
   isActive,
+  isMobile,
   isRegistered,
   isBeingPlayed,
   flashPadLight,
@@ -83,10 +85,22 @@ const PatternPad = ({
       pos="relative"
       p="2px"
       w="25%"
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onTouchStart={handleMouseDown}
-      onTouchEnd={handleMouseUp}
+      onMouseDown={() => {
+        if (isMobile) return;
+        handleMouseDown()
+      }}
+      onMouseUp={() => {
+        if (isMobile) return;
+        handleMouseUp()
+      }}
+      onTouchStart={() => {
+        if (!isMobile) return;
+        handleMouseDown()
+      }}
+      onTouchEnd={() => {
+        if (!isMobile) return;
+        handleMouseUp()
+      }}
     >
       <Image
         src={imageSrc}

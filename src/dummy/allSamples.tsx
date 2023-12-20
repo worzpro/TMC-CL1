@@ -1,5 +1,29 @@
 const allSamples = [
   {
+    id: 'rec-a',
+    artist: 'self',
+    name: 'REC',
+    src: '',
+  },
+  {
+    id: 'rec-b',
+    artist: 'self',
+    name: 'REC',
+    src: '',
+  },
+  {
+    id: 'rec-c',
+    artist: 'self',
+    name: 'REC',
+    src: '',
+  },
+  {
+    id: 'rec-d',
+    artist: 'self',
+    name: 'REC',
+    src: '',
+  },
+  {
     id: 'customize-1',
     artist: 'customize',
     name: "808 1 B",
