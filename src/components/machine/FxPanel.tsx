@@ -14,7 +14,7 @@ interface LooseObject {
 
 const FXs = [...Object.values(INSERT_EFFECTS), ...Object.values(SEND_EFFECTS)];
 
-const FxPanel = ({ hidden,isHold, onFxChange }: FxPanelProps) => {
+const FxPanel = ({ hidden, isHold, onFxChange }: FxPanelProps) => {
   const [barPositions, setBarPositions] = useState<number[]>(
     FXs.map((fx) => fx.defaultPosition)
   );
@@ -117,15 +117,15 @@ const FxPanel = ({ hidden,isHold, onFxChange }: FxPanelProps) => {
 
   return (
     <Flex hidden={hidden} direction="column" gap="12px">
-      <Flex wrap="wrap" gap="6px">
+      <Flex wrap="wrap" gap={{base:'2px',sm:"6px"}}>
         {FXs.map((fx: LooseObject, index: number) => (
           <Box
             id="container"
             ref={(el) => (containerRefs.current[index] = el)}
             key={fx.label}
             border="1px"
-            w="calc((100% - 18px) / 4)"
-            h="100px"
+            w={{base:"calc((100% - 6px) / 4)",sm:"calc((100% - 18px) / 4)"}}
+            h={{ base: "50px", sm: "100px" }}
             mb={index < 4 ? "4px" : "0px"}
             textAlign="center"
             pos="relative"
@@ -137,7 +137,9 @@ const FxPanel = ({ hidden,isHold, onFxChange }: FxPanelProps) => {
             onMouseDown={(e) => handleMouseDown(index, e, fx)}
             onTouchStart={(e) => handleTouchStart(index, e, fx)}
           >
-            <Text mt="4px" textStyle='en_special_xs_bold'>{fx.label}</Text>
+            <Text mt="4px" textStyle="en_special_xs_bold">
+              {fx.label}
+            </Text>
             <Box
               id="bar"
               pos="absolute"

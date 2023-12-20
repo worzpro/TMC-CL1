@@ -809,7 +809,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             maxH="382px"
             borderRadius="8px"
             bgColor="rgb(197, 218, 227)"
-            pt="12px"
+            pt={{ base: "6px", sm: "12px" }}
             px="8px"
             pb="1px"
             justify="space-between"
