@@ -967,13 +967,25 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                       src="/images/restart.svg"
                       alt="restart"
                       cursor="pointer"
-                      onMouseDown={handler.onStop}
-                      onTouchStart={handler.onStop}
+                      onMouseDown={(e)=>{
+                        if (isMobile) return;
+                        handler.onStop(e);
+                      }}
+                      onTouchStart={(e)=>{
+                        if (!isMobile) return;
+                        handler.onStop(e);
+                      }}
                     />
                     <Box
                       cursor="pointer"
-                      onMouseDown={handler.onPlayOrPause}
-                      onTouchStart={handler.onPlayOrPause}
+                      onMouseDown={()=>{
+                        if (isMobile) return;
+                        handler.onPlayOrPause();
+                      }}
+                      onTouchStart={()=>{
+                        if (!isMobile) return;
+                        handler.onPlayOrPause();
+                      }}
                     >
                       {isPlaying ? (
                         <Image src="/images/pause.svg" alt="pause" />
