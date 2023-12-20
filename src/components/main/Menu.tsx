@@ -1,7 +1,6 @@
-import { VStack, HStack, Image, Text, Button } from "@chakra-ui/react";
+import { VStack, HStack, Image, Text, Button, Box } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
-
 
 import cassettes from "@/dummy/cassettes";
 
@@ -31,10 +30,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
       pos="relative"
     >
       {!isMenuOpen && (
-        <Image
-
-          src={imageSrc}
-          alt="MenuBtn"
+        <Box
           mb="12px"
           cursor="pointer"
           onMouseEnter={() => setImageSrc("/images/music-list-focus.svg")}
@@ -42,13 +38,18 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
           onClick={() => {
             setIsMenuOpen(true);
           }}
-        />
+        >
+          <Image src={imageSrc} alt="MenuBtn" />
+        </Box>
       )}
 
       <Image
         w="150px"
         pos="absolute"
-        top={{base: isMenuOpen ? "110px" : "35px", md: isMenuOpen ? "110px" : "75px"}}
+        top={{
+          base: isMenuOpen ? "110px" : "35px",
+          md: isMenuOpen ? "110px" : "75px",
+        }}
         src={cassetteObj.imageSrc}
         alt={cassetteObj.name}
         transition="all 0.3s ease-out"
@@ -57,11 +58,8 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
       {isMenuOpen && (
         <VStack spacing="35px" mt="190px">
           <HStack w="100%" justify="space-between">
-            <Image
-              src="/images/music-list-left-right-arrow.svg"
-              alt="LeftArrow"
+            <Box
               cursor="pointer"
-              transform="scaleX(-1)"
               onClick={() => {
                 if (curCassette === 1) {
                   setCurCassette(6);
@@ -69,13 +67,16 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
                   setCurCassette(curCassette - 1);
                 }
               }}
-            />
+            >
+              <Image
+                src="/images/music-list-left-right-arrow.svg"
+                alt="LeftArrow"
+                transform="scaleX(-1)"
+              />
+            </Box>
             <Text textStyle="en_special_xl_md">{cassetteObj.name}</Text>
-            <Image
-              src="/images/music-list-left-right-arrow.svg"
-              alt="RightArrow"
+            <Box
               cursor="pointer"
-              transform="scaleX(1)"
               onClick={() => {
                 if (curCassette === 6) {
                   setCurCassette(1);
@@ -83,7 +84,13 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
                   setCurCassette(curCassette + 1);
                 }
               }}
-            />
+            >
+              <Image
+                src="/images/music-list-left-right-arrow.svg"
+                alt="RightArrow"
+                transform="scaleX(1)"
+              />
+            </Box>
           </HStack>
           <Text minH="120px" textStyle="ch_normal_md">
             {cassetteObj.description}
@@ -93,7 +100,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }: MenuProps) => {
             <Button
               variant="play"
               colorScheme="blue"
-              onClick={async() => {
+              onClick={async () => {
                 setIsMenuOpen(false);
                 setCurCassette(cassetteObj.id);
                 setTimeout(() => {

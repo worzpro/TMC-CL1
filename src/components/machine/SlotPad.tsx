@@ -26,7 +26,13 @@ const SlotPad = ({
   };
 
   return (
-    <Box pos="relative" p="2px" w="25%" onClick={() => onClick()}>
+    <Box
+      pos="relative"
+      p="2px"
+      w="25%"
+      cursor="pointer"
+      onClick={() => onClick()}
+    >
       <Box
         pos="absolute"
         w="10px"
@@ -42,12 +48,7 @@ const SlotPad = ({
         left="50%"
         transform="translateX(-50%)"
       />
-      <Image
-        src={imageSrc}
-        alt={name}
-        cursor="pointer"
-        onTouchStart={(e: any) => e.preventDefault()}
-      />
+      <Image src={imageSrc} alt={name} />
     </Box>
   );
 };

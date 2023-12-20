@@ -722,7 +722,7 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                 />
               )}
               <FxPanel
-              isMobile={isMobile}
+                isMobile={isMobile}
                 hidden={!showFX}
                 isHold={isHold}
                 onFxChange={handler.onFxChange}
@@ -816,10 +816,8 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   onChange={handler.onBpmChange}
                   toggleMetronome={handler.toggleMetronome}
                 />
-                <Image
+                <Box
                   hidden={showFX || showSampleRecord}
-                  src="/images/stop.svg"
-                  alt="record"
                   cursor="pointer"
                   onClick={() => {
                     Tone.Transport.stop();
@@ -832,29 +830,31 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     Tone.Transport.start();
                     setIsPlaying(true);
                   }}
-                />
-                <Image
-                  hidden={showSampleRecord}
-                  src="/images/restart.svg"
-                  alt="restart"
-                  cursor="pointer"
-                  onMouseDown={(e)=>{
-                    if (isMobile) return;
-                    handler.onStop(e);
-                  }}
-                  onTouchStart={(e)=>{
-                    if (!isMobile) return;
-                    handler.onStop(e);
-                  }}
-                />
+                >
+                  <Image src="/images/stop.svg" alt="record" />
+                </Box>
                 <Box
                   hidden={showSampleRecord}
                   cursor="pointer"
-                  onMouseDown={()=>{
+                  onMouseDown={(e) => {
+                    if (isMobile) return;
+                    handler.onStop(e);
+                  }}
+                  onTouchStart={(e) => {
+                    if (!isMobile) return;
+                    handler.onStop(e);
+                  }}
+                >
+                  <Image src="/images/restart.svg" alt="restart" />
+                </Box>
+                <Box
+                  hidden={showSampleRecord}
+                  cursor="pointer"
+                  onMouseDown={() => {
                     if (isMobile) return;
                     handler.onPlayOrPause();
                   }}
-                  onTouchStart={()=>{
+                  onTouchStart={() => {
                     if (!isMobile) return;
                     handler.onPlayOrPause();
                   }}
@@ -865,13 +865,13 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                     <Image src="/images/play.svg" alt="play" />
                   )}
                 </Box>
-                <Image
+                <Box
                   hidden={!showSampleRecord}
-                  src="/images/screen-delete.svg"
-                  alt="delete"
                   cursor="pointer"
                   onClick={handler.onSampleRecordDelete}
-                />
+                >
+                  <Image src="/images/screen-delete.svg" alt="delete" />
+                </Box>
               </HStack>
             </Flex>
           </Flex>
@@ -881,21 +881,17 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             pl="4px"
             spacing="18px"
           >
-            <Image
-              w="60px"
-              src="/images/bbbb.png"
+            <Box
               cursor="pointer"
-              _hover={{ opacity: 0.7 }}
               onClick={() => {
                 if (showSampleRecord) setShowSampleRecord(false);
                 setShowFX((prev) => !prev);
               }}
-            />
-            <Image
-              w="60px"
-              src="/images/bbbb.png"
+            >
+              <Image w="60px" src="/images/bbbb.png" />
+            </Box>
+            <Box
               cursor="pointer"
-              _hover={{ opacity: 0.7 }}
               onClick={() => {
                 if (curSample.artist == "self") {
                   if (showFX) setShowFX(false);
@@ -905,7 +901,9 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   setShowSelectPanel((prev) => !prev);
                 }
               }}
-            />
+            >
+              <Image w="60px" src="/images/bbbb.png" />
+            </Box>
           </HStack>
 
           <Box

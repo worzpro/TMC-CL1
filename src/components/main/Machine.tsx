@@ -838,19 +838,24 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             {!showFX && !showSample && (
               <Box pos="relative" flex="1" mt="8px" mb="8px">
                 {/* Jam */}
-                <Image
+                <Box
                   pos="absolute"
                   top="0"
                   right="0"
-                  w="85px"
-                  src={isJamming ? "/images/jam_on.png" : "/images/jam_off.png"}
                   cursor="pointer"
                   onClick={() => {
                     handler.toggleJam(curSeq);
                     setIsJamming((prev) => !prev);
                   }}
                   zIndex="100"
-                />
+                >
+                  <Image
+                    w="85px"
+                    src={
+                      isJamming ? "/images/jam_on.png" : "/images/jam_off.png"
+                    }
+                  />
+                </Box>
 
                 {/* Gif */}
                 <Center
@@ -955,18 +960,12 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   </Box>
                 )}
                 {showSample ? (
-                  <Image
-                    src="/images/screen-delete.svg"
-                    alt="delete"
-                    cursor="pointer"
-                    onClick={handler.onRecordDelete}
-                  />
+                  <Box cursor="pointer" onClick={handler.onRecordDelete}>
+                    <Image src="/images/screen-delete.svg" alt="delete" />
+                  </Box>
                 ) : (
                   <>
-                    <Image
-                      w="26px"
-                      src="/images/restart.svg"
-                      alt="restart"
+                    <Box
                       cursor="pointer"
                       onMouseDown={(e) => {
                         if (isMobile) return;
@@ -976,7 +975,9 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                         if (!isMobile) return;
                         handler.onStop(e);
                       }}
-                    />
+                    >
+                      <Image w="26px" src="/images/restart.svg" alt="restart" />
+                    </Box>
                     <Box
                       cursor="pointer"
                       onMouseDown={() => {
@@ -1005,25 +1006,25 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             pl="6px"
             spacing="28px"
           >
-            <Image
-              w="60px"
-              src="/images/bbbb.png"
+            <Box
               cursor="pointer"
               onClick={() => {
                 if (showSample) setShowSample(false);
                 setShowFX((prev) => !prev);
               }}
-            />
-            <Image
-              w="60px"
-              src="/images/bbbb.png"
+            >
+              <Image w="60px" src="/images/bbbb.png" />
+            </Box>
+            <Box
               cursor="pointer"
               onClick={() => {
                 if (showFX) setShowFX(false);
                 setShowSample((prev) => !prev);
                 navigator.mediaDevices.getUserMedia({ audio: true });
               }}
-            />
+            >
+              <Image w="60px" src="/images/bbbb.png" />
+            </Box>
           </HStack>
 
           <Box
@@ -1064,12 +1065,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   }}
                 >
                   <PadLight myPadName={pad.name} activePad={activePad} />
-                  <Image
-                    src={pad.imageSrc}
-                    alt={pad.name}
-                    cursor="pointer"
-                    onTouchStart={(e: any) => e.preventDefault()}
-                  />
+                  <Image src={pad.imageSrc} alt={pad.name} cursor="pointer" />
                 </Box>
               ))}
             </Flex>

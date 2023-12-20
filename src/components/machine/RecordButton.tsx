@@ -55,6 +55,7 @@ const RecordButton = ({
       pos="relative"
       p="2px"
       w="25%"
+      cursor="pointer"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onTouchStart={handleMouseDown}
@@ -62,12 +63,7 @@ const RecordButton = ({
     >
       <PadLight myPadName={pad.name} activePad={activePad} />
       <RecordingLight state={recordState[index]} />
-      <Image
-        src={pad.imageSrc}
-        alt={pad.name}
-        cursor="pointer"
-        onTouchStart={(e: any) => e.preventDefault()}
-      />
+      <Image src={pad.imageSrc} alt={pad.name} />
     </Box>
   );
 };

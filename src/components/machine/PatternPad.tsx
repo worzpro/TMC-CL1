@@ -85,6 +85,7 @@ const PatternPad = ({
       pos="relative"
       p="2px"
       w="25%"
+      cursor="pointer"
       onMouseDown={() => {
         if (isMobile) return;
         handleMouseDown()
@@ -105,8 +106,6 @@ const PatternPad = ({
       <Image
         src={imageSrc}
         alt={name}
-        cursor="pointer"
-        onTouchStart={(e: any) => e.preventDefault()}
       />
 
       <Box

@@ -83,11 +83,8 @@ const SampleSelectPanel = ({
           </HStack>
         </Box>
         <HStack w="100%" justify="space-between" px="32px">
-          <Image
-            src="/images/music-list-left-right-arrow.svg"
-            alt="LeftArrow"
+          <Box
             cursor="pointer"
-            transform="scaleX(-1)"
             onClick={() => {
               if (curCassetteId === 1) {
                 setCurCassetteId(6);
@@ -95,13 +92,17 @@ const SampleSelectPanel = ({
                 setCurCassetteId(curCassetteId - 1);
               }
             }}
-          />
+          >
+            <Image
+              src="/images/music-list-left-right-arrow.svg"
+              alt="LeftArrow"
+              transform="scaleX(-1)"
+            />
+          </Box>
+
           <Text textStyle="en_special_lg_bold">{cassetteObj.name}</Text>
-          <Image
-            src="/images/music-list-left-right-arrow.svg"
-            alt="RightArrow"
+          <Box
             cursor="pointer"
-            transform="scaleX(1)"
             onClick={() => {
               if (curCassetteId === 6) {
                 setCurCassetteId(1);
@@ -109,7 +110,13 @@ const SampleSelectPanel = ({
                 setCurCassetteId(curCassetteId + 1);
               }
             }}
-          />
+          >
+            <Image
+              src="/images/music-list-left-right-arrow.svg"
+              alt="RightArrow"
+              transform="scaleX(1)"
+            />
+          </Box>
         </HStack>
       </VStack>
 
