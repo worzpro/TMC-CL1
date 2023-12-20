@@ -19,7 +19,7 @@ const RecordButton = ({
   pad,
   index,
   recordState,
-  isMobile
+  isMobile,
   activePad,
   onRecordMouseDown,
   onRecordHold,
