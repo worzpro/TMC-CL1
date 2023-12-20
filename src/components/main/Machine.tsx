@@ -1042,6 +1042,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
                   pad={pad}
                   activePad={activePad}
                   recordState={recordState}
+                  isMobile={isMobile}
                   onRecordMouseDown={() =>
                     handler.onRecordMouseDown(pad.name, index)
                   }

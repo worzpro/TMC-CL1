@@ -8,6 +8,7 @@ interface RecordButtonProps {
   pad: any;
   index: number;
   recordState: any[];
+  isMobile: boolean;
   activePad: string;
   onRecordMouseDown: Function;
   onRecordHold: Function;
@@ -18,6 +19,7 @@ const RecordButton = ({
   pad,
   index,
   recordState,
+  isMobile
   activePad,
   onRecordMouseDown,
   onRecordHold,
@@ -56,10 +58,22 @@ const RecordButton = ({
       p="2px"
       w="25%"
       cursor="pointer"
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onTouchStart={handleMouseDown}
-      onTouchEnd={handleMouseUp}
+      onMouseDown={()=>{
+        if (!isMobile) return;
+        handleMouseDown();
+      }}
+      onMouseUp={()=>{
+        if (!isMobile) return;
+        handleMouseUp();
+      }}
+      onTouchStart={()=>{
+        if (isMobile) return;
+        handleMouseDown();
+      }}
+      onTouchEnd={()=>{
+        if (isMobile) return;
+        handleMouseUp();
+      }}
     >
       <PadLight myPadName={pad.name} activePad={activePad} />
       <RecordingLight state={recordState[index]} />
