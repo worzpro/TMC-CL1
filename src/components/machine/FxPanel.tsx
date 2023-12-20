@@ -106,14 +106,14 @@ const FxPanel = ({ hidden, isHold, onFxChange, isMobile }: FxPanelProps) => {
     (index: number, event: any, fx: LooseObject) => {
       if (!isMobile) return;
       updateBarPosition(index, event.touches[0].clientY, fx);
-      const handleTouchMove = (e: any) =>
-        updateBarPosition(index, e.touches[0].clientY, fx);
-      const handleTouchEnd = () => {
-        document.removeEventListener("touchmove", handleTouchMove);
-        document.removeEventListener("touchend", handleTouchEnd);
-      };
-      document.addEventListener("touchmove", handleTouchMove);
-      document.addEventListener("touchend", handleTouchEnd);
+      // const handleTouchMove = (e: any) =>
+      //   updateBarPosition(index, e.touches[0].clientY, fx);
+      // const handleTouchEnd = () => {
+      //   document.removeEventListener("touchmove", handleTouchMove);
+      //   document.removeEventListener("touchend", handleTouchEnd);
+      // };
+      // document.addEventListener("touchmove", handleTouchMove);
+      // document.addEventListener("touchend", handleTouchEnd);
     },
     [isHold, resetBarPosition, updateBarPosition]
   );
@@ -142,6 +142,7 @@ const FxPanel = ({ hidden, isHold, onFxChange, isMobile }: FxPanelProps) => {
             overflow="hidden"
             onMouseDown={(e) => handleMouseDown(index, e, fx)}
             onTouchStart={(e) => handleTouchStart(index, e, fx)}
+            onTouchMove={(e) => handleTouchStart(index, e, fx)}
             onTouchEnd={() => {
               if (!isMobile) return;
               !isHold && resetBarPosition(fx, index);
