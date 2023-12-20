@@ -59,19 +59,19 @@ const RecordButton = ({
       w="25%"
       cursor="pointer"
       onMouseDown={()=>{
-        if (!isMobile) return;
+        if (isMobile) return;
         handleMouseDown();
       }}
       onMouseUp={()=>{
-        if (!isMobile) return;
+        if (isMobile) return;
         handleMouseUp();
       }}
       onTouchStart={()=>{
-        if (isMobile) return;
+        if (!isMobile) return;
         handleMouseDown();
       }}
       onTouchEnd={()=>{
-        if (isMobile) return;
+        if (!isMobile) return;
         handleMouseUp();
       }}
     >
