@@ -552,14 +552,13 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
           const beat = Math.floor(
             (Math.floor(Tone.Transport.getTicksAtTime() / 192) % 4) + 1
           );
-          const slotIndex = Math.round(
-            (Tone.Transport.getTicksAtTime() / 192) * 2
-          );
+          // Currently, there is a latency issue between the metronome and samples. This is a temporary solution to align the metronome and samples.
+          const METRONOME_OFFSET = 0.1;
 
           if (beat === 1) {
-            metronome1Player.current?.start(time);
+            metronome1Player.current?.start(time+METRONOME_OFFSET);
           } else {
-            metronome2Player.current?.start(time);
+            metronome2Player.current?.start(time+METRONOME_OFFSET);
           }
         },
         "4n",
