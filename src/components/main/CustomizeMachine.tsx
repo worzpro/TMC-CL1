@@ -62,6 +62,7 @@ interface LooseObject {
 /// 常數 ////////////////////////////////////////////
 const SAMPLES = allSamples;
 const DEFAULT_SAMPLES = defaultSamples;
+const METRONOME_OFFSET = 0.1;
 
 const patternPads = Object.values(pads).filter((pad) => pad.id < 5);
 const slotPads = Object.values(pads)
@@ -279,8 +280,11 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     onSampleMouseDown: (id: string, artist: string, index: number) => {
       playerRef.current?.[index]?.start();
       if (isRecording) {
+        const rawTick = Tone.Transport.getTicksAtTime();
+        const offset =  Tone.Transport.getTicksAtTime(`+${METRONOME_OFFSET}`) - rawTick;
+        const tick = rawTick - offset;
         const slotIndex =
-          (Math.round((Tone.Transport.getTicksAtTime() / 192) * 2 - 8) %
+          (Math.round((tick / 192) * 2 - 8) %
             lengthRef.current) +
           getSeqSlotOffsetFromIndex(curSeq);
 
@@ -553,8 +557,6 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
             (Math.floor(Tone.Transport.getTicksAtTime() / 192) % 4) + 1
           );
           // Currently, there is a latency issue between the metronome and samples. This is a temporary solution to align the metronome and samples.
-          const METRONOME_OFFSET = 0.1;
-
           if (beat === 1) {
             metronome1Player.current?.start(time+METRONOME_OFFSET);
           } else {
