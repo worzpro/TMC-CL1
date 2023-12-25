@@ -648,6 +648,8 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
   // 初始化
   useEffect(() => {
+    // lowest lantency
+    Tone.getContext().lookAhead = 0;
     const { bpm } = curSeqData.audios.seqAudio;
     const { start, end } = SEQ_LOOP_POINTS[pathName][curSeq];
     Tone.Transport.loop = true;
@@ -682,6 +684,7 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       playerChannel.send(sendEffectKey);
     });
 
+    console.log(playerObj)
     playerRef.current = playerObj;
     resultWaveSurferRef.current = DEFAULT_SAMPLE_REF;
     insertEffectsRef.current = insertEffects;

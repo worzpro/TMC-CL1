@@ -62,6 +62,7 @@ interface LooseObject {
 /// 常數 ////////////////////////////////////////////
 const SAMPLES = allSamples;
 const DEFAULT_SAMPLES = defaultSamples;
+const METRONOME_OFFSET = 0.1;
 
 const patternPads = Object.values(pads).filter((pad) => pad.id < 5);
 const slotPads = Object.values(pads)
@@ -279,8 +280,11 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     onSampleMouseDown: (id: string, artist: string, index: number) => {
       playerRef.current?.[index]?.start();
       if (isRecording) {
+        const rawTick = Tone.Transport.getTicksAtTime();
+        const offset =  Tone.Transport.getTicksAtTime(`+${METRONOME_OFFSET}`) - rawTick;
+        const tick = rawTick - offset;
         const slotIndex =
-          (Math.round((Tone.Transport.getTicksAtTime() / 192) * 2 - 8) %
+          (Math.round((tick / 192) * 2 - 8) %
             lengthRef.current) +
           getSeqSlotOffsetFromIndex(curSeq);
 
@@ -505,66 +509,63 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
 
   // 初始化
   useEffect(() => {
-    if (isToneStarted) {
-      const samplePlayers = handler.createSamplePlayers();
-      const defaultPlayers = handler.getDefaultPlayer(samplePlayers);
+    // lowest lantency
+    Tone.getContext().lookAhead = 0;
+    const samplePlayers = handler.createSamplePlayers();
+    const defaultPlayers = handler.getDefaultPlayer(samplePlayers);
 
-      const players = getCustomizationPlayers(samplePlayers);
-      const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
-      players.forEach((player: any) => {
-        // player可能為undefined(若沒錄sample)
-        player?.connect(insertEffects.input);
-      });
-      // main channel as opposed to auxiliary channels
-      const playerChannel = new Tone.Channel().toDestination();
-      insertEffects.output.connect(playerChannel);
-      // auxiliary channels, i.e. send effects
-      const sendEffects = createSendAudioEffects(SEND_EFFECTS);
-      const sendEffectKeys = Object.keys(SEND_EFFECTS);
-      sendEffectKeys.forEach((sendEffectKey: string) => {
-        playerChannel.send(sendEffectKey);
-      });
+    const players = getCustomizationPlayers(samplePlayers);
+    const insertEffects = createChainedInsertAudioEffects(INSERT_EFFECTS);
+    players.forEach((player: any) => {
+      // player可能為undefined(若沒錄sample)
+      player?.connect(insertEffects.input);
+    });
+    // main channel as opposed to auxiliary channels
+    const playerChannel = new Tone.Channel().toDestination();
+    insertEffects.output.connect(playerChannel);
+    // auxiliary channels, i.e. send effects
+    const sendEffects = createSendAudioEffects(SEND_EFFECTS);
+    const sendEffectKeys = Object.keys(SEND_EFFECTS);
+    sendEffectKeys.forEach((sendEffectKey: string) => {
+      playerChannel.send(sendEffectKey);
+    });
 
-      playerRef.current = defaultPlayers;
-      resultWaveSurferRef.current = defaultPlayers.slice(0, NUMBER_OF_RECORDS);
-      samplePlayerRef.current = samplePlayers;
-      insertEffectsRef.current = insertEffects;
-      sendEffectsRef.current = sendEffects;
+    console.log(defaultPlayers)
+    playerRef.current = defaultPlayers;
+    resultWaveSurferRef.current = defaultPlayers.slice(0, NUMBER_OF_RECORDS);
+    samplePlayerRef.current = samplePlayers;
+    insertEffectsRef.current = insertEffects;
+    sendEffectsRef.current = sendEffects;
 
-      slotsRef.current = cloneAllSlots(padState.slots);
-      metronome1Player.current = handler.createMetronomePlayer().metronome1;
-      metronome2Player.current = handler.createMetronomePlayer().metronome2;
+    slotsRef.current = cloneAllSlots(padState.slots);
+    metronome1Player.current = handler.createMetronomePlayer().metronome1;
+    metronome2Player.current = handler.createMetronomePlayer().metronome2;
 
-      Tone.Transport.loop = true;
-      Tone.Transport.setLoopPoints("1:0:0", "2:0:0");
-      Tone.Transport.position = "1:0:0";
+    Tone.Transport.loop = true;
+    Tone.Transport.setLoopPoints("1:0:0", "2:0:0");
+    Tone.Transport.position = "1:0:0";
 
-      handler.muteMetronome();
-    }
-  }, [isToneStarted]);
+    handler.muteMetronome();
+  }, []);
 
   // metronome
   useEffect(() => {
-    let eventId: any = null;
-    if (isToneStarted) {
-      eventId = Tone.Transport.scheduleRepeat(
-        (time) => {
-          const beat = Math.floor(
-            (Math.floor(Tone.Transport.getTicksAtTime() / 192) % 4) + 1
-          );
-          // Currently, there is a latency issue between the metronome and samples. This is a temporary solution to align the metronome and samples.
-          const METRONOME_OFFSET = 0.1;
+    const eventId = Tone.Transport.scheduleRepeat(
+      (time) => {
+        const beat = Math.floor(
+          (Math.floor(Tone.Transport.getTicksAtTime() / 192) % 4) + 1
+        );
+        // Currently, there is a latency issue between the metronome and samples. This is a temporary solution to align the metronome and samples.
+        if (beat === 1) {
+          metronome1Player.current?.start(time+METRONOME_OFFSET);
+        } else {
+          metronome2Player.current?.start(time+METRONOME_OFFSET);
+        }
+      },
+      "4n",
+      "0:0:0"
+    );
 
-          if (beat === 1) {
-            metronome1Player.current?.start(time+METRONOME_OFFSET);
-          } else {
-            metronome2Player.current?.start(time+METRONOME_OFFSET);
-          }
-        },
-        "4n",
-        "0:0:0"
-      );
-    }
     return () => {
       Tone.Transport.clear(eventId);
     };
