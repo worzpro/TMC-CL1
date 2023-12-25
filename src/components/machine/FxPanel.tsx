@@ -44,7 +44,6 @@ const FxPanel = ({ hidden, isHold, onFxChange, isMobile }: FxPanelProps) => {
         const fxValue =
           Math.round(((newHeight / 100) * valueRange + min) / step) * step;
         newHeight = ((fxValue - min) / valueRange) * 100;
-        // console.log("fxValue", fxValue);
         onFxChange(fx, fxValue);
 
         setBarPositions((prev) =>
@@ -52,7 +51,7 @@ const FxPanel = ({ hidden, isHold, onFxChange, isMobile }: FxPanelProps) => {
         );
       }
     },
-    [barPositions]
+    [barPositions, hidden]
   );
 
   const resetBarPosition = useCallback(
@@ -106,14 +105,6 @@ const FxPanel = ({ hidden, isHold, onFxChange, isMobile }: FxPanelProps) => {
     (index: number, event: any, fx: LooseObject) => {
       if (!isMobile) return;
       updateBarPosition(index, event.touches[0].clientY, fx);
-      // const handleTouchMove = (e: any) =>
-      //   updateBarPosition(index, e.touches[0].clientY, fx);
-      // const handleTouchEnd = () => {
-      //   document.removeEventListener("touchmove", handleTouchMove);
-      //   document.removeEventListener("touchend", handleTouchEnd);
-      // };
-      // document.addEventListener("touchmove", handleTouchMove);
-      // document.addEventListener("touchend", handleTouchEnd);
     },
     [isHold, resetBarPosition, updateBarPosition]
   );
