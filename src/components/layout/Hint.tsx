@@ -32,7 +32,6 @@ const Hint = ({ showHint, setShowHint, setIsToneStarted }: HintProps) => {
           onClick={async () => {
             setShowHint(false);
             await Tone.start();
-            console.log("Audio context started!");
 
             setIsToneStarted(true);
           }}

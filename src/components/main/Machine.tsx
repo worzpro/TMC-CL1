@@ -499,7 +499,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
           [variableKey]: value,
         });
         if (value == defaultValue) {
-          console.log("mute!");
           sendEffectsRef.current[key].effect.disconnect();
         } else {
           sendEffectsRef.current[key].effect.toDestination();
@@ -684,7 +683,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       playerChannel.send(sendEffectKey);
     });
 
-    console.log(playerObj)
     playerRef.current = playerObj;
     resultWaveSurferRef.current = DEFAULT_SAMPLE_REF;
     insertEffectsRef.current = insertEffects;
@@ -704,23 +702,6 @@ const Machine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       });
     };
   }, []);
-
-  // count beat
-  useEffect(() => {
-    let eventId: any;
-    if (isPlaying) {
-      eventId = Tone.Transport.scheduleRepeat((time) => {
-        // console.log(
-        //   Math.floor(
-        //     (Math.floor(Tone.Transport.getTicksAtTime() / 192) % 4) + 1
-        //   )
-        // );
-      }, "4n");
-    }
-    return () => {
-      Tone.Transport.clear(eventId);
-    };
-  }, [isPlaying]);
 
   // count progress
   useEffect(() => {

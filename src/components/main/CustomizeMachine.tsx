@@ -177,7 +177,6 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
     },
     onBpmChange: (value: number) => {
       const debouncedSetBpm = debounce((value) => {
-        console.log("set bpm to: ", value);
         Tone.Transport.bpm.value = value;
       }, 500);
       debouncedSetBpm(value);
@@ -530,7 +529,6 @@ const CustomizeMachine = ({ isMenuOpen, isToneStarted }: MachineProps) => {
       playerChannel.send(sendEffectKey);
     });
 
-    console.log(defaultPlayers)
     playerRef.current = defaultPlayers;
     resultWaveSurferRef.current = defaultPlayers.slice(0, NUMBER_OF_RECORDS);
     samplePlayerRef.current = samplePlayers;
